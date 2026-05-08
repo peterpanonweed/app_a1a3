@@ -1,15 +1,15 @@
 const CACHE_NAME = 'drohnenschein-v1';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/modul-1.html',
-  '/modul-2.html',
-  '/modul-3.html',
-  '/modul-4.html',
-  '/exam.html',
-  '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png',
+  '/app_a1a3/',
+  '/app_a1a3/index.html',
+  '/app_a1a3/modul-1.html',
+  '/app_a1a3/modul-2.html',
+  '/app_a1a3/modul-3.html',
+  '/app_a1a3/modul-4.html',
+  '/app_a1a3/exam.html',
+  '/app_a1a3/manifest.json',
+  '/app_a1a3/icon-192.png',
+  '/app_a1a3/icon-512.png',
   'https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap'
 ];
 
@@ -54,7 +54,7 @@ self.addEventListener('fetch', (e) => {
       }).catch(() => {
         // Offline-Fallback
         if(e.request.destination === 'document'){
-          return caches.match('/index.html');
+          return caches.match('/app_a1a3/index.html');
         }
       });
     })

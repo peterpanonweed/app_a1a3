@@ -2,7 +2,7 @@
   "name": "DrohnenSchein.app",
   "short_name": "DrohnenSchein",
   "description": "Deine Lernvorbereitung für den EU-Drohnenführerschein A1/A3",
-  "start_url": "/",
+  "start_url": "/app_a1a3/",
   "display": "standalone",
   "background_color": "#004499",
   "theme_color": "#004499",
@@ -20,5 +20,6 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "scope": "/app_a1a3/"
 }
