@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Modul 2: Menschliches Leistungsvermögen · drohnenschein.app</title>
+<meta name="theme-color" content="#00695C"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="DrohnenSchein"/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icon-192.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--sky:#00897B;--sky-light:#E0F2F1;--sky-dark:#00695C;--yellow:#FFD600;--green:#00C853;--red:#FF3D00;--orange:#FF6D00;--purple:#9C27B0;--black:#0D0D0D;--white:#FAFAF8;--gray:#F2F2EF;--border:#E0E0DC;--text:#1A1A1A;--muted:#777}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);overflow-x:hidden;-webkit-tap-highlight-color:transparent;line-height:1.65}
+.app-header{background:var(--sky-dark);padding:.875rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;padding-top:max(.875rem,env(safe-area-inset-top));box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.header-back{color:#fff;text-decoration:none;font-size:14px;display:flex;align-items:center;gap:6px;opacity:.9;font-weight:500}
+.header-title{font-family:'Syne',sans-serif;font-size:14px;color:#fff;font-weight:700;text-align:center;flex:1;padding:0 1rem}
+.header-title small{display:block;font-size:11px;font-weight:400;opacity:.6;letter-spacing:.05em;text-transform:uppercase}
+.header-progress{font-size:13px;color:var(--yellow);font-weight:600;min-width:36px;text-align:right}
+.module-hero{background:linear-gradient(135deg,var(--sky-dark) 0%,var(--sky) 60%,#00796B 100%);padding:2.5rem 1.25rem 3rem;color:#fff;position:relative;overflow:hidden}
+.module-hero::after{content:'';position:absolute;bottom:-30px;left:0;right:0;height:60px;background:var(--white);border-radius:40px 40px 0 0}
+.module-hero::before{content:'';position:absolute;top:-50%;right:-20%;width:400px;height:400px;background:radial-gradient(circle,rgba(255,214,0,.15) 0%,transparent 70%);pointer-events:none}
+.module-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);font-size:12px;font-weight:600;padding:5px 14px;border-radius:20px;margin-bottom:1rem;letter-spacing:.05em;backdrop-filter:blur(8px)}
+.module-hero h1{font-family:'Syne',sans-serif;font-size:clamp(26px,6vw,42px);font-weight:800;line-height:1.05;margin-bottom:.75rem;letter-spacing:-.02em}
+.module-hero .subtitle{font-size:15px;color:rgba(255,255,255,.85);line-height:1.6;max-width:520px;margin-bottom:1.5rem}
+.module-meta{display:flex;gap:.75rem;flex-wrap:wrap;font-size:13px}
+.meta-item{display:flex;align-items:center;gap:6px;color:rgba(255,255,255,.9);background:rgba(0,0,0,.15);padding:5px 12px;border-radius:20px}
+.progress-section{padding:1.25rem 1.25rem;background:var(--white);position:sticky;top:56px;z-index:50;border-bottom:1px solid var(--border)}
+.progress-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:500}
+.progress-track{height:6px;background:var(--gray);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--sky),var(--yellow));border-radius:3px;transition:width .5s ease;width:0%}
+.content{max-width:680px;margin:0 auto;padding:0 1.25rem 6rem}
+.intro-block{background:var(--gray);border-left:4px solid var(--sky);border-radius:0 12px 12px 0;padding:1.5rem;margin:2rem 0}
+.pilot-quote{display:flex;gap:14px;align-items:flex-start}
+.pilot-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--yellow),var(--orange));display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 4px 12px rgba(255,214,0,.3)}
+.pilot-quote-content .from{font-size:11px;font-weight:700;color:var(--orange);letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px}
+.pilot-quote-content p{font-size:15px;color:var(--text);line-height:1.65;font-style:italic}
+/* CHAPTER TABS */
+.chapter-nav{display:flex;gap:6px;padding:1.5rem 1.25rem .5rem;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;background:var(--white)}
+.chapter-nav::-webkit-scrollbar{display:none}
+.chapter-tab{flex-shrink:0;background:var(--gray);border:1.5px solid var(--border);border-radius:20px;padding:7px 14px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;font-family:'DM Sans',sans-serif}
+.chapter-tab.active{background:var(--sky-dark);color:#fff;border-color:var(--sky-dark)}
+.chapter-tab.done{background:#E8F5E9;color:#1B5E20;border-color:#A5D6A7}
+/* LESSON */
+.lesson{background:#fff;border:1px solid var(--border);border-radius:16px;margin-bottom:1.5rem;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.lesson-head{padding:1.25rem 1.5rem;background:linear-gradient(135deg,#fff 0%,var(--sky-light) 100%);border-bottom:1px solid var(--border);display:flex;gap:14px;align-items:center;cursor:pointer;user-select:none}
+.lesson-num{width:40px;height:40px;background:var(--sky-dark);color:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:18px;font-weight:800;flex-shrink:0}
+.lesson-head-info{flex:1;min-width:0}
+.lesson-eyebrow{font-size:11px;color:var(--sky);font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px}
+.lesson-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;line-height:1.3;color:var(--text)}
+.lesson-toggle{font-size:12px;color:var(--muted);transition:transform .3s;flex-shrink:0;background:var(--gray);width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.lesson-toggle.open{transform:rotate(180deg);background:var(--sky-dark);color:#fff}
+.lesson-body{max-height:0;overflow:hidden;transition:max-height .5s ease}
+.lesson-body.open{max-height:30000px}
+.lesson-content{padding:1.5rem}
+.lesson-content h3{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--sky-dark);margin:1.5rem 0 .65rem;line-height:1.3}
+.lesson-content h3:first-child{margin-top:0}
+.lesson-content h4{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin:1.1rem 0 .4rem}
+.lesson-content p{font-size:15px;line-height:1.8;color:#2a2a2a;margin-bottom:1rem}
+.lesson-content p strong{color:var(--sky-dark);font-weight:600}
+/* BOXES */
+.box{border-radius:12px;padding:1.1rem 1.25rem;margin:1.1rem 0;display:flex;gap:12px;align-items:flex-start}
+.box.info{background:#E3F2FD;border-left:3px solid var(--sky)}
+.box.warn{background:#FFF8E1;border-left:3px solid #FFB300}
+.box.danger{background:#FFEBEE;border-left:3px solid var(--red)}
+.box.success{background:#E8F5E9;border-left:3px solid var(--green)}
+.box.tip{background:#F3E5F5;border-left:3px solid var(--purple)}
+.box.law{background:#E8EAF6;border-left:3px solid #3949AB}
+.box-icon{font-size:22px;flex-shrink:0;line-height:1;margin-top:2px}
+.box-text{flex:1;font-size:14px;line-height:1.7;color:#333}
+.box-text strong{color:#000;font-weight:600}
+.box-text .label{display:block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;opacity:.7}
+/* MERKSATZ */
+.merksatz{background:linear-gradient(135deg,#FFF9C4,#FFEB3B);border-radius:12px;padding:1.1rem 1.4rem;margin:1.4rem 0;position:relative;box-shadow:0 4px 16px rgba(255,235,59,.3)}
+.merksatz::before{content:'💡 MERKE';position:absolute;top:-10px;left:1.25rem;background:var(--sky-dark);color:var(--yellow);font-size:10px;font-weight:700;padding:3px 10px;border-radius:4px;letter-spacing:.1em}
+.merksatz p{font-size:14px;color:#3E2723;font-weight:500;line-height:1.65;margin:0;font-style:italic}
+.merksatz p strong{color:#1B5E20;font-weight:700;font-style:normal}
+/* DEFINITION CARDS */
+.def-grid{display:grid;grid-template-columns:1fr;gap:8px;margin:1.1rem 0}
+.def-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:.9rem 1.1rem;display:flex;gap:12px;align-items:flex-start}
+.def-badge{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;background:var(--sky-dark);color:#fff;padding:3px 8px;border-radius:5px;flex-shrink:0;letter-spacing:.05em;margin-top:2px}
+.def-text{flex:1;font-size:14px;line-height:1.6;color:#333}
+.def-text strong{color:var(--text);font-weight:600}
+/* CATEGORY TABLE */
+.cat-table{border-radius:12px;overflow:hidden;border:1px solid var(--border);margin:1.1rem 0}
+.cat-row{display:grid;grid-template-columns:80px 1fr 1fr;border-bottom:1px solid var(--border)}
+.cat-row:last-child{border-bottom:none}
+.cat-row.header{background:var(--sky-dark);color:#fff;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:.05em}
+.cat-cell{padding:.75rem .9rem;font-size:13px;line-height:1.5;border-right:1px solid var(--border)}
+.cat-cell:last-child{border-right:none}
+.cat-row.a1{background:#E8F5E9}
+.cat-row.a2{background:#FFF8E1}
+.cat-row.a3{background:#FFF3E0}
+/* CLASS TABLE */
+.class-table{border-radius:12px;overflow:hidden;border:1px solid var(--border);margin:1.1rem 0;font-size:13px}
+.class-row{display:grid;grid-template-columns:50px 90px 1fr 1fr;border-bottom:1px solid var(--border)}
+.class-row:last-child{border-bottom:none}
+.class-row.header{background:var(--sky-dark);color:#fff;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.05em}
+.class-cell{padding:.65rem .8rem;border-right:1px solid var(--border);line-height:1.4}
+.class-cell:last-child{border-right:none}
+.class-badge{display:inline-block;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;padding:2px 8px;border-radius:5px;color:#fff}
+.c0{background:#43A047}.c1{background:#1E88E5}.c2{background:#FB8C00}.c3{background:#E53935}.c4{background:#6D4C41}
+/* QUIZ */
+.quiz-block{background:linear-gradient(135deg,var(--sky-dark),var(--sky));border-radius:14px;padding:1.4rem;margin:1.4rem 0;color:#fff}
+.quiz-tag{display:inline-block;background:rgba(255,255,255,.15);font-size:11px;font-weight:600;padding:3px 10px;border-radius:4px;letter-spacing:.08em;margin-bottom:.65rem}
+.quiz-q{font-size:15px;font-weight:500;line-height:1.45;margin-bottom:.9rem}
+.quiz-opts{display:flex;flex-direction:column;gap:6px}
+.quiz-opt{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);border-radius:8px;padding:10px 14px;font-size:13px;cursor:pointer;text-align:left;color:#fff;width:100%;font-family:'DM Sans',sans-serif;transition:all .15s;display:flex;align-items:center;gap:10px;line-height:1.45}
+.quiz-opt:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3)}
+.quiz-opt.correct{background:rgba(0,200,83,.25);border-color:var(--green)}
+.quiz-opt.wrong{background:rgba(255,61,0,.25);border-color:var(--red)}
+.quiz-opt:disabled{cursor:default}
+.opt-l{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;font-family:'Syne',sans-serif}
+.quiz-opt.correct .opt-l{background:var(--green)}
+.quiz-opt.wrong .opt-l{background:var(--red)}
+.quiz-fb{font-size:13px;line-height:1.6;padding:10px 14px;border-radius:8px;margin-top:.65rem;display:none}
+.quiz-fb.show{display:block}
+.quiz-fb.correct{background:rgba(0,200,83,.15);color:#A5D6A7}
+.quiz-fb.wrong{background:rgba(255,61,0,.15);color:#FFAB91}
+/* SCENARIO */
+.scenario{background:#fff;border:2px solid var(--orange);border-radius:14px;margin:1.4rem 0;position:relative}
+.scenario-tag{position:absolute;top:-10px;left:1rem;background:var(--orange);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:4px;letter-spacing:.08em;z-index:2}
+.scenario-q{padding:1.1rem 1.25rem;font-size:14px;font-weight:500;background:var(--gray);border-bottom:1px solid var(--border);line-height:1.6}
+.scenario-opts{display:flex;flex-direction:column;gap:7px;padding:.9rem}
+.sc-opt{background:#fff;border:1.5px solid var(--border);border-radius:9px;padding:10px 14px;font-size:13px;cursor:pointer;transition:all .15s;text-align:left;color:var(--text);width:100%;font-family:'DM Sans',sans-serif;display:flex;align-items:flex-start;gap:10px;line-height:1.5}
+.sc-opt:hover{border-color:var(--sky);background:var(--sky-light)}
+.sc-opt.correct{border-color:var(--green);background:#E8F5E9;color:#1B5E20}
+.sc-opt.wrong{border-color:var(--red);background:#FFEBEE;color:#BF360C}
+.sc-opt:disabled{cursor:default}
+.sc-opt .opt-l{width:24px;height:24px;border-radius:50%;background:var(--gray);color:var(--muted);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;margin-top:1px}
+.sc-opt.correct .opt-l{background:var(--green);color:#fff}
+.sc-opt.wrong .opt-l{background:var(--red);color:#fff}
+.sc-fb{padding:.9rem 1.1rem;font-size:13px;line-height:1.65;display:none;border-top:2px solid var(--border)}
+.sc-fb.show{display:block}
+.sc-fb.correct{background:#E8F5E9;color:#1B5E20;border-color:var(--green)}
+.sc-fb.wrong{background:#FFEBEE;color:#BF360C;border-color:var(--red)}
+/* FINAL QUIZ */
+.final-quiz{background:linear-gradient(135deg,var(--sky-dark),#1565C0);border-radius:16px;padding:1.75rem 1.5rem;margin:2rem 0;color:#fff}
+.fq-header{text-align:center;margin-bottom:1.25rem}
+.fq-header h3{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:.25rem}
+.fq-header p{font-size:13px;color:rgba(255,255,255,.7)}
+.fq-dots{display:flex;gap:5px;justify-content:center;margin-bottom:1.25rem;flex-wrap:wrap}
+.qdot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.2);transition:all .3s}
+.fq-counter{font-size:12px;color:rgba(255,255,255,.65);text-align:center;margin-bottom:.65rem;letter-spacing:.05em;text-transform:uppercase}
+.fq-question{font-size:16px;font-weight:500;line-height:1.5;margin-bottom:1.1rem}
+.fq-opts{display:flex;flex-direction:column;gap:7px}
+.fq-feedback{background:rgba(0,0,0,.2);border-radius:10px;padding:.9rem;margin-top:.9rem;font-size:14px;line-height:1.6;display:none}
+.fq-feedback.show{display:block}
+.fq-next{display:block;width:100%;background:var(--yellow);color:#000;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:.9rem;display:none;transition:all .2s}
+.fq-next:hover{background:#E6C200}
+.fq-result{text-align:center;padding:1rem}
+.fq-score{font-family:'Syne',sans-serif;font-size:56px;font-weight:800;color:var(--yellow);line-height:1;margin-bottom:.5rem}
+.fq-result-label{font-size:18px;font-weight:600;margin-bottom:.65rem}
+.fq-result-msg{font-size:14px;color:rgba(255,255,255,.8);line-height:1.6;margin-bottom:1.4rem}
+.module-end{background:linear-gradient(135deg,var(--sky-dark),var(--sky));color:#fff;border-radius:16px;padding:2rem 1.5rem;margin:2.5rem 0 0;text-align:center}
+.module-end-icon{font-size:52px;margin-bottom:.75rem}
+.module-end h2{font-family:'Syne',sans-serif;font-size:22px;margin-bottom:.5rem;font-weight:800}
+.module-end p{font-size:14px;color:rgba(255,255,255,.8);margin-bottom:1.4rem;line-height:1.6}
+.btn-next{display:inline-block;background:var(--yellow);color:var(--black);padding:13px 28px;border-radius:8px;font-weight:700;font-size:15px;text-decoration:none;border:none;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
+.btn-next:hover{background:#E6C200;transform:translateY(-1px)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--sky-dark);color:#fff;padding:12px 24px;border-radius:24px;font-size:14px;font-weight:500;z-index:200;opacity:0;transition:all .3s ease;box-shadow:0 8px 24px rgba(0,0,0,.2);max-width:90%;text-align:center;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{background:var(--green)}
+.chapter-section{display:none}
+.chapter-section.active{display:block}
+.vorrang-list{display:flex;flex-direction:column;gap:8px;margin:1.1rem 0}
+.vorrang-item{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:.8rem 1rem}
+.vorrang-num{width:30px;height:30px;background:var(--sky-dark);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;flex-shrink:0}
+.vorrang-text{flex:1;font-size:14px;line-height:1.5}
+.vorrang-text strong{color:var(--sky-dark)}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <a href="index.html" class="header-back">← Übersicht</a>
+  <div class="header-title">
+    <small>Modul 2 · 2 von 4</small>
+    Menschliches Leistungsvermögen
+  </div>
+  <div class="header-progress" id="headerProgress">0%</div>
+</header>
+
+<div class="module-hero">
+  <div class="module-tag">🧠 Modul 2 von 4</div>
+  <h1>Menschliches<br><span style="color:var(--yellow)">Leistungs&shy;vermögen</span></h1>
+  <p class="subtitle">Das rechtliche Fundament jedes Fluges. Kategorien, Klassen, Behörden, Verantwortung, Datenschutz und Versicherung — alles was Du als Pilot kennen musst.</p>
+  <div class="module-meta">
+    <div class="meta-item">⏱️ ca. 60–75 Min</div>
+    <div class="meta-item">📚 2 Kapitel</div>
+    <div class="meta-item">🎯 Prüfungsrelevant</div>
+  </div>
+</div>
+
+<div class="progress-section">
+  <div class="progress-label">
+    <span>Dein Fortschritt</span>
+    <span id="progressPct">0%</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+
+<div class="chapter-nav" id="chapterNav">
+  <button class="chapter-tab active" onclick="showChapter(0)" id="ctab0">1 · Gesundheit & Fitness</button>
+  <button class="chapter-tab" onclick="showChapter(1)" id="ctab1">2 · Wahrnehmung & SA</button>
+</div>
+
+<div class="content">
+
+<!-- ==================== KAPITEL 1: GESUNDHEIT & FITNESS ==================== -->
+<div class="chapter-section active" id="ch0">
+  <div class="content">
+
+    <div class="pilot-quote">
+      <div class="pilot-avatar">🧑‍✈️</div>
+      <div class="pilot-quote-content">
+        <div class="from">Torsten Flieger sagt:</div>
+        <p>„Ich hab mal an einem schlechten Tag geflogen. Erkältet, zu wenig Schlaf, ein bisschen gestresst. Die Drohne ist fast in einen Baum geflogen — nicht weil die Technik versagt hat, sondern weil ich es war, der versagt hat. Seither: kein Flug ohne I'M SAFE."</p>
+      </div>
+    </div>
+
+    <div class="intro-block">
+      <strong>Kapitel 1 · Gesundheit & Fitness</strong><br>
+      Dein Körper und dein Geist sind das wichtigste System beim Drohnenfliegen — nicht die Fernbedienung. In diesem Kapitel lernst du, was deine Leistungsfähigkeit beeinflusst und wie du dich vor jedem Flug selbst checken kannst.
+    </div>
+
+    <!-- LEKTION 1 -->
+    <div class="lesson" id="l0_1">
+      <div class="lesson-head" onclick="toggleLesson('l0_1','ch0')">
+        <div class="lesson-num">1</div>
+        <div class="lesson-head-info">
+          <div class="lesson-eyebrow">Kapitel 1 · Lektion 1 · ca. 15 Min</div>
+          <div class="lesson-title">Krankheit, Medikamente & Alkohol</div>
+        </div>
+        <div class="lesson-toggle" id="tgl_l0_1">▾</div>
+      </div>
+      <div class="lesson-body" id="body_l0_1">
+        <div class="lesson-content">
+
+          <h3>Krankheit — auch kleine Leiden zählen</h3>
+          <p>Schon geringfügige medizinische Probleme wie eine Erkältung, Grippe, Magen-Darm-Beschwerden oder Kopfschmerzen können deine Leistungsfähigkeit entscheidend einschränken. Nicht nur körperlich — auch deine kognitiven Fähigkeiten leiden: Denkvermögen ↓, Urteilskraft ↓, räumliche Vorstellung ↓, Reaktionszeit ↑.</p>
+
+          <div class="box warn">
+            <div class="box-icon">⚠️</div>
+            <div class="box-body">
+              <span class="box-label">Wichtig</span>
+              Bereits geringe Symptome können sich während eines Fluges schnell verstärken. Wenn das UAS in der Luft ist und du dich krank fühlst: <strong>sofort landen</strong> oder die Steuerung übergeben.
+            </div>
+          </div>
+
+          <div class="merksatz"><p>Im Zweifel bleibt die Drohne am Boden. Kein Flug ist es wert, andere zu gefährden.</p></div>
+
+          <div class="quiz-block">
+            <div class="quiz-eyebrow">🧠 Check</div>
+            <div class="quiz-q">Du hast eine leichte Erkältung, aber keine starken Symptome. Was solltest du tun?</div>
+            <div class="quiz-opts" id="qo_q0_1">
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_1')"><span class="opt-l">A</span>Einfach fliegen — eine Erkältung ist harmlos</button>
+              <button class="quiz-opt" onclick="answerQ(this,'correct','q0_1')"><span class="opt-l">B</span>Fitness ehrlich einschätzen — bei Zweifel Flug absagen</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_1')"><span class="opt-l">C</span>Nur fliegen wenn es sich nach 10 Minuten besser anfühlt</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_1')"><span class="opt-l">D</span>Erst starten und bei Verschlechterung landen</button>
+            </div>
+            <div class="quiz-fb" id="fb_q0_1"></div>
+          </div>
+
+          <h3>Medikamente — die richtige Frage stellen</h3>
+          <p>Bei Medikamenten gilt: Frage dich immer zuerst <strong>WARUM</strong> du sie nimmst — oft ist bereits die Ursache der Einnahme nicht mit dem Fliegen vereinbar. Berücksichtige immer: direkte Wirkung, Nebenwirkungen und Wechselwirkungen mit anderen Mitteln.</p>
+
+          <div class="quiz-block">
+            <div class="quiz-eyebrow">🧠 Check</div>
+            <div class="quiz-q">Welche Frage ist bei Medikamenten am wichtigsten?</div>
+            <div class="quiz-opts" id="qo_q0_2">
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_2')"><span class="opt-l">A</span>Wie lange nehme ich das Medikament schon?</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_2')"><span class="opt-l">B</span>Ist das Medikament verschreibungspflichtig?</button>
+              <button class="quiz-opt" onclick="answerQ(this,'correct','q0_2')"><span class="opt-l">C</span>WARUM nehme ich es — ist die Ursache flugkompatibel?</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_2')"><span class="opt-l">D</span>Steht auf dem Beipackzettel etwas über Fahrtauglichkeit?</button>
+            </div>
+            <div class="quiz-fb" id="fb_q0_2"></div>
+          </div>
+
+          <h3>Alkohol — klares Nein</h3>
+          <p>Alkohol ist einer der größten Risikofaktoren in der Luftfahrt. Die kommerzielle Richtlinie gilt als gute Orientierung: <strong>Max. 0,2 Promille</strong> und <strong>mindestens 8 Stunden</strong> vor dem Flug kein Alkohol. Unter Alkohol sinkt die kognitive Leistung stark — und die Selbsteinschätzung als erstes.</p>
+
+          <div class="quiz-block">
+            <div class="quiz-eyebrow">🧠 Check</div>
+            <div class="quiz-q">Wie viele Stunden vor dem Flug sollte man keinen Alkohol mehr trinken?</div>
+            <div class="quiz-opts" id="qo_q0_3">
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_3')"><span class="opt-l">A</span>2 Stunden</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_3')"><span class="opt-l">B</span>4 Stunden</button>
+              <button class="quiz-opt" onclick="answerQ(this,'correct','q0_3')"><span class="opt-l">C</span>Mindestens 8 Stunden</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_3')"><span class="opt-l">D</span>Es kommt auf die Menge an</button>
+            </div>
+            <div class="quiz-fb" id="fb_q0_3"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- LEKTION 2 -->
+    <div class="lesson" id="l0_2">
+      <div class="lesson-head" onclick="toggleLesson('l0_2','ch0')">
+        <div class="lesson-num">2</div>
+        <div class="lesson-head-info">
+          <div class="lesson-eyebrow">Kapitel 1 · Lektion 2 · ca. 15 Min</div>
+          <div class="lesson-title">Müdigkeit & die I'M SAFE Checkliste</div>
+        </div>
+        <div class="lesson-toggle" id="tgl_l0_2">▾</div>
+      </div>
+      <div class="lesson-body" id="body_l0_2">
+        <div class="lesson-content">
+
+          <h3>Müdigkeit — unterschätzter Killerfaktor</h3>
+          <p>Müdigkeit entsteht durch Schlafmangel, lange Wachzeiten oder körperliche Erschöpfung. Das Tückische: Wer müde ist, unterschätzt seine eigene Beeinträchtigung systematisch.</p>
+
+          <div class="box info">
+            <div class="box-icon">📊</div>
+            <div class="box-body">
+              <span class="box-label">Wissenschaftlicher Vergleich</span>
+              <strong>17 Stunden wach</strong> = ca. 0,5 Promille Alkohol-Äquivalent<br>
+              <strong>23 Stunden wach</strong> = ca. 1,0 Promille Alkohol-Äquivalent
+            </div>
+          </div>
+
+          <div class="merksatz"><p>17h wach = 0,5 Promille. Mit 0,5 Promille fliegst du kein Luftfahrzeug. Mit 17h Schlafmangel also auch keine Drohne.</p></div>
+
+          <div class="quiz-block">
+            <div class="quiz-eyebrow">🧠 Check</div>
+            <div class="quiz-q">17 Stunden ohne Schlaf entsprechen etwa welchem Blutalkoholwert?</div>
+            <div class="quiz-opts" id="qo_q0_4">
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_4')"><span class="opt-l">A</span>0,2 Promille</button>
+              <button class="quiz-opt" onclick="answerQ(this,'correct','q0_4')"><span class="opt-l">B</span>0,5 Promille</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_4')"><span class="opt-l">C</span>1,0 Promille</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_4')"><span class="opt-l">D</span>1,5 Promille</button>
+            </div>
+            <div class="quiz-fb" id="fb_q0_4"></div>
+          </div>
+
+          <h3>Die I'M SAFE Checkliste</h3>
+          <p>Vor jedem Flug ehrlich durchgehen. Nur wenn alle Punkte zufriedenstellend beantwortet werden kannst, bist du flugbereit:</p>
+
+          <table style="width:100%;border-collapse:collapse;margin:14px 0;border-radius:12px;overflow:hidden">
+            <thead><tr style="background:var(--sky-dark);color:#fff">
+              <th style="padding:10px;text-align:left;font-size:12px;width:30px">Buchst.</th>
+              <th style="padding:10px;text-align:left;font-size:12px">Begriff</th>
+              <th style="padding:10px;text-align:left;font-size:12px">Frage</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px;font-family:'Syne',sans-serif;font-size:20px;color:var(--sky-dark);font-weight:800">I</td><td style="padding:10px;font-size:13px"><strong>Illness</strong><br><span style="color:var(--muted);font-size:12px">Krankheit</span></td><td style="padding:10px;font-size:13px">Bestehen Krankheitssymptome?</td></tr>
+              <tr style="border-bottom:1px solid var(--border);background:var(--gray)"><td style="padding:10px;font-family:'Syne',sans-serif;font-size:20px;color:var(--sky-dark);font-weight:800">M</td><td style="padding:10px;font-size:13px"><strong>Medication</strong><br><span style="color:var(--muted);font-size:12px">Medikamente</span></td><td style="padding:10px;font-size:13px">Nehme ich aktuell Medikamente?</td></tr>
+              <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px;font-family:'Syne',sans-serif;font-size:20px;color:var(--sky-dark);font-weight:800">S</td><td style="padding:10px;font-size:13px"><strong>Stress</strong><br><span style="color:var(--muted);font-size:12px">Stress</span></td><td style="padding:10px;font-size:13px">Stehe ich unter Stress oder psychischem Druck?</td></tr>
+              <tr style="border-bottom:1px solid var(--border);background:var(--gray)"><td style="padding:10px;font-family:'Syne',sans-serif;font-size:20px;color:var(--sky-dark);font-weight:800">A</td><td style="padding:10px;font-size:13px"><strong>Alcohol</strong><br><span style="color:var(--muted);font-size:12px">Alkohol</span></td><td style="padding:10px;font-size:13px">Habe ich in den letzten 8–24h Alkohol getrunken?</td></tr>
+              <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px;font-family:'Syne',sans-serif;font-size:20px;color:var(--sky-dark);font-weight:800">F</td><td style="padding:10px;font-size:13px"><strong>Fatigue</strong><br><span style="color:var(--muted);font-size:12px">Müdigkeit</span></td><td style="padding:10px;font-size:13px">Hatte ich ausreichend Schlaf, Essen und Trinken?</td></tr>
+              <tr><td style="padding:10px;font-family:'Syne',sans-serif;font-size:20px;color:var(--sky-dark);font-weight:800">E</td><td style="padding:10px;font-size:13px"><strong>Emotion</strong><br><span style="color:var(--muted);font-size:12px">Gefühle</span></td><td style="padding:10px;font-size:13px">Habe ich ausreichend Abstand zu extremen Gefühlssituationen?</td></tr>
+            </tbody>
+          </table>
+
+          <div class="quiz-block">
+            <div class="quiz-eyebrow">🧠 Check</div>
+            <div class="quiz-q">Für was steht das "E" in der I'M SAFE Checkliste?</div>
+            <div class="quiz-opts" id="qo_q0_5">
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_5')"><span class="opt-l">A</span>Equipment — Ist die Drohne technisch in Ordnung?</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_5')"><span class="opt-l">B</span>Experience — Habe ich genug Flugerfahrung?</button>
+              <button class="quiz-opt" onclick="answerQ(this,'correct','q0_5')"><span class="opt-l">C</span>Emotion — Habe ich Abstand zu extremen Gefühlssituationen?</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_5')"><span class="opt-l">D</span>Environment — Sind die Wetterbedingungen gut?</button>
+            </div>
+            <div class="quiz-fb" id="fb_q0_5"></div>
+          </div>
+
+          <div class="quiz-block">
+            <div class="quiz-eyebrow">🧠 Check</div>
+            <div class="quiz-q">Welche Aussage zu Müdigkeit ist korrekt?</div>
+            <div class="quiz-opts" id="qo_q0_6">
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_6')"><span class="opt-l">A</span>Wer sich fit fühlt, ist auch fit genug zum Fliegen</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_6')"><span class="opt-l">B</span>Müdigkeit beeinflusst nur die körperliche Leistung</button>
+              <button class="quiz-opt" onclick="answerQ(this,'correct','q0_6')"><span class="opt-l">C</span>Die Selbsteinschätzung bei Müdigkeit ist oft zu optimistisch — man unterschätzt die eigene Beeinträchtigung</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_6')"><span class="opt-l">D</span>Ein Kaffee gleicht Müdigkeit für den Flug aus</button>
+            </div>
+            <div class="quiz-fb" id="fb_q0_6"></div>
+          </div>
+
+        </div>
+
+        <div style="padding:16px 0 8px">
+          <button onclick="showChapter(1);window.scrollTo({top:0,behavior:'smooth'})" style="width:100%;background:var(--sky-dark);color:#fff;border:none;border-radius:14px;padding:16px;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer">
+            Weiter zu Kapitel 2 · Wahrnehmung & SA →
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div><!-- end ch0 -->
+
+<!-- ==================== KAPITEL 2: WAHRNEHMUNG & SA ==================== -->
+<div class="chapter-section" id="ch1">
+  <div class="content">
+
+    <div class="pilot-quote">
+      <div class="pilot-avatar">🧑‍✈️</div>
+      <div class="pilot-quote-content">
+        <div class="from">Torsten Flieger sagt:</div>
+        <p>„Ich dachte immer, ich kann gut einschätzen, wie hoch meine Drohne fliegt. Dann hab ich mal GPS mit meiner Schätzung verglichen — lagen 30 Meter auseinander. Seitdem vertraue ich den Instrumenten, nicht meinen Augen."</p>
+      </div>
+    </div>
+
+    <div class="intro-block">
+      <strong>Kapitel 2 · Wahrnehmung & Situational Awareness</strong><br>
+      Deine Sinne sind kein zuverlässiges Messgerät. In diesem Kapitel lernst du, wie Situational Awareness funktioniert, warum Höhe und Geschwindigkeit so schwer einzuschätzen sind — und was Dunkelheit mit dir macht.
+    </div>
+
+    <!-- LEKTION 1 -->
+    <div class="lesson" id="l1_1">
+      <div class="lesson-head" onclick="toggleLesson('l1_1','ch1')">
+        <div class="lesson-num">1</div>
+        <div class="lesson-head-info">
+          <div class="lesson-eyebrow">Kapitel 2 · Lektion 1 · ca. 12 Min</div>
+          <div class="lesson-title">Situational Awareness</div>
+        </div>
+        <div class="lesson-toggle" id="tgl_l1_1">▾</div>
+      </div>
+      <div class="lesson-body" id="body_l1_1">
+        <div class="lesson-content">
+
+          <h3>Was ist Situational Awareness?</h3>
+          <p><strong>Situational Awareness (SA)</strong> = Das „große Bild" einer Situation haben und wissen, was wahrscheinlich als nächstes kommt. Der Prozess läuft in drei Schritten:</p>
+
+          <div class="def-grid">
+            <div class="def-card"><div class="def-badge">1</div><div class="def-text"><strong>Erfassen</strong> — Welche aktuellen Informationen habe ich? (Position, Höhe, Luftraum)</div></div>
+            <div class="def-card"><div class="def-badge">2</div><div class="def-text"><strong>Verstehen</strong> — Was bedeuten diese Informationen? (Bin ich nahe an einer Sperrzone?)</div></div>
+            <div class="def-card"><div class="def-badge">3</div><div class="def-text"><strong>Vorhersagen</strong> — Was passiert als nächstes? Welche Maßnahme ist nötig?</div></div>
+          </div>
+
+          <p>Die SA wird durch drei Faktor-Kategorien beeinflusst: <strong>Persönliche Faktoren</strong> (Müdigkeit, Stress, Erfahrung), <strong>Umgebungsfaktoren</strong> (Sicht, Wetter, Ablenkung) und <strong>Systemfaktoren</strong> (Komplexität der Drohne, Automatisierung, Fernbedienung).</p>
+
+          <div class="merksatz"><p>Situational Awareness = das große Bild haben und wissen, was als nächstes kommt.</p></div>
+
+          <div class="quiz-block">
+            <div class="quiz-eyebrow">🧠 Check</div>
+            <div class="quiz-q">Was ist Situational Awareness?</div>
+            <div class="quiz-opts" id="qo_q1_1">
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_1')"><span class="opt-l">A</span>Die Fähigkeit, mehrere Drohnen gleichzeitig zu steuern</button>
+              <button class="quiz-opt" onclick="answerQ(this,'correct','q1_1')"><span class="opt-l">B</span>Das große Bild einer Situation haben und wissen, was wahrscheinlich als nächstes kommt</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_1')"><span class="opt-l">C</span>Das technische Wissen über die Drohne</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_1')"><span class="opt-l">D</span>Die Fähigkeit, Wetterbedingungen vorherzusagen</button>
+            </div>
+            <div class="quiz-fb" id="fb_q1_1"></div>
+          </div>
+
+          <div class="quiz-block">
+            <div class="quiz-eyebrow">🧠 Check</div>
+            <div class="quiz-q">Welche drei Kategorien beeinflussen die Situational Awareness?</div>
+            <div class="quiz-opts" id="qo_q1_2">
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_2')"><span class="opt-l">A</span>Hardware, Software, Firmware</button>
+              <button class="quiz-opt" onclick="answerQ(this,'correct','q1_2')"><span class="opt-l">B</span>Persönliche Faktoren, Umgebungsfaktoren, Systemfaktoren (UAS)</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_2')"><span class="opt-l">C</span>Wetter, Luftraum, Versicherung</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_2')"><span class="opt-l">D</span>Qualifikation, Registrierung, Erfahrung</button>
+            </div>
+            <div class="quiz-fb" id="fb_q1_2"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- LEKTION 2 -->
+    <div class="lesson" id="l1_2">
+      <div class="lesson-head" onclick="toggleLesson('l1_2','ch1')">
+        <div class="lesson-num">2</div>
+        <div class="lesson-head-info">
+          <div class="lesson-eyebrow">Kapitel 2 · Lektion 2 · ca. 13 Min</div>
+          <div class="lesson-title">Höhe, Entfernung, Geschwindigkeit & Dunkelheit</div>
+        </div>
+        <div class="lesson-toggle" id="tgl_l1_2">▾</div>
+      </div>
+      <div class="lesson-body" id="body_l1_2">
+        <div class="lesson-content">
+
+          <h3>Höhe & Entfernung einschätzen</h3>
+          <p>Unsere Augen sind auf kurze Distanzen ausgelegt. Mit zunehmender Entfernung werden Schätzungen immer ungenauer. Als Referenz können bekannte Objekte helfen — aber nur wenn <strong>(1)</strong> die tatsächliche Größe des Referenzobjekts/Hauses bekannt ist und <strong>(2)</strong> UAS und Objekt ungefähr gleich weit vom Beobachter entfernt sind.</p>
+
+          <div class="box danger">
+            <div class="box-icon">📏</div>
+            <div class="box-body">
+              <span class="box-label">Warnung</span>
+              Gehe immer davon aus, dass eine <strong>signifikante Abweichung</strong> zwischen deiner Wahrnehmung und der tatsächlichen Position bestehen kann. Atmosphärische Einflüsse (Feuchtigkeit, Rauch, Sonneneinstrahlung) verstärken das.
+            </div>
+          </div>
+
+          <div class="box success">
+            <div class="box-icon">📡</div>
+            <div class="box-body">
+              <span class="box-label">Empfehlung</span>
+              GPS nutzen wenn möglich! Technische Messung schlägt Augenschein — immer.
+            </div>
+          </div>
+
+          <div class="quiz-block">
+            <div class="quiz-eyebrow">🧠 Check</div>
+            <div class="quiz-q">Du willst die Höhe deiner Drohne mit einem Haus als Referenz schätzen. Was muss stimmen?</div>
+            <div class="quiz-opts" id="qo_q1_3">
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_3')"><span class="opt-l">A</span>Das Haus muss mindestens 10m hoch sein</button>
+              <button class="quiz-opt" onclick="answerQ(this,'correct','q1_3')"><span class="opt-l">B</span>Die echte Größe des Hauses/Objektes muss bekannt sein und UAS und Objekt müssen ungefähr gleich weit vom Beobachter entfernt sein</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_3')"><span class="opt-l">C</span>Es reicht wenn das Haus im gleichen Sichtfeld liegt</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_3')"><span class="opt-l">D</span>Referenzobjekte funktionieren grundsätzlich nicht</button>
+            </div>
+            <div class="quiz-fb" id="fb_q1_3"></div>
+          </div>
+
+          <h3>Geschwindigkeit einschätzen</h3>
+          <p>Die Einschätzung der Geschwindigkeit anderer Flugobjekte hängt stark von der Bewegungsrichtung ab: <strong>Senkrecht zur Blickrichtung</strong> ist einfacher einzuschätzen. <strong>Direkt auf dich zu</strong> ist am schwierigsten — und gefährlichsten. Ein herannahender Kampfjet ist kaum von einem langsamen Propellerflugzeug zu unterscheiden.</p>
+
+          <div class="quiz-block">
+            <div class="quiz-eyebrow">🧠 Check</div>
+            <div class="quiz-q">Wann ist die Geschwindigkeitseinschätzung eines Flugobjekts am schwierigsten?</div>
+            <div class="quiz-opts" id="qo_q1_4">
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_4')"><span class="opt-l">A</span>Wenn es sich senkrecht zur Blickrichtung bewegt</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_4')"><span class="opt-l">B</span>Bei bewölktem Himmel</button>
+              <button class="quiz-opt" onclick="answerQ(this,'correct','q1_4')"><span class="opt-l">C</span>Wenn es sich direkt oder schräg auf den Beobachter zubewegt</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_4')"><span class="opt-l">D</span>Bei Gegenwind</button>
+            </div>
+            <div class="quiz-fb" id="fb_q1_4"></div>
+          </div>
+
+          <h3>Flüge bei Dunkelheit</h3>
+          <p>Die Augen brauchen ca. <strong>30 Minuten</strong> zur Dunkelanpassung — danach helles Licht unbedingt meiden. Lichtfarben können täuschen: <strong>Grünes Licht</strong> erscheint heller und damit näher. <strong>Rotes Licht</strong> erscheint dunkler und damit weiter entfernt.</p>
+
+          <div class="box danger">
+            <div class="box-icon">🚬</div>
+            <div class="box-body">
+              <span class="box-label">Anämische Hypoxie</span>
+              Rauchen oder Abgase verursachen eine CO-Vergiftung — Kohlenstoffmonoxid verdrängt Sauerstoff in den roten Blutkörperchen. Folge: verschlechterte Nachtsicht.
+            </div>
+          </div>
+
+          <div class="merksatz"><p>30 Min Dunkeladaption → helles Licht danach meiden → Grün wirkt näher, Rot weiter → Rauchen verschlechtert Nachtsicht (anämische Hypoxie).</p></div>
+
+          <div class="quiz-block">
+            <div class="quiz-eyebrow">🧠 Check</div>
+            <div class="quiz-q">Wie lange dauert die Anpassung der Augen an Dunkelheit?</div>
+            <div class="quiz-opts" id="qo_q1_5">
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_5')"><span class="opt-l">A</span>5 Minuten</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_5')"><span class="opt-l">B</span>10 Minuten</button>
+              <button class="quiz-opt" onclick="answerQ(this,'correct','q1_5')"><span class="opt-l">C</span>30 Minuten</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_5')"><span class="opt-l">D</span>60 Minuten</button>
+            </div>
+            <div class="quiz-fb" id="fb_q1_5"></div>
+          </div>
+
+          <div class="quiz-block">
+            <div class="quiz-eyebrow">🧠 Check</div>
+            <div class="quiz-q">Was ist „anämische Hypoxie"?</div>
+            <div class="quiz-opts" id="qo_q1_6">
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_6')"><span class="opt-l">A</span>Sehschwäche durch Überanstrengung</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_6')"><span class="opt-l">B</span>Eine Form von Höhenkrankheit</button>
+              <button class="quiz-opt" onclick="answerQ(this,'correct','q1_6')"><span class="opt-l">C</span>Verschlechterte Nachtsicht durch CO-Vergiftung (z.B. durch Rauchen)</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_6')"><span class="opt-l">D</span>Müdigkeit durch langen Nachtflug</button>
+            </div>
+            <div class="quiz-fb" id="fb_q1_6"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div><!-- end ch1 -->
+
+
+<!-- ==================== FINALES QUIZ ==================== -->
+<div class="final-quiz" id="finalQuizSection" style="display:none">
+  <div class="fq-header">
+    <h3>🎯 Modul-Abschlussquiz</h3>
+    <p>20 Fragen aus allen 2 Kapiteln · 75% zum Bestehen</p>
+  </div>
+  <div class="fq-dots" id="fqDots"></div>
+  <div id="fqBody">
+    <div class="fq-counter" id="fqCounter"></div>
+    <div class="fq-question" id="fqQuestion"></div>
+    <div class="fq-opts" id="fqOpts"></div>
+    <div class="fq-feedback" id="fqFeedback"></div>
+    <button class="fq-next" id="fqNext" onclick="nextFQ()">Weiter →</button>
+  </div>
+  <div id="fqResult" style="display:none"></div>
+</div>
+
+<div class="module-end" id="moduleEnd" style="display:none">
+  <div class="module-end-icon">🧠</div>
+  <h2>Modul 2 abgeschlossen!</h2>
+  <p>Du kennst jetzt das menschliche Leistungsvermögen. Weiter zu Modul 3 — dort geht es um betriebliche Verfahren.</p>
+  <a href="modul-3.html" class="btn-next">Zu Modul 3: Betriebliche Verfahren →</a>
+</div>
+
+</div><!-- end content -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── STATE ─────────────────────────────────────────
+const chapterDone = [false,false];
+const quizAnswered = {};
+let currentChapter = 0;
+let finalQuizStarted = false;
+
+// ─── CHAPTER NAVIGATION ────────────────────────────
+function showChapter(n){
+  document.querySelectorAll('.chapter-section').forEach((s,i)=>{
+    s.classList.toggle('active', i===n);
+  });
+  document.querySelectorAll('.chapter-tab').forEach((t,i)=>{
+    t.classList.toggle('active', i===n);
+  });
+  currentChapter = n;
+  window.scrollTo({top:0,behavior:'smooth'});
+  // Open first lesson of chapter
+  const firstLesson = document.querySelector(`#ch${n} .lesson-body`);
+  if(firstLesson && !firstLesson.classList.contains('open')){
+    const firstHead = document.querySelector(`#ch${n} .lesson-head`);
+    if(firstHead) firstHead.click();
+  }
+}
+
+// ─── LESSON TOGGLE ─────────────────────────────────
+function toggleLesson(id, chId){
+  const body = document.getElementById('body_'+id);
+  const tgl = document.getElementById('tgl_'+id);
+  const isOpen = body.classList.toggle('open');
+  tgl.classList.toggle('open', isOpen);
+  if(isOpen){
+    markChapterProgress(chId);
+    setTimeout(()=>{ body.scrollIntoView({behavior:'smooth',block:'start'}); },100);
+  }
+}
+
+// Chapter keys mapping for localStorage
+const chapterKeys = ['m2_ch1','m2_ch2'];
+
+function markChapterProgress(chId){
+  const chIdx = parseInt(chId.replace('ch',''));
+  if(!chapterDone[chIdx]){
+    chapterDone[chIdx] = true;
+    document.getElementById('ctab'+chIdx).classList.add('done');
+    // Save chapter progress to localStorage
+    try {
+      const p = JSON.parse(localStorage.getItem('drohnenschein_progress')||'{}');
+      p[chapterKeys[chIdx]] = true;
+      localStorage.setItem('drohnenschein_progress', JSON.stringify(p));
+    } catch(e) {}
+    updateProgress();
+    // Show final quiz when all chapters done
+    if(chapterDone.every(Boolean) && !finalQuizStarted){
+      setTimeout(()=>{
+        document.getElementById('finalQuizSection').style.display='block';
+        document.getElementById('finalQuizSection').scrollIntoView({behavior:'smooth'});
+        finalQuizStarted = true;
+        initFQ();
+      }, 800);
+    }
+  }
+}
+
+// ─── PROGRESS ──────────────────────────────────────
+function updateProgress(){
+  const done = chapterDone.filter(Boolean).length;
+  const total = chapterDone.length + 1; // +1 for quiz
+  let pct = Math.round(done/total*100);
+  if(quizPassed) pct = 100;
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressPct').textContent = pct+'%';
+  document.getElementById('headerProgress').textContent = pct+'%';
+}
+
+// ─── INLINE QUIZ ───────────────────────────────────
+const qFeedbacks = {
+  q0_1:{correct:'✅ Richtig! Ehrliche Selbsteinschätzung ist Pflicht. Im Zweifel immer absagen.',wrong:'❌ Falsch. Auch geringe Symptome können sich im Flug verstärken.'},
+  q0_2:{correct:'✅ Genau! Die Ursache der Medikation ist oft selbst schon ein Ausschlusskriterium.',wrong:'❌ Falsch. Die Kernfrage ist WARUM du das Medikament nimmst.'},
+  q0_3:{correct:'✅ Korrekt! Mindestens 8 Stunden Abstand — und 0,2 Promille Grenze beachten.',wrong:'❌ Falsch. Die empfohlene Richtlinie ist mindestens 8 Stunden.'},
+  q0_4:{correct:'✅ Richtig! 17h wach = 0,5 Promille. 23h = 1,0 Promille.',wrong:'❌ Falsch. 17h schlaflos = 0,5 Promille, 23h = 1,0 Promille.'},
+  q0_5:{correct:'✅ Korrekt! E = Emotion — Abstand zu extremen Gefühlssituationen.',wrong:'❌ Falsch. E steht für Emotion.'},
+  q0_6:{correct:'✅ Richtig! Müdigkeit täuscht: man fühlt sich fitter als man ist.',wrong:'❌ Falsch. Die Selbsteinschätzung leidet als erstes.'},
+  q1_1:{correct:'✅ Richtig! SA = das große Bild haben und wissen, was als nächstes kommt.',wrong:'❌ Falsch. Situational Awareness ist das Lagebewusstsein des Fernpiloten.'},
+  q1_2:{correct:'✅ Korrekt! Persönlich + Umgebung + System (UAS).',wrong:'❌ Falsch. Die drei Faktoren sind: persönlich, Umgebung, System.'},
+  q1_3:{correct:'✅ Richtig! Bekannte Größe + gleicher Abstand vom Beobachter — beide Bedingungen müssen stimmen.',wrong:'❌ Falsch. Beide Bedingungen müssen erfüllt sein.'},
+  q1_4:{correct:'✅ Korrekt! Annähernde Objekte sind am schwierigsten einzuschätzen.',wrong:'❌ Falsch. Annähernder Verkehr ist am gefährlichsten.'},
+  q1_5:{correct:'✅ Richtig! 30 Minuten Dunkeladaption, danach helles Licht meiden.',wrong:'❌ Falsch. Die Augen brauchen etwa 30 Minuten.'},
+  q1_6:{correct:'✅ Korrekt! CO aus Rauchen/Abgasen → schlechtere Nachtsicht.',wrong:'❌ Falsch. Anämische Hypoxie = Nachtsichtverschlechterung durch CO-Vergiftung.'}
+};
+
+function answerQ(btn, type, id){
+  if(quizAnswered[id]) return;
+  quizAnswered[id] = true;
+  btn.closest('.quiz-block').querySelectorAll('.quiz-opt').forEach(o=>o.disabled=true);
+  btn.classList.add(type);
+  const fb = document.getElementById('fb_'+id);
+  fb.innerHTML = qFeedbacks[id][type];
+  fb.className = 'quiz-fb show '+type;
+}
+
+const scFeedbacks = {
+  sc0_1:{correct:'✅ Korrekt! C0-Drohnen (unter 250g) dürfen in A1 auch über vereinzelte Personen fliegen — aber nur mit äußerster Vorsicht und möglichst vermieden. Das ist keine generelle Erlaubnis, sondern eine begrenzte Ausnahmeregelung.',wrong:'❌ Falsch. C0-Drohnen dürfen in A1 mit äußerster Vorsicht über vereinzelte (nicht angesammelte) Personen fliegen. Keine Prüfung nötig, aber sehr wohl Regeln.'},
+  sc2_1:{correct:'✅ Richtig! Sobald ein Notfalleinsatz stattfindet, gilt für alle anderen UAS sofortiges Flugverbot in und um das Gebiet. Rettungskräfte brauchen freien Luftraum.',wrong:'❌ Falsch. Bei jedem Notfalleinsatz gilt sofortiges Flugverbot für alle anderen UAS — ohne Ausnahme, außer die Einsatzleitung erteilt ausdrücklich Erlaubnis.'}
+};
+
+function answerSc(btn, type, id){
+  if(quizAnswered['sc_'+id]) return;
+  quizAnswered['sc_'+id] = true;
+  btn.closest('.scenario').querySelectorAll('.sc-opt').forEach(o=>o.disabled=true);
+  btn.classList.add(type);
+  const fb = document.getElementById('fb_'+id);
+  fb.innerHTML = scFeedbacks[id][type];
+  fb.className = 'sc-fb show '+type;
+}
+
+// ─── FINAL QUIZ ────────────────────────────────────
+const fqPool = [
+  {q:'Was bewirkt Alkohol auf die Selbsteinschätzung?',opts:['Verbessert sie leicht','Hat keinen Einfluss','Verschlechtert sie — man fühlt sich fitter als man ist','Macht sie präziser bei geringer Menge'],c:2,fb:'Alkohol beeinträchtigt die Selbsteinschätzung als erstes — man fühlt sich fit obwohl man es nicht ist.'},
+  {q:'Welche Auswirkungen hat Müdigkeit auf die Flugsicherheit?',opts:['Nur körperliche Verlangsamung','Verminderte Aufmerksamkeit, Mikroschlafereignisse, gestörte SA, Fehleinschätzungen','Kein Einfluss bei kurzen Flügen','Nur bei über 2h Schlafmangel'],c:1,fb:'Müdigkeit verursacht: verminderte Aufmerksamkeit, Mikroschlafereignisse, gestörte Situational Awareness und erhöhte Fehleinschätzungen.'},
+  {q:'Wofür steht das "S" in der I\'M SAFE Checkliste?',opts:['Sleep — ausreichend geschlafen?','Safety — ist die Drohne sicher?','Stress — stehe ich unter Stress oder psychischem Druck?','Sunlight — fliege ich bei Tageslicht?'],c:2,fb:'S = Stress. Stehen Sie unter Stress oder psychischem Druck?'},
+  {q:'Wofür steht das "F" in der I\'M SAFE Checkliste?',opts:['Fuel — genug Akku?','Fatigue — ausreichend Schlaf, Essen, Trinken?','Focus — bin ich fokussiert?','Flight — ist der Flug geplant?'],c:1,fb:'F = Fatigue (Müdigkeit). Hatten Sie ausreichend Schlaf, Essen und Trinken?'},
+  {q:'Welche Promille-Grenze gilt in der kommerziellen Luftfahrt?',opts:['0,0 Promille','0,2 Promille','0,5 Promille','0,8 Promille'],c:1,fb:'0,2 Promille ist die kommerzielle Grenze — eine gute Orientierung auch für Drohnenpiloten.'},
+  {q:'Was versteht man unter kognitiven Fähigkeiten?',opts:['Körperkraft und Ausdauer','Denkvermögen, Urteilskraft, Schlussfolgerungen, räumliche Vorstellung','Sehkraft und Hörvermögen','Reaktionszeit und Motorik'],c:1,fb:'Kognitive Fähigkeiten: Denkvermögen, Urteilskraft, Schlussfolgerungen und räumliche Vorstellung.'},
+  {q:'23 Stunden ohne Schlaf entsprechen etwa welchem Blutalkoholspiegel?',opts:['0,2 Promille','0,5 Promille','0,8 Promille','1,0 Promille'],c:3,fb:'23h wach = ~1,0 Promille Alkoholäquivalent. Mit 1,0 Promille ist Fliegen absolut verboten.'},
+  {q:'Wofür steht das "M" in I\'M SAFE?',opts:['Meteorologie — Wetter geprüft?','Medication — nehme ich Medikamente?','Mental — bin ich mental fit?','Mission — Flugziel definiert?'],c:1,fb:'M = Medication. Nehmen Sie aktuell Medikamente? Auch Neben- und Wechselwirkungen beachten.'},
+  {q:'Warum ist bei Medikamenten die Frage "WARUM nehme ich es?" so wichtig?',opts:['Um die Kosten abzuschätzen','Um die Dosierung zu prüfen','Weil die Ursache selbst oft schon ein Ausschlusskriterium fürs Fliegen ist','Nur bei verschreibungspflichtigen Mitteln relevant'],c:2,fb:'Das medizinische Problem selbst — nicht nur das Medikament — kann die Flugtauglichkeit ausschließen.'},
+  {q:'Was tun wenn man sich während des Fluges krank fühlt?',opts:['Kurz pausieren und warten','Sofort landen oder Steuerung übergeben','Flughöhe reduzieren und langsamer fliegen','Erst nach dem Flug Arzt aufsuchen'],c:1,fb:'Bei Krankheit während des Fluges: sofort landen oder Steuerung an einen anderen Piloten übergeben.'},
+  {q:'Was sind die drei Schritte der Situational Awareness?',opts:['Starten, Fliegen, Landen','Erfassen, Verstehen, Vorhersagen','Planen, Durchführen, Auswerten','Beobachten, Melden, Reagieren'],c:1,fb:'SA = Informationen erfassen → Bedeutung verstehen → Vorhersage treffen, was als nächstes passiert.'},
+  {q:'Welcher atmosphärische Faktor kann die Entfernungseinschätzung verschlechtern?',opts:['Regen allein','Feuchtigkeit, Rauch, Partikel und Sonneneinstrahlung','Nur starker Wind','Kälte unter 0 Grad'],c:1,fb:'Feuchtigkeit, Rauch, Staubpartikel und Sonneneinstrahlung können die Entfernungswahrnehmung verzerren.'},
+  {q:'Was gilt für die Genauigkeit der Entfernungseinschätzung mit zunehmender Distanz?',opts:['Sie wird genauer','Sie bleibt konstant','Sie wird immer unzuverlässiger','Sie verbessert sich bei gutem Wetter'],c:2,fb:'Mit zunehmender Entfernung werden Schätzungen immer ungenauer — das Gehirn ergänzt aus Erfahrung, die oft täuscht.'},
+  {q:'Welche Lichtfarbe erscheint im Dunkeln näher?',opts:['Blaues Licht','Rotes Licht','Grünes Licht','Weißes Licht'],c:2,fb:'Grünes Licht erscheint heller und wirkt daher näher als es ist. Rotes Licht wirkt entfernter.'},
+  {q:'Was ist bei GPS-Daten zur Positionsbestimmung zu empfehlen?',opts:['GPS nur als Backup','GPS und Augenschein mitteln','GPS bevorzugen — technische Messung ist zuverlässiger als Augenschein','GPS nur bei schlechter Sicht'],c:2,fb:'GPS und technische Systeme sind zuverlässiger als die eigene Wahrnehmung. Im Zweifel: Instrumente vertrauen.'},
+  {q:'Welche Bewegungsrichtung eines Flugobjekts ist am schwierigsten einzuschätzen?',opts:['Senkrecht zur Blickrichtung','Diagonal nach oben','Direkt auf den Beobachter zu','Parallel in großer Höhe'],c:2,fb:'Direkt annähernde Objekte wirken zunächst fast bewegungslos — bis sie plötzlich sehr nah sind.'},
+  {q:'Warum ist die Nähe von Wolken beim Drohnenfliegen gefährlich?',opts:['Wolken verursachen Turbulenzen','Ein bemanntes Flugzeug kann aus der Wolke kommen — Reaktionszeit wäre unzureichend','Wolken beeinflussen GPS stark','Wolken verhindern Sichtkontakt zum Boden'],c:1,fb:'Aus Wolken können bemannten Flugzeuge kommen — die Reaktionszeit ist dann zu kurz für eine Kollisionsvermeidung.'},
+  {q:'Was verursacht anämische Hypoxie?',opts:['Zu wenig Schlaf','Überanstrengung der Augen','CO-Vergiftung durch Rauchen/Abgase — verdrängt Sauerstoff in roten Blutkörperchen','Kälte die die Augen beeinflusst'],c:2,fb:'Kohlenstoffmonoxid bindet an rote Blutkörperchen und verdrängt Sauerstoff → anämische Hypoxie → schlechtere Nachtsicht.'},
+  {q:'Warum ist die Einschätzung der Flughöhe einer Drohne schwierig?',opts:['Drohnen fliegen zu schnell','Drohnen sind zu klein — Entfernungseinschätzung ist unzuverlässig und von Illusionen beeinflusst','Das Gehirn kann keine bewegten Objekte schätzen','Nur bei Gegenlicht schwierig'],c:1,fb:'UAS sind sehr kleine Objekte. Die Entfernungseinschätzung ist generell unzuverlässig und wird durch viele Faktoren verzerrt.'},
+  {q:'Welche Aussage zur Situational Awareness ist korrekt?',opts:['SA ist angeboren und kann nicht verbessert werden','SA betrifft nur die technischen Systeme','SA wird durch Müdigkeit, Stress und schlechte Sicht negativ beeinflusst','SA ist nur bei Nachtflügen relevant'],c:2,fb:'SA wird durch persönliche Faktoren (Müdigkeit, Stress), Umgebung (Sicht, Wetter) und Systemfaktoren beeinflusst.'}
+];
+
+let fqState = {questions:[],current:0,score:0};
+let quizPassed = false;
+
+function initFQ(){
+  fqState.questions = [...fqPool].sort(()=>Math.random()-0.5);
+  fqState.current=0; fqState.score=0;
+  document.getElementById('fqDots').innerHTML = fqState.questions.map((_,i)=>`<div class="qdot" id="fqdot${i}"></div>`).join('');
+  showFQ();
+}
+
+function showFQ(){
+  const q = fqState.questions[fqState.current];
+  document.getElementById('fqCounter').textContent = `Frage ${fqState.current+1} / ${fqState.questions.length}`;
+  document.getElementById('fqQuestion').textContent = q.q;
+  document.getElementById('fqOpts').innerHTML = q.opts.map((o,i)=>`<button class="quiz-opt" onclick="answerFQ(this,${i})"><span class="opt-l">${'ABCD'[i]}</span>${o}</button>`).join('');
+  document.getElementById('fqFeedback').style.display='none';
+  document.getElementById('fqFeedback').className='fq-feedback';
+  document.getElementById('fqNext').style.display='none';
+  const dot = document.getElementById('fqdot'+fqState.current);
+  if(dot) dot.style.background='rgba(255,214,0,.6)';
+}
+
+function answerFQ(btn,idx){
+  const q=fqState.questions[fqState.current];
+  document.querySelectorAll('#fqOpts .quiz-opt').forEach(o=>o.disabled=true);
+  const fb=document.getElementById('fqFeedback');
+  const dot=document.getElementById('fqdot'+fqState.current);
+  if(idx===q.c){
+    btn.classList.add('correct');
+    fb.innerHTML='✅ Richtig! '+q.fb;
+    fb.className='fq-feedback show';
+    fqState.score++;
+    if(dot) dot.style.background='var(--green)';
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('#fqOpts .quiz-opt')[q.c].classList.add('correct');
+    fb.innerHTML='❌ Falsch. '+q.fb;
+    fb.className='fq-feedback show';
+    if(dot) dot.style.background='var(--red)';
+  }
+  fb.style.display='block';
+  document.getElementById('fqNext').style.display='block';
+}
+
+function nextFQ(){
+  fqState.current++;
+  if(fqState.current>=fqState.questions.length){ showFQResult(); }
+  else { showFQ(); }
+}
+
+function showFQResult(){
+  const pct=Math.round(fqState.score/fqState.questions.length*100);
+  const passed=pct>=75;
+  document.getElementById('fqBody').style.display='none';
+  document.getElementById('fqDots').style.display='none';
+  const r=document.getElementById('fqResult');
+  r.style.display='block';
+  r.innerHTML=`<div class="fq-result">
+    <div class="fq-score">${pct}%</div>
+    <div class="fq-result-label">${passed?'🎉 Bestanden!':'💪 Noch nicht ganz'}</div>
+    <div class="fq-result-msg">${fqState.score} von ${fqState.questions.length} Fragen richtig.<br>${passed?'Ausgezeichnet! Du kennst das menschliche Leistungsvermögen.':'Nochmal durch die Kapitel und dann neu versuchen.'}</div>
+    <button onclick="retryFQ()" style="background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.3);color:#fff;padding:11px 22px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif">🔄 Nochmal</button>
+  </div>`;
+  if(passed){
+    quizPassed=true;
+    updateProgress();
+    showToast('🎉 Modul 2 abgeschlossen!','success');
+    document.getElementById('moduleEnd').style.display='block';
+    markModuleDone();
+  }
+}
+
+function retryFQ(){
+  document.getElementById('fqResult').style.display='none';
+  document.getElementById('fqBody').style.display='block';
+  document.getElementById('fqDots').style.display='flex';
+  initFQ();
+}
+
+function markModuleDone(){
+  try{
+    const p=JSON.parse(localStorage.getItem('drohnenschein_progress')||'{}');
+    p['m2_completed']=true;
+    localStorage.setItem('drohnenschein_progress',JSON.stringify(p));
+  }catch(e){}
+}
+
+function showToast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast '+type+' show';
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+// ─── INIT ──────────────────────────────────────────
+document.addEventListener('DOMContentLoaded',()=>{
+  // Always reset progress to 0% on load
+  document.getElementById('progressFill').style.width = '0%';
+  document.getElementById('progressPct').textContent = '0%';
+  document.getElementById('headerProgress').textContent = '0%';
+  // Open first lesson of chapter 1
+  const firstBody = document.getElementById('body_l0_1');
+  const firstTgl = document.getElementById('tgl_l0_1');
+  if(firstBody){ firstBody.classList.add('open'); if(firstTgl) firstTgl.classList.add('open'); }
+});
+</script>
+</body>
+</html>

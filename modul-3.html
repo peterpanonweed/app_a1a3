@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Modul 3: Betriebliche Verfahren · drohnenschein.app</title>
+<meta name="theme-color" content="#BF360C"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="DrohnenSchein"/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icon-192.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--sky:#E65100;--sky-light:#FFF3E0;--sky-dark:#BF360C;--yellow:#FFD600;--green:#00C853;--red:#FF3D00;--orange:#FF6D00;--purple:#9C27B0;--black:#0D0D0D;--white:#FAFAF8;--gray:#F2F2EF;--border:#E0E0DC;--text:#1A1A1A;--muted:#777}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);overflow-x:hidden;-webkit-tap-highlight-color:transparent;line-height:1.65}
+.app-header{background:var(--sky-dark);padding:.875rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;padding-top:max(.875rem,env(safe-area-inset-top));box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.header-back{color:#fff;text-decoration:none;font-size:14px;display:flex;align-items:center;gap:6px;opacity:.9;font-weight:500}
+.header-title{font-family:'Syne',sans-serif;font-size:14px;color:#fff;font-weight:700;text-align:center;flex:1;padding:0 1rem}
+.header-title small{display:block;font-size:11px;font-weight:400;opacity:.6;letter-spacing:.05em;text-transform:uppercase}
+.header-progress{font-size:13px;color:var(--yellow);font-weight:600;min-width:36px;text-align:right}
+.module-hero{background:linear-gradient(135deg,var(--sky-dark) 0%,var(--sky) 60%,#F4511E 100%);padding:2.5rem 1.25rem 3rem;color:#fff;position:relative;overflow:hidden}
+.module-hero::after{content:'';position:absolute;bottom:-30px;left:0;right:0;height:60px;background:var(--white);border-radius:40px 40px 0 0}
+.module-hero::before{content:'';position:absolute;top:-50%;right:-20%;width:400px;height:400px;background:radial-gradient(circle,rgba(255,214,0,.15) 0%,transparent 70%);pointer-events:none}
+.module-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);font-size:12px;font-weight:600;padding:5px 14px;border-radius:20px;margin-bottom:1rem;letter-spacing:.05em;backdrop-filter:blur(8px)}
+.module-hero h1{font-family:'Syne',sans-serif;font-size:clamp(26px,6vw,42px);font-weight:800;line-height:1.05;margin-bottom:.75rem;letter-spacing:-.02em}
+.module-hero .subtitle{font-size:15px;color:rgba(255,255,255,.85);line-height:1.6;max-width:520px;margin-bottom:1.5rem}
+.module-meta{display:flex;gap:.75rem;flex-wrap:wrap;font-size:13px}
+.meta-item{display:flex;align-items:center;gap:6px;color:rgba(255,255,255,.9);background:rgba(0,0,0,.15);padding:5px 12px;border-radius:20px}
+.progress-section{padding:1.25rem 1.25rem;background:var(--white);position:sticky;top:56px;z-index:50;border-bottom:1px solid var(--border)}
+.progress-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:500}
+.progress-track{height:6px;background:var(--gray);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--sky),var(--yellow));border-radius:3px;transition:width .5s ease;width:0%}
+.content{max-width:680px;margin:0 auto;padding:0 1.25rem 6rem}
+.intro-block{background:var(--gray);border-left:4px solid var(--sky);border-radius:0 12px 12px 0;padding:1.5rem;margin:2rem 0}
+.pilot-quote{display:flex;gap:14px;align-items:flex-start}
+.pilot-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--yellow),var(--orange));display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 4px 12px rgba(255,214,0,.3)}
+.pilot-quote-content .from{font-size:11px;font-weight:700;color:var(--orange);letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px}
+.pilot-quote-content p{font-size:15px;color:var(--text);line-height:1.65;font-style:italic}
+/* CHAPTER TABS */
+.chapter-nav{display:flex;gap:6px;padding:1.5rem 1.25rem .5rem;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;background:var(--white)}
+.chapter-nav::-webkit-scrollbar{display:none}
+.chapter-tab{flex-shrink:0;background:var(--gray);border:1.5px solid var(--border);border-radius:20px;padding:7px 14px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;font-family:'DM Sans',sans-serif}
+.chapter-tab.active{background:var(--sky-dark);color:#fff;border-color:var(--sky-dark)}
+.chapter-tab.done{background:#E8F5E9;color:#1B5E20;border-color:#A5D6A7}
+/* LESSON */
+.lesson{background:#fff;border:1px solid var(--border);border-radius:16px;margin-bottom:1.5rem;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.lesson-head{padding:1.25rem 1.5rem;background:linear-gradient(135deg,#fff 0%,var(--sky-light) 100%);border-bottom:1px solid var(--border);display:flex;gap:14px;align-items:center;cursor:pointer;user-select:none}
+.lesson-num{width:40px;height:40px;background:var(--sky-dark);color:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:18px;font-weight:800;flex-shrink:0}
+.lesson-head-info{flex:1;min-width:0}
+.lesson-eyebrow{font-size:11px;color:var(--sky);font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px}
+.lesson-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;line-height:1.3;color:var(--text)}
+.lesson-toggle{font-size:12px;color:var(--muted);transition:transform .3s;flex-shrink:0;background:var(--gray);width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.lesson-toggle.open{transform:rotate(180deg);background:var(--sky-dark);color:#fff}
+.lesson-body{max-height:0;overflow:hidden;transition:max-height .5s ease}
+.lesson-body.open{max-height:30000px}
+.lesson-content{padding:1.5rem}
+.lesson-content h3{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--sky-dark);margin:1.5rem 0 .65rem;line-height:1.3}
+.lesson-content h3:first-child{margin-top:0}
+.lesson-content h4{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin:1.1rem 0 .4rem}
+.lesson-content p{font-size:15px;line-height:1.8;color:#2a2a2a;margin-bottom:1rem}
+.lesson-content p strong{color:var(--sky-dark);font-weight:600}
+/* BOXES */
+.box{border-radius:12px;padding:1.1rem 1.25rem;margin:1.1rem 0;display:flex;gap:12px;align-items:flex-start}
+.box.info{background:#E3F2FD;border-left:3px solid var(--sky)}
+.box.warn{background:#FFF8E1;border-left:3px solid #FFB300}
+.box.danger{background:#FFEBEE;border-left:3px solid var(--red)}
+.box.success{background:#E8F5E9;border-left:3px solid var(--green)}
+.box.tip{background:#F3E5F5;border-left:3px solid var(--purple)}
+.box.law{background:#E8EAF6;border-left:3px solid #3949AB}
+.box-icon{font-size:22px;flex-shrink:0;line-height:1;margin-top:2px}
+.box-text{flex:1;font-size:14px;line-height:1.7;color:#333}
+.box-text strong{color:#000;font-weight:600}
+.box-text .label{display:block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;opacity:.7}
+/* MERKSATZ */
+.merksatz{background:linear-gradient(135deg,#FFF9C4,#FFEB3B);border-radius:12px;padding:1.1rem 1.4rem;margin:1.4rem 0;position:relative;box-shadow:0 4px 16px rgba(255,235,59,.3)}
+.merksatz::before{content:'💡 MERKE';position:absolute;top:-10px;left:1.25rem;background:var(--sky-dark);color:var(--yellow);font-size:10px;font-weight:700;padding:3px 10px;border-radius:4px;letter-spacing:.1em}
+.merksatz p{font-size:14px;color:#3E2723;font-weight:500;line-height:1.65;margin:0;font-style:italic}
+.merksatz p strong{color:#1B5E20;font-weight:700;font-style:normal}
+/* DEFINITION CARDS */
+.def-grid{display:grid;grid-template-columns:1fr;gap:8px;margin:1.1rem 0}
+.def-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:.9rem 1.1rem;display:flex;gap:12px;align-items:flex-start}
+.def-badge{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;background:var(--sky-dark);color:#fff;padding:3px 8px;border-radius:5px;flex-shrink:0;letter-spacing:.05em;margin-top:2px}
+.def-text{flex:1;font-size:14px;line-height:1.6;color:#333}
+.def-text strong{color:var(--text);font-weight:600}
+/* CATEGORY TABLE */
+.cat-table{border-radius:12px;overflow:hidden;border:1px solid var(--border);margin:1.1rem 0}
+.cat-row{display:grid;grid-template-columns:80px 1fr 1fr;border-bottom:1px solid var(--border)}
+.cat-row:last-child{border-bottom:none}
+.cat-row.header{background:var(--sky-dark);color:#fff;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:.05em}
+.cat-cell{padding:.75rem .9rem;font-size:13px;line-height:1.5;border-right:1px solid var(--border)}
+.cat-cell:last-child{border-right:none}
+.cat-row.a1{background:#E8F5E9}
+.cat-row.a2{background:#FFF8E1}
+.cat-row.a3{background:#FFF3E0}
+/* CLASS TABLE */
+.class-table{border-radius:12px;overflow:hidden;border:1px solid var(--border);margin:1.1rem 0;font-size:13px}
+.class-row{display:grid;grid-template-columns:50px 90px 1fr 1fr;border-bottom:1px solid var(--border)}
+.class-row:last-child{border-bottom:none}
+.class-row.header{background:var(--sky-dark);color:#fff;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.05em}
+.class-cell{padding:.65rem .8rem;border-right:1px solid var(--border);line-height:1.4}
+.class-cell:last-child{border-right:none}
+.class-badge{display:inline-block;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;padding:2px 8px;border-radius:5px;color:#fff}
+.c0{background:#43A047}.c1{background:#1E88E5}.c2{background:#FB8C00}.c3{background:#E53935}.c4{background:#6D4C41}
+/* QUIZ */
+.quiz-block{background:linear-gradient(135deg,var(--sky-dark),var(--sky));border-radius:14px;padding:1.4rem;margin:1.4rem 0;color:#fff}
+.quiz-tag{display:inline-block;background:rgba(255,255,255,.15);font-size:11px;font-weight:600;padding:3px 10px;border-radius:4px;letter-spacing:.08em;margin-bottom:.65rem}
+.quiz-q{font-size:15px;font-weight:500;line-height:1.45;margin-bottom:.9rem}
+.quiz-opts{display:flex;flex-direction:column;gap:6px}
+.quiz-opt{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);border-radius:8px;padding:10px 14px;font-size:13px;cursor:pointer;text-align:left;color:#fff;width:100%;font-family:'DM Sans',sans-serif;transition:all .15s;display:flex;align-items:center;gap:10px;line-height:1.45}
+.quiz-opt:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3)}
+.quiz-opt.correct{background:rgba(0,200,83,.25);border-color:var(--green)}
+.quiz-opt.wrong{background:rgba(255,61,0,.25);border-color:var(--red)}
+.quiz-opt:disabled{cursor:default}
+.opt-l{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;font-family:'Syne',sans-serif}
+.quiz-opt.correct .opt-l{background:var(--green)}
+.quiz-opt.wrong .opt-l{background:var(--red)}
+.quiz-fb{font-size:13px;line-height:1.6;padding:10px 14px;border-radius:8px;margin-top:.65rem;display:none}
+.quiz-fb.show{display:block}
+.quiz-fb.correct{background:rgba(0,200,83,.15);color:#A5D6A7}
+.quiz-fb.wrong{background:rgba(255,61,0,.15);color:#FFAB91}
+/* SCENARIO */
+.scenario{background:#fff;border:2px solid var(--orange);border-radius:14px;margin:1.4rem 0;position:relative}
+.scenario-tag{position:absolute;top:-10px;left:1rem;background:var(--orange);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:4px;letter-spacing:.08em;z-index:2}
+.scenario-q{padding:1.1rem 1.25rem;font-size:14px;font-weight:500;background:var(--gray);border-bottom:1px solid var(--border);line-height:1.6}
+.scenario-opts{display:flex;flex-direction:column;gap:7px;padding:.9rem}
+.sc-opt{background:#fff;border:1.5px solid var(--border);border-radius:9px;padding:10px 14px;font-size:13px;cursor:pointer;transition:all .15s;text-align:left;color:var(--text);width:100%;font-family:'DM Sans',sans-serif;display:flex;align-items:flex-start;gap:10px;line-height:1.5}
+.sc-opt:hover{border-color:var(--sky);background:var(--sky-light)}
+.sc-opt.correct{border-color:var(--green);background:#E8F5E9;color:#1B5E20}
+.sc-opt.wrong{border-color:var(--red);background:#FFEBEE;color:#BF360C}
+.sc-opt:disabled{cursor:default}
+.sc-opt .opt-l{width:24px;height:24px;border-radius:50%;background:var(--gray);color:var(--muted);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;margin-top:1px}
+.sc-opt.correct .opt-l{background:var(--green);color:#fff}
+.sc-opt.wrong .opt-l{background:var(--red);color:#fff}
+.sc-fb{padding:.9rem 1.1rem;font-size:13px;line-height:1.65;display:none;border-top:2px solid var(--border)}
+.sc-fb.show{display:block}
+.sc-fb.correct{background:#E8F5E9;color:#1B5E20;border-color:var(--green)}
+.sc-fb.wrong{background:#FFEBEE;color:#BF360C;border-color:var(--red)}
+/* FINAL QUIZ */
+.final-quiz{background:linear-gradient(135deg,var(--sky-dark),#1565C0);border-radius:16px;padding:1.75rem 1.5rem;margin:2rem 0;color:#fff}
+.fq-header{text-align:center;margin-bottom:1.25rem}
+.fq-header h3{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:.25rem}
+.fq-header p{font-size:13px;color:rgba(255,255,255,.7)}
+.fq-dots{display:flex;gap:5px;justify-content:center;margin-bottom:1.25rem;flex-wrap:wrap}
+.qdot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.2);transition:all .3s}
+.fq-counter{font-size:12px;color:rgba(255,255,255,.65);text-align:center;margin-bottom:.65rem;letter-spacing:.05em;text-transform:uppercase}
+.fq-question{font-size:16px;font-weight:500;line-height:1.5;margin-bottom:1.1rem}
+.fq-opts{display:flex;flex-direction:column;gap:7px}
+.fq-feedback{background:rgba(0,0,0,.2);border-radius:10px;padding:.9rem;margin-top:.9rem;font-size:14px;line-height:1.6;display:none}
+.fq-feedback.show{display:block}
+.fq-next{display:block;width:100%;background:var(--yellow);color:#000;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:.9rem;display:none;transition:all .2s}
+.fq-next:hover{background:#E6C200}
+.fq-result{text-align:center;padding:1rem}
+.fq-score{font-family:'Syne',sans-serif;font-size:56px;font-weight:800;color:var(--yellow);line-height:1;margin-bottom:.5rem}
+.fq-result-label{font-size:18px;font-weight:600;margin-bottom:.65rem}
+.fq-result-msg{font-size:14px;color:rgba(255,255,255,.8);line-height:1.6;margin-bottom:1.4rem}
+.module-end{background:linear-gradient(135deg,var(--sky-dark),var(--sky));color:#fff;border-radius:16px;padding:2rem 1.5rem;margin:2.5rem 0 0;text-align:center}
+.module-end-icon{font-size:52px;margin-bottom:.75rem}
+.module-end h2{font-family:'Syne',sans-serif;font-size:22px;margin-bottom:.5rem;font-weight:800}
+.module-end p{font-size:14px;color:rgba(255,255,255,.8);margin-bottom:1.4rem;line-height:1.6}
+.btn-next{display:inline-block;background:var(--yellow);color:var(--black);padding:13px 28px;border-radius:8px;font-weight:700;font-size:15px;text-decoration:none;border:none;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
+.btn-next:hover{background:#E6C200;transform:translateY(-1px)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--sky-dark);color:#fff;padding:12px 24px;border-radius:24px;font-size:14px;font-weight:500;z-index:200;opacity:0;transition:all .3s ease;box-shadow:0 8px 24px rgba(0,0,0,.2);max-width:90%;text-align:center;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{background:var(--green)}
+.chapter-section{display:none}
+.chapter-section.active{display:block}
+.vorrang-list{display:flex;flex-direction:column;gap:8px;margin:1.1rem 0}
+.vorrang-item{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:.8rem 1rem}
+.vorrang-num{width:30px;height:30px;background:var(--sky-dark);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;flex-shrink:0}
+.vorrang-text{flex:1;font-size:14px;line-height:1.5}
+.vorrang-text strong{color:var(--sky-dark)}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <a href="index.html" class="header-back">← Übersicht</a>
+  <div class="header-title">
+    <small>Modul 3 · 3 von 4</small>
+    Betriebliche Verfahren
+  </div>
+  <div class="header-progress" id="headerProgress">0%</div>
+</header>
+
+<div class="module-hero">
+  <div class="module-tag">📋 Modul 3 von 4</div>
+  <h1>Betriebliche<br><span style="color:var(--yellow)">Verfahren</span></h1>
+  <p class="subtitle">Das rechtliche Fundament jedes Fluges. Kategorien, Klassen, Behörden, Verantwortung, Datenschutz und Versicherung — alles was Du als Pilot kennen musst.</p>
+  <div class="module-meta">
+    <div class="meta-item">⏱️ ca. 60–75 Min</div>
+    <div class="meta-item">📚 3 Kapitel</div>
+    <div class="meta-item">🎯 Prüfungsrelevant</div>
+  </div>
+</div>
+
+<div class="progress-section">
+  <div class="progress-label">
+    <span>Dein Fortschritt</span>
+    <span id="progressPct">0%</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+
+<div class="chapter-nav" id="chapterNav">
+  <button class="chapter-tab active" onclick="showChapter(0)" id="ctab0">1 · Flugvorbereitung</button>
+  <button class="chapter-tab" onclick="showChapter(1)" id="ctab1">2 · Flugüberwachung</button>
+  <button class="chapter-tab" onclick="showChapter(2)" id="ctab2">3 · Notverfahren</button>
+</div>
+
+<div class="content">
+
+<!-- ==================== KAPITEL 1: FLUGVORBEREITUNG ==================== -->
+<div class="chapter-section active" id="ch0">
+  <div class="content">
+
+    <div class="pilot-quote">
+      <div class="pilot-avatar">📋</div>
+      <div class="pilot-quote-content">
+        <div class="from">Pilot Torsten Flieger sagt:</div>
+        <p>„Ich bin mal ohne NOTAM-Check geflogen. Mitten in mein Fluggebiet kam plötzlich ein Polizeihubschrauber — wegen einer Großveranstaltung, die ich hätte kennen müssen. Seit dem Tag: Checkliste, NOTAM, Wetter. Immer. Ohne Ausnahme."</p>
+      </div>
+    </div>
+
+    <div class="intro-block">
+      <strong>Kapitel 1 · Flugvorbereitung</strong><br>
+      Ein guter Flug beginnt am Schreibtisch — oft schon am Vortag. Checklisten, Luftraum, NOTAMs, Wetter, Fluggebiet, Papiere, Ausrüstung: Hier lernst du, was vor dem ersten Propeller-Dreh erledigt sein muss.
+    </div>
+
+    <!-- LEKTION 1: Checklisten & Papiere -->
+    <div class="lesson" id="l0_1">
+      <div class="lesson-head" onclick="toggleLesson('l0_1','ch0')">
+        <div class="lesson-num">1</div>
+        <div class="lesson-head-info">
+          <div class="lesson-eyebrow">Kapitel 1 · Lektion 1 · ca. 12 Min</div>
+          <div class="lesson-title">Checklisten, Papiere & Fitness</div>
+        </div>
+        <div class="lesson-toggle" id="tgl_l0_1">▾</div>
+      </div>
+      <div class="lesson-body" id="body_l0_1">
+        <div class="lesson-content">
+
+          <h3>Warum Checklisten?</h3>
+          <p>In der bemannten Luftfahrt sind Checklisten Pflicht — und das aus gutem Grund. Sie verhindern <strong>Flüchtigkeitsfehler</strong>, sichern wiederkehrende Abläufe ab und stellen sicher, dass nichts vergessen wurde. Jeder Punkt muss aktiv bestätigt werden — abhaken, nicht nur lesen.</p>
+
+          <div class="merksatz"><p>Eine Checkliste ist nur wirksam wenn die Punkte nach der Bearbeitung auch wirklich abgehakt werden. Lesen allein reicht nicht.</p></div>
+
+          <h3>Die 6 Checklisten-Phasen</h3>
+          <p>Von der Vorbereitung bis nach dem Flug gibt es eine klare Abfolge — plus eine Notfall-Checkliste die immer griffbereit sein muss:</p>
+
+          <!-- SVG Checklisten-Zeitstrahl -->
+          <svg viewBox="0 0 340 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:340px;display:block;margin:16px auto">
+            <rect width="340" height="160" fill="#FFF3E0" rx="12"/>
+            <!-- Timeline line -->
+            <line x1="20" y1="80" x2="300" y2="80" stroke="#E65100" stroke-width="2"/>
+            <!-- Phases -->
+            <g transform="translate(20,80)">
+              <!-- Vorab -->
+              <circle cx="0" cy="0" r="8" fill="#BF360C"/>
+              <text x="0" y="-16" text-anchor="middle" font-size="8" font-family="sans-serif" font-weight="700" fill="#BF360C">VORAB</text>
+              <text x="0" y="22" text-anchor="middle" font-size="7" font-family="sans-serif" fill="#666">1 Tag</text>
+              <text x="0" y="31" text-anchor="middle" font-size="7" font-family="sans-serif" fill="#666">zuvor</text>
+              <!-- Ausrüstung -->
+              <circle cx="56" cy="0" r="8" fill="#E65100"/>
+              <text x="56" y="-16" text-anchor="middle" font-size="7.5" font-family="sans-serif" font-weight="700" fill="#E65100">AUSRÜST.</text>
+              <text x="56" y="22" text-anchor="middle" font-size="7" font-family="sans-serif" fill="#666">Flugtag</text>
+              <text x="56" y="31" text-anchor="middle" font-size="7" font-family="sans-serif" fill="#666">zuhause</text>
+              <!-- Vor Start -->
+              <circle cx="112" cy="0" r="8" fill="#F4511E"/>
+              <text x="112" y="-16" text-anchor="middle" font-size="7.5" font-family="sans-serif" font-weight="700" fill="#F4511E">VOR START</text>
+              <text x="112" y="22" text-anchor="middle" font-size="7" font-family="sans-serif" fill="#666">Vor Ort</text>
+              <!-- Nach Start -->
+              <circle cx="168" cy="0" r="8" fill="#FF6D00"/>
+              <text x="168" y="-16" text-anchor="middle" font-size="7.5" font-family="sans-serif" font-weight="700" fill="#FF6D00">NACH START</text>
+              <text x="168" y="22" text-anchor="middle" font-size="7" font-family="sans-serif" fill="#666">Vor Ort</text>
+              <!-- Nach Landung -->
+              <circle cx="224" cy="0" r="8" fill="#FFD600"/>
+              <text x="224" y="-16" text-anchor="middle" font-size="7.5" font-family="sans-serif" font-weight="700" fill="#9E6800">LANDUNG</text>
+              <text x="224" y="22" text-anchor="middle" font-size="7" font-family="sans-serif" fill="#666">Vor Ort</text>
+              <!-- Nach Flug -->
+              <circle cx="280" cy="0" r="8" fill="#00C853"/>
+              <text x="280" y="-16" text-anchor="middle" font-size="7.5" font-family="sans-serif" font-weight="700" fill="#00695C">NACH FLUG</text>
+              <text x="280" y="22" text-anchor="middle" font-size="7" font-family="sans-serif" fill="#666">Flugtag</text>
+            </g>
+            <!-- Notfall Box -->
+            <rect x="120" y="110" width="100" height="32" rx="6" fill="#FF3D00" opacity="0.9"/>
+            <text x="170" y="122" text-anchor="middle" font-size="9" font-family="sans-serif" font-weight="700" fill="#fff">🚨 NOTFALL</text>
+            <text x="170" y="135" text-anchor="middle" font-size="8" font-family="sans-serif" fill="rgba(255,255,255,0.85)">immer griffbereit!</text>
+          </svg>
+
+          <h3>Notwendige Papiere</h3>
+          <p>Vor jedem Flug müssen drei Dokumente vorhanden und gültig sein:</p>
+          <div class="def-grid">
+            <div class="def-card"><div class="def-badge">📄</div><div class="def-text"><strong>Kompetenznachweis</strong> — gültige EU-Drohnenlizenz für die jeweilige Unterkategorie</div></div>
+            <div class="def-card"><div class="def-badge">📋</div><div class="def-text"><strong>Betreiberregistrierung</strong> — Registrierungsnummer beim LBA / Austro Control</div></div>
+            <div class="def-card"><div class="def-badge">🛡️</div><div class="def-text"><strong>Haftpflichtversicherung</strong> — Nachweis muss beim Flug mitgeführt werden</div></div>
+          </div>
+
+          <div class="box info">
+            <div class="box-icon">📞</div>
+            <div class="box-body">
+              <span class="box-label">Zusätzlich bereithalten</span>
+              Telefonnummern der nächsten Rettungsleitstelle und Polizeidienststelle — für den Notfall immer parat haben.
+            </div>
+          </div>
+
+          <h3>Fitness — I'M SAFE gilt auch hier</h3>
+          <p>Die I'M SAFE Checkliste aus Modul 2 gilt natürlich auch vor jedem Flug — und wichtig: <strong>nicht nur für den Fernpiloten, sondern auch für alle beteiligten Personen!</strong></p>
+
+          <div class="quiz-block">
+            <div class="quiz-eyebrow">🧠 Check</div>
+            <div class="quiz-q">Welche der folgenden Aussagen zu Checklisten ist korrekt?</div>
+            <div class="quiz-opts" id="qo_q0_1">
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_1')"><span class="opt-l">A</span>Checklisten sind nur für kommerzielle Drohnenpiloten Pflicht</button>
+              <button class="quiz-opt" onclick="answerQ(this,'correct','q0_1')"><span class="opt-l">B</span>Punkte müssen nach Bearbeitung aktiv bestätigt werden — Lesen allein reicht nicht</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_1')"><span class="opt-l">C</span>Eine Checkliste reicht für alle Phasen des Fluges</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_1')"><span class="opt-l">D</span>Checklisten gelten nur für den Start, nicht für die Nachbereitung</button>
+            </div>
+            <div class="quiz-fb" id="fb_q0_1"></div>
+          </div>
+
+          <div class="quiz-block">
+            <div class="quiz-eyebrow">🧠 Check</div>
+            <div class="quiz-q">Welche drei Dokumente müssen vor dem Flug vorhanden sein?</div>
+            <div class="quiz-opts" id="qo_q0_2">
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_2')"><span class="opt-l">A</span>Personalausweis, Drohnen-Kaufbeleg, Wetterbericht</button>
+              <button class="quiz-opt" onclick="answerQ(this,'correct','q0_2')"><span class="opt-l">B</span>Kompetenznachweis, Betreiberregistrierung, Haftpflichtversicherungsnachweis</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_2')"><span class="opt-l">C</span>Drohnenführerschein, NOTAM-Ausdruck, Wettervorhersage</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_2')"><span class="opt-l">D</span>Versicherung, Flugbuch, GPS-Koordinaten</button>
+            </div>
+            <div class="quiz-fb" id="fb_q0_2"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- LEKTION 2: Luftraum, NOTAM, Wetter -->
+    <div class="lesson" id="l0_2">
+      <div class="lesson-head" onclick="toggleLesson('l0_2','ch0')">
+        <div class="lesson-num">2</div>
+        <div class="lesson-head-info">
+          <div class="lesson-eyebrow">Kapitel 1 · Lektion 2 · ca. 14 Min</div>
+          <div class="lesson-title">Luftraum, NOTAM & Wetter</div>
+        </div>
+        <div class="lesson-toggle" id="tgl_l0_2">▾</div>
+      </div>
+      <div class="lesson-body" id="body_l0_2">
+        <div class="lesson-content">
+
+          <h3>Luftraum prüfen</h3>
+          <p>Die Luftraumprüfung gehört zu den <strong>wichtigsten Vorbereitungsschritten</strong>. Aktuelle UAS-Zonen müssen berücksichtigt werden — und bei restriktivem oder kontrolliertem Luftraum muss vorab eine Erlaubnis eingeholt werden.</p>
+
+          <div class="def-grid">
+            <div class="def-card"><div class="def-badge">📍</div><div class="def-text"><strong>Aktuelle UAS-Zonen</strong> — App (DronIQ, Unifly, AIM Austria) oder ICAO-Karten nutzen</div></div>
+            <div class="def-card"><div class="def-badge">🗼</div><div class="def-text"><strong>Kontrollzone</strong> — Erlaubnis beim Kontrollturm einholen: Koordinaten, Fluggebiet, Zeiten, Kontakt</div></div>
+          </div>
+
+          <h3>NOTAM — Notice to Airmen</h3>
+          <p><strong>NOTAM</strong> = <strong>NO</strong>tice <strong>T</strong>o <strong>A</strong>ir<strong>M</strong>en — Mitteilungen über kurzfristige Besonderheiten im Luftraum: Musikfestivals, Militärübungen, temporäre Sperrgebiete. Veröffentlicht von Austro Control, DFS und anderen Flugsicherungsstellen.</p>
+
+          <div class="box warn">
+            <div class="box-icon">⚠️</div>
+            <div class="box-body">
+              <span class="box-label">Wichtig</span>
+              NOTAMs am <strong>Vortag</strong> lesen UND am <strong>Flugtag nochmals aktualisieren</strong> — neue NOTAMs können jederzeit veröffentlicht werden!
+            </div>
+          </div>
+
+          <div class="merksatz"><p>NOTAM = NOtice To AirMan. Immer am Vortag prüfen, am Flugtag erneut checken. Neue Sperrungen können kurzfristig entstehen.</p></div>
+
+          <h3>Wetter</h3>
+          <p>Wie bei NOTAMs: Vorbereitung am Vortag, Aktualisierung direkt vor Ort. Wichtig sind vor allem:</p>
+          <div class="def-grid">
+            <div class="def-card"><div class="def-badge">💨</div><div class="def-text"><strong>Wind</strong> — Bodennähe und in Flughöhe (Wind nimmt mit der Höhe zu!). Im Zweifel: Windmesser nutzen.</div></div>
+            <div class="def-card"><div class="def-badge">🌧️</div><div class="def-text"><strong>Niederschläge</strong> — Feuchtigkeit kann Technik schädigen. Handbuch-Limits beachten.</div></div>
+            <div class="def-card"><div class="def-badge">⛈️</div><div class="def-text"><strong>Wetterentwicklung</strong> — Gewitterböen kommen plötzlich. Nicht warten bis die erste Böe das UAS erfasst.</div></div>
+          </div>
+
+          <div class="box danger">
+            <div class="box-icon">🌪️</div>
+            <div class="box-body">
+              <span class="box-label">Böenwalze vor Gewittern</span>
+              Besonders gefährlich: Die Böenwalze vor einem Gewitter kann heftige Turbulenzen verursachen — lange bevor das Gewitter selbst sichtbar ist. Bei Gewitterentwicklung sofort landen!
+            </div>
+          </div>
+
+          <div class="quiz-block">
+            <div class="quiz-eyebrow">🧠 Check</div>
+            <div class="quiz-q">Wofür steht die Abkürzung NOTAM?</div>
+            <div class="quiz-opts" id="qo_q0_3">
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_3')"><span class="opt-l">A</span>Notice of Temporary Airspace Modification</button>
+              <button class="quiz-opt" onclick="answerQ(this,'correct','q0_3')"><span class="opt-l">B</span>Notice to Airmen</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_3')"><span class="opt-l">C</span>National Operations Tracking and Monitoring</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_3')"><span class="opt-l">D</span>No-fly Airspace Territory Alert Map</button>
+            </div>
+            <div class="quiz-fb" id="fb_q0_3"></div>
+          </div>
+
+          <div class="quiz-block">
+            <div class="quiz-eyebrow">🧠 Check</div>
+            <div class="quiz-q">Warum muss der Wind in Flughöhe anders eingeschätzt werden als am Boden?</div>
+            <div class="quiz-opts" id="qo_q0_4">
+              <button class="quiz-opt" onclick="answerQ(this,'correct','q0_4')"><span class="opt-l">A</span>Wind nimmt mit der Höhe zu — am Boden gemessene Windstärke unterschätzt die tatsächliche Belastung in der Luft</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_4')"><span class="opt-l">B</span>Wind nimmt mit der Höhe ab — in der Luft ist es ruhiger</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_4')"><span class="opt-l">C</span>Wind ist in jeder Höhe gleich stark</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_4')"><span class="opt-l">D</span>Windmesser sind am Boden nicht zuverlässig</button>
+            </div>
+            <div class="quiz-fb" id="fb_q0_4"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- LEKTION 3: Fluggebiet, Personen, Ausrüstung -->
+    <div class="lesson" id="l0_3">
+      <div class="lesson-head" onclick="toggleLesson('l0_3','ch0')">
+        <div class="lesson-num">3</div>
+        <div class="lesson-head-info">
+          <div class="lesson-eyebrow">Kapitel 1 · Lektion 3 · ca. 13 Min</div>
+          <div class="lesson-title">Fluggebiet, Personen & UAS-Ausrüstung</div>
+        </div>
+        <div class="lesson-toggle" id="tgl_l0_3">▾</div>
+      </div>
+      <div class="lesson-body" id="body_l0_3">
+        <div class="lesson-content">
+
+          <h3>Das Fluggebiet checken</h3>
+          <p>Am Einsatzort wird die Umgebung systematisch geprüft:</p>
+          <div class="def-grid">
+            <div class="def-card"><div class="def-badge">⚡</div><div class="def-text"><strong>Hochspannungsleitungen</strong> — Kollisionsgefahr und elektromagnetische Interferenzen → Funkverlust möglich</div></div>
+            <div class="def-card"><div class="def-badge">🌄</div><div class="def-text"><strong>Unübersichtliches Gelände</strong> — Begehung vor dem Flug um versteckte Personen zu erkennen</div></div>
+            <div class="def-card"><div class="def-badge">🚧</div><div class="def-text"><strong>Start-/Landeplatz sichern</strong> — Pylone oder Flatterband, kein Mensch oder Auto im Landebereich (RTH!)</div></div>
+            <div class="def-card"><div class="def-badge">🚶</div><div class="def-text"><strong>Straßen & Wege</strong> — Dort können unerwartet Personen auftauchen. Möglichst nicht überfliegen.</div></div>
+          </div>
+
+          <div class="box info">
+            <div class="box-icon">📌</div>
+            <div class="box-body">
+              <span class="box-label">Notlandeplätze</span>
+              Immer nach Alternativen Ausschau halten — falls eine schnelle Landung nötig ist, muss die Entscheidung sofort fallen können.
+            </div>
+          </div>
+
+          <h3>Beteiligte Personen & Briefing</h3>
+          <p>Helfer erhöhen die Sicherheit erheblich — für Luftraumbeobachtung, Gebietssicherung und Informationsweitergabe an Passanten. Vor dem Flug ist ein <strong>Briefing Pflicht</strong>:</p>
+          <div class="def-grid">
+            <div class="def-card"><div class="def-badge">📋</div><div class="def-text">Geplanter Flugverlauf und Intention</div></div>
+            <div class="def-card"><div class="def-badge">✅</div><div class="def-text">Checklisten durchgehen gemeinsam</div></div>
+            <div class="def-card"><div class="def-badge">🚨</div><div class="def-text">Gefahren und Notverfahren besprechen</div></div>
+            <div class="def-card"><div class="def-badge">📞</div><div class="def-text">Kommunikation und Aufgabenverteilung klären</div></div>
+          </div>
+
+          <h3>UAS & Ausrüstung prüfen</h3>
+          <p>Drei Bereiche werden beim letzten Check vor dem Start geprüft:</p>
+          <div class="def-grid">
+            <div class="def-card"><div class="def-badge">🔧</div><div class="def-text"><strong>Aufbau</strong> — Beschädigungen, Befestigungen, Ersatzbatterie, aktuelle Software/Firmware</div></div>
+            <div class="def-card"><div class="def-badge">📷</div><div class="def-text"><strong>Nutzlast</strong> — MTOM nicht überschreiten, ggf. Schwerpunktberechnung, Funktionsprüfung</div></div>
+            <div class="def-card"><div class="def-badge">⚙️</div><div class="def-text"><strong>Einstellungen</strong> — Betriebsart, Batteriestand, GNSS (min. 5 Satelliten!), RTH-Höhe, Kompasskalibrierung</div></div>
+          </div>
+
+          <div class="box warn">
+            <div class="box-icon">📱</div>
+            <div class="box-body">
+              <span class="box-label">Smartphone-Falle</span>
+              Bei Nutzung eines Mobiltelefons als Bodenstation: Eingehende Anrufe unterbrechen die Flug-App — Telemetrie und Akkustand nicht mehr einsehbar. Auf Flugmodus schalten!
+            </div>
+          </div>
+
+          <div class="merksatz"><p>GNSS: Mindestens 5 Satelliten müssen verfügbar sein. RTH-Höhe korrekt einstellen — besonders in baumreichen oder bebauten Gebieten.</p></div>
+
+          <div class="quiz-block">
+            <div class="quiz-eyebrow">🧠 Check</div>
+            <div class="quiz-q">Warum ist die korrekte RTH-Höhe besonders wichtig?</div>
+            <div class="quiz-opts" id="qo_q0_5">
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_5')"><span class="opt-l">A</span>Damit die Drohne schneller zurückkommt</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_5')"><span class="opt-l">B</span>Wegen der gesetzlichen Maximalflughöhe von 120m</button>
+              <button class="quiz-opt" onclick="answerQ(this,'correct','q0_5')"><span class="opt-l">C</span>Damit die Drohne bei der Rückkehr nicht in Hindernisse wie Bäume oder Gebäude fliegt</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_5')"><span class="opt-l">D</span>Höhere RTH-Höhe spart Batterie</button>
+            </div>
+            <div class="quiz-fb" id="fb_q0_5"></div>
+          </div>
+
+        </div>
+
+        <div style="padding:16px 0 8px">
+          <button onclick="showChapter(1);window.scrollTo({top:0,behavior:'smooth'})" style="width:100%;background:var(--sky-dark);color:#fff;border:none;border-radius:14px;padding:16px;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer">
+            Weiter zu Kapitel 2 · Flugüberwachung →
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div><!-- end ch0 -->
+
+<!-- ==================== KAPITEL 2: FLUGÜBERWACHUNG & NACHBEREITUNG ==================== -->
+<div class="chapter-section" id="ch1">
+  <div class="content">
+
+    <div class="pilot-quote">
+      <div class="pilot-avatar">👁️</div>
+      <div class="pilot-quote-content">
+        <div class="from">Pilot Torsten Flieger sagt:</div>
+        <p>„Einmal hat mich ein Kind beim Fliegen angesprochen. Kurz hingeschaut — und in dieser Zeit ist die Drohne 30 Meter abgedriftet. Jetzt sage ich immer: 'Ich bin gerade beschäftigt, warte kurz.' Keine Ausnahmen."</p>
+      </div>
+    </div>
+
+    <div class="intro-block">
+      <strong>Kapitel 2 · Flugüberwachung & Nachbereitung</strong><br>
+      Der Flug ist gestartet — jetzt geht es darum, konzentriert zu bleiben, die richtigen Dinge zu überwachen und nach der Landung alles sorgfältig abzuschließen.
+    </div>
+
+    <!-- LEKTION 1: Abflug & Normalverfahren -->
+    <div class="lesson" id="l1_1">
+      <div class="lesson-head" onclick="toggleLesson('l1_1','ch1')">
+        <div class="lesson-num">1</div>
+        <div class="lesson-head-info">
+          <div class="lesson-eyebrow">Kapitel 2 · Lektion 1 · ca. 13 Min</div>
+          <div class="lesson-title">Abflug, Normalverfahren & Risiken</div>
+        </div>
+        <div class="lesson-toggle" id="tgl_l1_1">▾</div>
+      </div>
+      <div class="lesson-body" id="body_l1_1">
+        <div class="lesson-content">
+
+          <h3>Abflugverfahren — die richtige Reihenfolge</h3>
+          <p>Beim Start gibt es eine verbindliche Reihenfolge: <strong>1. Fernsteuerung</strong> → <strong>2. UAS</strong> → <strong>3. Zusatzausrüstung</strong>. Die Startfläche muss eben sein — bei unebenem Gelände ein Launchpad verwenden. In sicherer Höhe dann Funktionsprüfung: Nutzlast, Telemetrie, Steuerung.</p>
+
+          <h3>Normalverfahren — was während des Fluges zählt</h3>
+          <p>Drei Dinge müssen während des gesamten Fluges konstant überwacht werden:</p>
+
+          <div class="def-grid">
+            <div class="def-card"><div class="def-badge">🔋</div><div class="def-text"><strong>Batteriestand</strong> — mindestens einmal pro Minute checken. Mit ausreichender Reserve landen — niemals auf leerem Akku kalkulieren.</div></div>
+            <div class="def-card"><div class="def-badge">👁️</div><div class="def-text"><strong>UAS im Blick</strong> — nicht auf Display starren! Wenn etwas passiert, weißt du sonst nicht wo die Drohne ist.</div></div>
+            <div class="def-card"><div class="def-badge">✈️</div><div class="def-text"><strong>Luftraum scannen</strong> — bemannte Luftfahrzeuge fliegen schnell und sehen die Drohne kaum. Wenn möglich: zu zweit fliegen.</div></div>
+          </div>
+
+          <h3>Die Batterie-Entladekurve</h3>
+          <p>Die Batterie entlädt sich nicht linear — das ist eine häufige Falle:</p>
+
+          <!-- SVG Batterie-Entladekurve -->
+          <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:300px;display:block;margin:14px auto;border-radius:10px;background:#0a2540">
+            <text x="150" y="18" text-anchor="middle" font-size="11" font-family="sans-serif" font-weight="700" fill="#FFD600">Batterie-Entladekurve</text>
+            <!-- Axes -->
+            <line x1="40" y1="130" x2="280" y2="130" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+            <line x1="40" y1="30" x2="40" y2="130" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+            <!-- Axis labels -->
+            <text x="160" y="148" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.6)" font-family="sans-serif">Flugzeit →</text>
+            <text x="18" y="85" font-size="9" fill="rgba(255,255,255,0.6)" font-family="sans-serif" transform="rotate(-90,18,85)">Ladung</text>
+            <!-- 100% / 0% labels -->
+            <text x="35" y="34" text-anchor="end" font-size="8" fill="rgba(255,255,255,0.5)" font-family="sans-serif">100%</text>
+            <text x="35" y="131" text-anchor="end" font-size="8" fill="rgba(255,255,255,0.5)" font-family="sans-serif">0%</text>
+            <!-- Curve: fast drop, plateau, fast drop -->
+            <path d="M 45 32 Q 80 55 110 75 Q 160 85 200 88 Q 230 95 265 128" stroke="#FFD600" stroke-width="2.5" fill="none"/>
+            <!-- Zone labels -->
+            <text x="72" y="48" font-size="8" fill="#FF6D00" font-family="sans-serif" font-weight="700">Schnell ↓</text>
+            <text x="148" y="75" text-anchor="middle" font-size="8" fill="#00C853" font-family="sans-serif" font-weight="700">Plateau</text>
+            <text x="240" y="108" font-size="8" fill="#FF3D00" font-family="sans-serif" font-weight="700">Schnell ↓</text>
+            <!-- Danger zone -->
+            <rect x="215" y="88" width="55" height="40" fill="rgba(255,61,0,0.15)" rx="3"/>
+            <text x="242" y="116" text-anchor="middle" font-size="7" fill="#FF3D00" font-family="sans-serif">GEFAHR!</text>
+            <!-- Warning line -->
+            <line x1="40" y1="100" x2="280" y2="100" stroke="#FFD600" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+            <text x="282" y="103" font-size="8" fill="#FFD600" font-family="sans-serif">min.</text>
+          </svg>
+
+          <div class="box warn">
+            <div class="box-icon">⚡</div>
+            <div class="box-body">
+              <span class="box-label">Batterie-Falle</span>
+              Im Plateau-Bereich entlädt sich die Batterie scheinbar langsam — das verleitet dazu, die Drohne zu weit wegzufliegen. Danach fällt der Ladestand plötzlich schnell. Immer mit Reserve landen!
+            </div>
+          </div>
+
+          <h3>Ablenkungen & Risiken</h3>
+          <p>Passanten sprechen Fernpiloten gerne an. Klare Antwort: <em>„Ich bin gerade beschäftigt — sobald die Drohne gelandet ist."</em> Im Zweier-Team kann sich eine Person um Zuschauer kümmern.</p>
+
+          <div class="def-grid">
+            <div class="def-card"><div class="def-badge">🏠</div><div class="def-text"><strong>Bodenrisiko</strong> — Absturz auf Personen oder Gegenstände. Überflug von Personen möglichst vermeiden.</div></div>
+            <div class="def-card"><div class="def-badge">🚁</div><div class="def-text"><strong>Luftrisiko</strong> — Kollision mit anderen Luftraumnutzern. Höchstes Risiko: niedrig fliegende Rettungshubschrauber.</div></div>
+          </div>
+
+          <div class="quiz-block">
+            <div class="quiz-eyebrow">🧠 Check</div>
+            <div class="quiz-q">Wie oft sollte der Batteriestand während des Fluges geprüft werden?</div>
+            <div class="quiz-opts" id="qo_q1_1">
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_1')"><span class="opt-l">A</span>Nur am Anfang und am Ende des Fluges</button>
+              <button class="quiz-opt" onclick="answerQ(this,'correct','q1_1')"><span class="opt-l">B</span>Mindestens einmal pro Minute</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_1')"><span class="opt-l">C</span>Alle 10 Minuten reicht</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_1')"><span class="opt-l">D</span>Nur wenn ein Warnsignal ertönt</button>
+            </div>
+            <div class="quiz-fb" id="fb_q1_1"></div>
+          </div>
+
+          <div class="quiz-block">
+            <div class="quiz-eyebrow">🧠 Check</div>
+            <div class="quiz-q">Welche Luftfahrzeuge stellen das höchste Luftrisiko für Drohnenpiloten dar?</div>
+            <div class="quiz-opts" id="qo_q1_2">
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_2')"><span class="opt-l">A</span>Große Passagiermaschinen in großer Höhe</button>
+              <button class="quiz-opt" onclick="answerQ(this,'correct','q1_2')"><span class="opt-l">B</span>Niedrig fliegende Rettungs- und Polizeihubschrauber</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_2')"><span class="opt-l">C</span>Segelflugzeuge</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_2')"><span class="opt-l">D</span>Militärjets in großer Höhe</button>
+            </div>
+            <div class="quiz-fb" id="fb_q1_2"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- LEKTION 2: Nachbereitung & Dokumentation -->
+    <div class="lesson" id="l1_2">
+      <div class="lesson-head" onclick="toggleLesson('l1_2','ch1')">
+        <div class="lesson-num">2</div>
+        <div class="lesson-head-info">
+          <div class="lesson-eyebrow">Kapitel 2 · Lektion 2 · ca. 10 Min</div>
+          <div class="lesson-title">Nachbereitung & Dokumentation</div>
+        </div>
+        <div class="lesson-toggle" id="tgl_l1_2">▾</div>
+      </div>
+      <div class="lesson-body" id="body_l1_2">
+        <div class="lesson-content">
+
+          <h3>Nach der Landung — noch nicht fertig</h3>
+          <p>Der Flug ist vorbei, aber die Arbeit noch nicht. Nachbereitung ist ein fester Bestandteil des professionellen Betriebs.</p>
+
+          <div class="def-grid">
+            <div class="def-card"><div class="def-badge">🔍</div><div class="def-text"><strong>Inspektion</strong> — Propeller, Batterie und Rahmen auf Beschädigungen und Verschmutzungen prüfen. Kleine Schäden sofort erkennen.</div></div>
+            <div class="def-card"><div class="def-badge">🧹</div><div class="def-text"><strong>Reinigen</strong> — UAS nach jedem Flug säubern. Schmutz kann Motoren und Sensoren beschädigen.</div></div>
+            <div class="def-card"><div class="def-badge">🔋</div><div class="def-text"><strong>Batterien</strong> — Abnehmen, separat aufbewahren und laden. Nicht vollgeladen lagern. Idealtemperatur: 15–25°C, dunkel, keine entflammbaren Gegenstände in der Nähe.</div></div>
+            <div class="def-card"><div class="def-badge">💾</div><div class="def-text"><strong>Datensicherung</strong> — Flugdaten auf externem Medium sichern. Für spätere Nachvollziehbarkeit oder Vorfallsanalyse.</div></div>
+          </div>
+
+          <div class="box danger">
+            <div class="box-icon">🔋</div>
+            <div class="box-body">
+              <span class="box-label">Beschädigte Batterien</span>
+              Verformte oder beschädigte Batterien dürfen <strong>niemals</strong> weiterverwendet werden — Brandgefahr! Fachgerecht entsorgen.
+            </div>
+          </div>
+
+          <h3>Flugbuch & Dokumentation</h3>
+          <p>In der offenen Kategorie keine Pflicht — aber <strong>dringend empfohlen</strong>. Ein Flugbuch ermöglicht Wartungsplanung, Teile-Lebenszeit-Berechnung und Nachvollziehbarkeit von Vorfällen. Ins Flugbuch gehören:</p>
+
+          <div class="def-grid">
+            <div class="def-card"><div class="def-badge">📅</div><div class="def-text">Datum, UAS-Typ, Ort und Grund des Fluges</div></div>
+            <div class="def-card"><div class="def-badge">⏱️</div><div class="def-text">Start- und Landezeit, Flugdauer, Anzahl Starts/Landungen</div></div>
+            <div class="def-card"><div class="def-badge">⚠️</div><div class="def-text">Besondere Vorkommnisse, Reparaturen oder Beschädigungen</div></div>
+          </div>
+
+          <div class="merksatz"><p>Viele Systeme führen automatische Logs — aber digitale Daten können verloren gehen. Ein kleines analoges Logbuch ist die sicherste Lösung.</p></div>
+
+          <div class="quiz-block">
+            <div class="quiz-eyebrow">🧠 Check</div>
+            <div class="quiz-q">Wie sollen Batterien idealerweise gelagert werden?</div>
+            <div class="quiz-opts" id="qo_q1_3">
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_3')"><span class="opt-l">A</span>Vollgeladen im Kühlschrank bei 5°C</button>
+              <button class="quiz-opt" onclick="answerQ(this,'correct','q1_3')"><span class="opt-l">B</span>Teilentladen, an dunklem Platz bei 15–25°C, keine entflammbaren Gegenstände in der Nähe</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_3')"><span class="opt-l">C</span>Vollgeladen bei Raumtemperatur im Sonnenlicht</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_3')"><span class="opt-l">D</span>Im UAS eingebaut bis zum nächsten Flug</button>
+            </div>
+            <div class="quiz-fb" id="fb_q1_3"></div>
+          </div>
+
+        </div>
+
+        <div style="padding:16px 0 8px">
+          <button onclick="showChapter(2);window.scrollTo({top:0,behavior:'smooth'})" style="width:100%;background:var(--sky-dark);color:#fff;border:none;border-radius:14px;padding:16px;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer">
+            Weiter zu Kapitel 3 · Nichtplanmäßige Verfahren →
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div><!-- end ch1 -->
+
+<!-- ==================== KAPITEL 3: NICHTPLANMÄSSIGE VERFAHREN ==================== -->
+<div class="chapter-section" id="ch2">
+  <div class="content">
+
+    <div class="pilot-quote">
+      <div class="pilot-avatar">🚨</div>
+      <div class="pilot-quote-content">
+        <div class="from">Pilot Torsten Flieger sagt:</div>
+        <p>„Die meisten Notfälle kündigen sich an. Das ist das Wichtigste, was ich gelernt habe. Wer früh genug hinschaut, landet sicher. Wer wartet bis es brennt, hat keine Wahl mehr."</p>
+      </div>
+    </div>
+
+    <div class="intro-block">
+      <strong>Kapitel 3 · Nichtplanmäßige Verfahren</strong><br>
+      Nicht alles läuft wie geplant. Hier lernst du den Unterschied zwischen abnormalen Situationen und echten Notfällen — und was du in konkreten Szenarien tun musst.
+    </div>
+
+    <!-- LEKTION 1: Abnormal vs. Notfall, Landungsarten, RTH -->
+    <div class="lesson" id="l2_1">
+      <div class="lesson-head" onclick="toggleLesson('l2_1','ch2')">
+        <div class="lesson-num">1</div>
+        <div class="lesson-head-info">
+          <div class="lesson-eyebrow">Kapitel 3 · Lektion 1 · ca. 12 Min</div>
+          <div class="lesson-title">Abnormal Situation, Landungsarten & RTH</div>
+        </div>
+        <div class="lesson-toggle" id="tgl_l2_1">▾</div>
+      </div>
+      <div class="lesson-body" id="body_l2_1">
+        <div class="lesson-content">
+
+          <h3>Abnormal Situation vs. Notsituation</h3>
+          <p>Bevor es zum echten Notfall kommt, gibt es meist eine <strong>abnormale Situation</strong> — eine unerwartete Lage bei der die Sicherheit von Personen noch nicht unmittelbar gefährdet ist, der Flug aber nicht wie geplant fortgesetzt werden kann.</p>
+
+          <div class="def-grid">
+            <div class="def-card"><div class="def-badge">⚠️</div><div class="def-text"><strong>Abnormale Situation</strong> — Einschränkungen vorhanden, keine unmittelbare Sicherheitsgefahr. Beispiele: Überflug unbeteiligter Personen, plötzliche Wetterverschlechterung, schnellere Batterieentladung, ungewöhnliches Flugverhalten.</div></div>
+            <div class="def-card"><div class="def-badge">🚨</div><div class="def-text"><strong>Notsituation</strong> — Unmittelbare Gefahr für Personen oder das UAS. Schnelles Handeln zwingend erforderlich.</div></div>
+          </div>
+
+          <div class="merksatz"><p>Häufig kündigen sich Notfälle frühzeitig an. Wer früh reagiert, hat mehr Optionen. Je besser die Vorbereitung, desto geringer der Schaden.</p></div>
+
+          <h3>Drei Arten der außerplanmäßigen Landung</h3>
+
+          <!-- SVG: Notlandung vs Sicherheitslandung vs RTH -->
+          <svg viewBox="0 0 330 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:330px;display:block;margin:14px auto;border-radius:12px;background:#0a2540">
+            <!-- Notlandung -->
+            <rect x="8" y="20" width="96" height="140" rx="8" fill="rgba(255,61,0,0.15)" stroke="#FF3D00" stroke-width="1.5"/>
+            <text x="56" y="38" text-anchor="middle" font-size="10" font-family="sans-serif" font-weight="700" fill="#FF3D00">NOTLANDUNG</text>
+            <text x="56" y="52" text-anchor="middle" font-size="18">🆘</text>
+            <text x="56" y="72" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.75)" font-family="sans-serif">Erzwungen</text>
+            <text x="56" y="84" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.75)" font-family="sans-serif">Schnelles Handeln</text>
+            <text x="56" y="96" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.75)" font-family="sans-serif">Kaum Optionen</text>
+            <line x1="16" y1="105" x2="96" y2="105" stroke="rgba(255,61,0,0.3)" stroke-width="1"/>
+            <text x="56" y="118" text-anchor="middle" font-size="7.5" fill="#FF6D00" font-family="sans-serif">Motor ausgefallen</text>
+            <text x="56" y="129" text-anchor="middle" font-size="7.5" fill="#FF6D00" font-family="sans-serif">Propeller beschädigt</text>
+            <!-- Sicherheitslandung -->
+            <rect x="117" y="20" width="96" height="140" rx="8" fill="rgba(255,214,0,0.1)" stroke="#FFD600" stroke-width="1.5"/>
+            <text x="165" y="35" text-anchor="middle" font-size="9" font-family="sans-serif" font-weight="700" fill="#FFD600">SICHERHEITS-</text>
+            <text x="165" y="47" text-anchor="middle" font-size="9" font-family="sans-serif" font-weight="700" fill="#FFD600">LANDUNG</text>
+            <text x="165" y="62" text-anchor="middle" font-size="18">⚠️</text>
+            <text x="165" y="82" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.75)" font-family="sans-serif">Früh erkannt</text>
+            <text x="165" y="94" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.75)" font-family="sans-serif">Zeit für Entscheid.</text>
+            <text x="165" y="106" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.75)" font-family="sans-serif">Technik ok</text>
+            <line x1="125" y1="115" x2="205" y2="115" stroke="rgba(255,214,0,0.3)" stroke-width="1"/>
+            <text x="165" y="128" text-anchor="middle" font-size="7.5" fill="#FFD600" font-family="sans-serif">Sensor ausgefallen</text>
+            <text x="165" y="139" text-anchor="middle" font-size="7.5" fill="#FFD600" font-family="sans-serif">Wetter schlechter</text>
+            <!-- RTH -->
+            <rect x="226" y="20" width="96" height="140" rx="8" fill="rgba(0,200,83,0.1)" stroke="#00C853" stroke-width="1.5"/>
+            <text x="274" y="38" text-anchor="middle" font-size="10" font-family="sans-serif" font-weight="700" fill="#00C853">RETURN TO</text>
+            <text x="274" y="50" text-anchor="middle" font-size="10" font-family="sans-serif" font-weight="700" fill="#00C853">HOME</text>
+            <text x="274" y="65" text-anchor="middle" font-size="18">🏠</text>
+            <text x="274" y="85" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.75)" font-family="sans-serif">Automatisch</text>
+            <text x="274" y="97" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.75)" font-family="sans-serif">Kehrt zu Start</text>
+            <text x="274" y="109" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.75)" font-family="sans-serif">zurück</text>
+            <line x1="234" y1="118" x2="314" y2="118" stroke="rgba(0,200,83,0.3)" stroke-width="1"/>
+            <text x="274" y="131" text-anchor="middle" font-size="7.5" fill="#00C853" font-family="sans-serif">Krit. Batteriestand</text>
+            <text x="274" y="142" text-anchor="middle" font-size="7.5" fill="#00C853" font-family="sans-serif">Funkverlust</text>
+            <text x="274" y="153" text-anchor="middle" font-size="7.5" fill="#00C853" font-family="sans-serif">Bodenstation-Prob.</text>
+          </svg>
+
+          <div class="box warn">
+            <div class="box-icon">🏠</div>
+            <div class="box-body">
+              <span class="box-label">RTH richtig eingestellt?</span>
+              RTH-Höhe muss vor dem Flug korrekt eingestellt werden — besonders bei hohen Bäumen oder Gebäuden in der Umgebung. Auch beim RTH muss der Fernpilot eingreifen können!
+            </div>
+          </div>
+
+          <div class="quiz-block">
+            <div class="quiz-eyebrow">🧠 Check</div>
+            <div class="quiz-q">Was unterscheidet eine Sicherheitslandung von einer Notlandung?</div>
+            <div class="quiz-opts" id="qo_q2_1">
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q2_1')"><span class="opt-l">A</span>Bei einer Notlandung hat man mehr Zeit zum Entscheiden</button>
+              <button class="quiz-opt" onclick="answerQ(this,'correct','q2_1')"><span class="opt-l">B</span>Bei der Sicherheitslandung wird die Situation früh erkannt und es bleibt Zeit — bei der Notlandung ist die Landung erzwungen und schnelles Handeln nötig</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q2_1')"><span class="opt-l">C</span>Notlandungen sind nur bei Motorausfall möglich</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q2_1')"><span class="opt-l">D</span>Bei der Sicherheitslandung ist die Technik defekt</button>
+            </div>
+            <div class="quiz-fb" id="fb_q2_1"></div>
+          </div>
+
+          <div class="quiz-block">
+            <div class="quiz-eyebrow">🧠 Check</div>
+            <div class="quiz-q">Warum ist RTH bei einem GNSS-Fehler keine gute Lösung?</div>
+            <div class="quiz-opts" id="qo_q2_2">
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q2_2')"><span class="opt-l">A</span>RTH verbraucht zu viel Batterie</button>
+              <button class="quiz-opt" onclick="answerQ(this,'correct','q2_2')"><span class="opt-l">B</span>Ohne GNSS kann das UAS die Startposition nicht finden — RTH würde fehlschlagen</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q2_2')"><span class="opt-l">C</span>RTH ist nur bei Funkverlust verfügbar</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q2_2')"><span class="opt-l">D</span>RTH funktioniert nur in der Nähe des Startplatzes</button>
+            </div>
+            <div class="quiz-fb" id="fb_q2_2"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- LEKTION 2: Konkrete Szenarien -->
+    <div class="lesson" id="l2_2">
+      <div class="lesson-head" onclick="toggleLesson('l2_2','ch2')">
+        <div class="lesson-num">2</div>
+        <div class="lesson-head-info">
+          <div class="lesson-eyebrow">Kapitel 3 · Lektion 2 · ca. 13 Min</div>
+          <div class="lesson-title">Kollision, GNSS-Fehler, Wetter & Absturz</div>
+        </div>
+        <div class="lesson-toggle" id="tgl_l2_2">▾</div>
+      </div>
+      <div class="lesson-body" id="body_l2_2">
+        <div class="lesson-content">
+
+          <h3>Kollisionsgefahr mit anderen Luftraumnutzern</h3>
+          <p>Taucht plötzlich ein anderes Luftfahrzeug auf — egal ob Hubschrauber, Ballon, Sportflugzeug oder andere Drohne — gilt: <strong>Davon ausgehen dass der andere dich nicht gesehen hat.</strong> Sofort ausweichen, Kollisionsvermeidung hat Vorrang vor allem anderen.</p>
+
+          <div class="def-grid">
+            <div class="def-card"><div class="def-badge">1.</div><div class="def-text"><strong>Sofortige Sicherheitslandung</strong> — sicherste Option</div></div>
+            <div class="def-card"><div class="def-badge">2.</div><div class="def-text"><strong>Sehr tief schweben</strong> — Bodennahe Warteposition (auf Hindernisse achten)</div></div>
+          </div>
+
+          <h3>GNSS- oder Kompassfehler</h3>
+          <p>Symptome: Drohne dreht schnelle Kreise oder fliegt in unbeabsichtigte Richtung. Ursachen: Abschattung durch Gebäude, Gebirge, Wald. In solchen Fällen hilft RTH <strong>nicht</strong> — das UAS findet die Startposition nicht.</p>
+
+          <div class="box danger">
+            <div class="box-icon">🛰️</div>
+            <div class="box-body">
+              <span class="box-label">GNSS-Ausfall: Was tun?</span>
+              In den <strong>manuellen oder stabilisierten Höhenmodus</strong> wechseln. Windeinfluss berücksichtigen — das UAS driftet sofort! Manuell zurückfliegen oder sofort landen.
+            </div>
+          </div>
+
+          <h3>Kritisches Wetter</h3>
+          <div class="def-grid">
+            <div class="def-card"><div class="def-badge">❄️</div><div class="def-text"><strong>Frost</strong> — Batteriekapazität sinkt. Bei 0°C auch Vereisungsgefahr an Propellern und Tragflächen → Absturzgefahr. Nach Probeflug Oberflächen prüfen.</div></div>
+            <div class="def-card"><div class="def-badge">💨</div><div class="def-text"><strong>Wind & Böen</strong> — Bei zunehmendem Wind rechtzeitig landen, bevor die Kontrolle schwierig wird. Böen vor Gewittern besonders gefährlich.</div></div>
+          </div>
+
+          <h3>Sichtverlust & Fly-away</h3>
+          <p>Wenn die Drohne außer Sichtweite gerät oder unkontrolliert davonfliegt: sofort <strong>RTH aktivieren</strong>. In Flugplatznähe zusätzlich: <strong>Flugsicherung informieren</strong> mit verbleibender Flugzeit, Richtung und Höhe.</p>
+
+          <h3>Absturz</h3>
+          <p>Wenn der Absturz unvermeidbar ist: <strong>Lautstark warnen!</strong> Danach Speicherkarte des Flugreglers sichern um den Vorfall zu analysieren. Behörden informieren um zukünftige Unfälle zu vermeiden — das ist der einzige Sinn dieser Meldung, keine Sanktionen.</p>
+
+          <div class="merksatz"><p>Bei Kollisionsgefahr: sofort ausweichen. Der andere hat dich nicht gesehen. Rechtsverhältnis ist zweitrangig — Sicherheit first.</p></div>
+
+          <div class="quiz-block">
+            <div class="quiz-eyebrow">🧠 Check</div>
+            <div class="quiz-q">Deine Drohne dreht plötzlich schnelle Kreise und fliegt in eine unbeabsichtigte Richtung. Was ist wahrscheinlich passiert und was tust du?</div>
+            <div class="quiz-opts" id="qo_q2_3">
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q2_3')"><span class="opt-l">A</span>Akkufehler — RTH aktivieren und warten</button>
+              <button class="quiz-opt" onclick="answerQ(this,'correct','q2_3')"><span class="opt-l">B</span>GNSS- oder Kompassfehler — manuellen Modus einschalten, Windeinfluss beachten, landen oder manuell zurückfliegen</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q2_3')"><span class="opt-l">C</span>Interferenz — Fernbedienung neu starten</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q2_3')"><span class="opt-l">D</span>Windfehler — höher fliegen bis Signal stärker wird</button>
+            </div>
+            <div class="quiz-fb" id="fb_q2_3"></div>
+          </div>
+
+          <div class="quiz-block">
+            <div class="quiz-eyebrow">🧠 Check</div>
+            <div class="quiz-q">Was muss bei einem Fly-away in der Nähe eines Flugplatzes zusätzlich getan werden?</div>
+            <div class="quiz-opts" id="qo_q2_4">
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q2_4')"><span class="opt-l">A</span>Nichts — RTH reicht</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q2_4')"><span class="opt-l">B</span>Den Hersteller anrufen</button>
+              <button class="quiz-opt" onclick="answerQ(this,'correct','q2_4')"><span class="opt-l">C</span>Flugsicherung informieren mit verbleibender Flugzeit, Richtung und Höhe</button>
+              <button class="quiz-opt" onclick="answerQ(this,'wrong','q2_4')"><span class="opt-l">D</span>Erst nach der Landung Behörden informieren</button>
+            </div>
+            <div class="quiz-fb" id="fb_q2_4"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div><!-- end ch2 -->
+
+
+<!-- ==================== FINALES QUIZ ==================== -->
+<div class="final-quiz" id="finalQuizSection" style="display:none">
+  <div class="fq-header">
+    <h3>🎯 Modul-Abschlussquiz</h3>
+    <p>20 Fragen aus allen 3 Kapiteln · 75% zum Bestehen</p>
+  </div>
+  <div class="fq-dots" id="fqDots"></div>
+  <div id="fqBody">
+    <div class="fq-counter" id="fqCounter"></div>
+    <div class="fq-question" id="fqQuestion"></div>
+    <div class="fq-opts" id="fqOpts"></div>
+    <div class="fq-feedback" id="fqFeedback"></div>
+    <button class="fq-next" id="fqNext" onclick="nextFQ()">Weiter →</button>
+  </div>
+  <div id="fqResult" style="display:none"></div>
+</div>
+
+<div class="module-end" id="moduleEnd" style="display:none">
+  <div class="module-end-icon">📋</div>
+  <h2>Modul 3 abgeschlossen!</h2>
+  <p>Du kennst jetzt alle betrieblichen Verfahren. Weiter zu Modul 4 — dort geht es um Technik: Wie fliegt eine Drohne, was steckt drin, wie wird sie gewartet.</p>
+  <a href="modul-4.html" class="btn-next">Zu Modul 4: Allgemeine UAS-Kunde →</a>
+</div>
+
+</div><!-- end content -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── STATE ─────────────────────────────────────────
+const chapterDone = [false,false,false];
+const quizAnswered = {};
+let currentChapter = 0;
+let finalQuizStarted = false;
+
+// ─── CHAPTER NAVIGATION ────────────────────────────
+function showChapter(n){
+  document.querySelectorAll('.chapter-section').forEach((s,i)=>{
+    s.classList.toggle('active', i===n);
+  });
+  document.querySelectorAll('.chapter-tab').forEach((t,i)=>{
+    t.classList.toggle('active', i===n);
+  });
+  currentChapter = n;
+  window.scrollTo({top:0,behavior:'smooth'});
+  // Open first lesson of chapter
+  const firstLesson = document.querySelector(`#ch${n} .lesson-body`);
+  if(firstLesson && !firstLesson.classList.contains('open')){
+    const firstHead = document.querySelector(`#ch${n} .lesson-head`);
+    if(firstHead) firstHead.click();
+  }
+}
+
+// ─── LESSON TOGGLE ─────────────────────────────────
+function toggleLesson(id, chId){
+  const body = document.getElementById('body_'+id);
+  const tgl = document.getElementById('tgl_'+id);
+  const isOpen = body.classList.toggle('open');
+  tgl.classList.toggle('open', isOpen);
+  if(isOpen){
+    markChapterProgress(chId);
+    setTimeout(()=>{ body.scrollIntoView({behavior:'smooth',block:'start'}); },100);
+  }
+}
+
+// Chapter keys mapping for localStorage
+const chapterKeys = ['m3_ch1','m3_ch2','m3_ch3'];
+
+function markChapterProgress(chId){
+  const chIdx = parseInt(chId.replace('ch',''));
+  if(!chapterDone[chIdx]){
+    chapterDone[chIdx] = true;
+    document.getElementById('ctab'+chIdx).classList.add('done');
+    // Save chapter progress to localStorage
+    try {
+      const p = JSON.parse(localStorage.getItem('drohnenschein_progress')||'{}');
+      p[chapterKeys[chIdx]] = true;
+      localStorage.setItem('drohnenschein_progress', JSON.stringify(p));
+    } catch(e) {}
+    updateProgress();
+    // Show final quiz when all chapters done
+    if(chapterDone.every(Boolean) && !finalQuizStarted){
+      setTimeout(()=>{
+        document.getElementById('finalQuizSection').style.display='block';
+        document.getElementById('finalQuizSection').scrollIntoView({behavior:'smooth'});
+        finalQuizStarted = true;
+        initFQ();
+      }, 800);
+    }
+  }
+}
+
+// ─── PROGRESS ──────────────────────────────────────
+function updateProgress(){
+  const done = chapterDone.filter(Boolean).length;
+  const total = chapterDone.length + 1; // +1 for quiz
+  let pct = Math.round(done/total*100);
+  if(quizPassed) pct = 100;
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressPct').textContent = pct+'%';
+  document.getElementById('headerProgress').textContent = pct+'%';
+}
+
+// ─── INLINE QUIZ ───────────────────────────────────
+const qFeedbacks = {
+  q0_1:{correct:'✅ Richtig! Aktives Abhaken ist Pflicht — passives Lesen reicht nicht.',wrong:'❌ Falsch. Checklisten-Punkte müssen nach Bearbeitung aktiv bestätigt werden.'},
+  q0_2:{correct:'✅ Korrekt! Alle drei Dokumente müssen beim Flug dabei sein.',wrong:'❌ Falsch. Die drei Pflicht-Dokumente sind: Kompetenznachweis, Betreiberregistrierung und Haftpflichtversicherung.'},
+  q0_3:{correct:'✅ Richtig! NOTAM = Notice to Airmen — Mitteilungen über kurzfristige Luftraumbesonderheiten.',wrong:'❌ Falsch. NOTAM steht für Notice to Airmen.'},
+  q0_4:{correct:'✅ Korrekt! Bodenhindernisse bremsen Wind — in der Luft ist er stärker.',wrong:'❌ Falsch. Wind nimmt mit der Höhe zu, nicht ab.'},
+  q0_5:{correct:'✅ Richtig! RTH fliegt geradlinig zurück — zu niedrige Höhe = Kollision mit Hindernissen.',wrong:'❌ Falsch. Die RTH-Höhe muss so gewählt werden, dass die Drohne über alle Hindernisse kommt.'},
+  q1_1:{correct:'✅ Richtig! Mindestens einmal pro Minute — wegen der tückischen Entladekurve.',wrong:'❌ Falsch. Mindestens einmal pro Minute checken — der Akku kann plötzlich schnell fallen.'},
+  q1_2:{correct:'✅ Korrekt! Rettungshubschrauber fliegen niedrig und schnell — höchstes Risiko.',wrong:'❌ Falsch. Niedrig fliegende Rettungs- und Polizeihubschrauber sind das größte Risiko.'},
+  q1_3:{correct:'✅ Richtig! 15–25°C, dunkel, teilentladen, keine brennbaren Gegenstände.',wrong:'❌ Falsch. Batterien teilentladen lagern bei 15–25°C, dunkel, ohne brennbare Gegenstände in der Nähe.'},
+  q2_1:{correct:'✅ Genau! Sicherheitslandung = früh erkannt, Zeit vorhanden. Notlandung = erzwungen.',wrong:'❌ Falsch. Bei der Notlandung ist die Situation erzwungen — kaum Optionen, sofortiges Handeln nötig.'},
+  q2_2:{correct:'✅ Richtig! Ohne GNSS kein RTH — das UAS findet die Startposition nicht.',wrong:'❌ Falsch. RTH basiert auf GPS-Navigation. Ohne GNSS-Signal ist RTH nicht möglich.'},
+  q2_3:{correct:'✅ Korrekt! GNSS-/Kompassfehler → manueller Modus, Windeinfluss beachten, landen.',wrong:'❌ Falsch. Bei GNSS-Fehler hilft RTH nicht. Manuellen Modus einschalten und landen.'},
+  q2_4:{correct:'✅ Richtig! Flugsicherung sofort informieren mit Flugzeit, Richtung und Höhe.',wrong:'❌ Falsch. In Flugplatznähe muss die Flugsicherung sofort informiert werden.'}
+};
+
+function answerQ(btn, type, id){
+  if(quizAnswered[id]) return;
+  quizAnswered[id] = true;
+  btn.closest('.quiz-block').querySelectorAll('.quiz-opt').forEach(o=>o.disabled=true);
+  btn.classList.add(type);
+  const fb = document.getElementById('fb_'+id);
+  fb.innerHTML = qFeedbacks[id][type];
+  fb.className = 'quiz-fb show '+type;
+}
+
+const scFeedbacks = {
+  sc0_1:{correct:'✅ Korrekt! C0-Drohnen (unter 250g) dürfen in A1 auch über vereinzelte Personen fliegen — aber nur mit äußerster Vorsicht und möglichst vermieden. Das ist keine generelle Erlaubnis, sondern eine begrenzte Ausnahmeregelung.',wrong:'❌ Falsch. C0-Drohnen dürfen in A1 mit äußerster Vorsicht über vereinzelte (nicht angesammelte) Personen fliegen. Keine Prüfung nötig, aber sehr wohl Regeln.'},
+  sc2_1:{correct:'✅ Richtig! Sobald ein Notfalleinsatz stattfindet, gilt für alle anderen UAS sofortiges Flugverbot in und um das Gebiet. Rettungskräfte brauchen freien Luftraum.',wrong:'❌ Falsch. Bei jedem Notfalleinsatz gilt sofortiges Flugverbot für alle anderen UAS — ohne Ausnahme, außer die Einsatzleitung erteilt ausdrücklich Erlaubnis.'}
+};
+
+function answerSc(btn, type, id){
+  if(quizAnswered['sc_'+id]) return;
+  quizAnswered['sc_'+id] = true;
+  btn.closest('.scenario').querySelectorAll('.sc-opt').forEach(o=>o.disabled=true);
+  btn.classList.add(type);
+  const fb = document.getElementById('fb_'+id);
+  fb.innerHTML = scFeedbacks[id][type];
+  fb.className = 'sc-fb show '+type;
+}
+
+// ─── FINAL QUIZ ────────────────────────────────────
+const fqPool = [
+  {q:'Welche Aussage zu Checklisten ist korrekt?',opts:['Nur für kommerzielle Piloten Pflicht','Punkte müssen aktiv bestätigt werden — Lesen reicht nicht','Eine Checkliste reicht für alle Phasen','Nur für den Start, nicht für die Nachbereitung'],c:1,fb:'Checklisten funktionieren nur wenn Punkte nach Bearbeitung aktiv abgehakt werden. Passives Lesen reicht nicht.'},
+  {q:'Welche drei Dokumente müssen vor dem Flug vorhanden sein?',opts:['Personalausweis, Kaufbeleg, Wetterbericht','Kompetenznachweis, Betreiberregistrierung, Haftpflichtversicherungsnachweis','Drohnenführerschein, NOTAM-Ausdruck, GPS-Koordinaten','Versicherung, Flugbuch, Checkliste'],c:1,fb:'Kompetenznachweis (Drohnenlizenz), Betreiberregistrierung (LBA) und Haftpflichtversicherungsnachweis müssen alle dabei sein.'},
+  {q:'Wofür steht NOTAM?',opts:['Notice of Temporary Airspace Modification','Notice to Airmen','National Operations Tracking and Monitoring','No-fly Airspace Territory Alert Map'],c:1,fb:'NOTAM = Notice to Airmen. Mitteilungen über kurzfristige Besonderheiten im Luftraum — Festivals, Militärübungen, temporäre Sperrungen.'},
+  {q:'Wann müssen NOTAMs gelesen werden?',opts:['Nur am Vortag reicht','Nur am Flugtag','Am Vortag UND nochmals am Flugtag aktualisieren — neue NOTAMs können jederzeit erscheinen','Einmal pro Woche ist ausreichend'],c:2,fb:'NOTAMs am Vortag lesen UND am Flugtag aktualisieren — neue Sperrungen können kurzfristig veröffentlicht werden.'},
+  {q:'Warum nimmt der Wind in der Flughöhe zu?',opts:['Weil die Luft dünner ist','Weil Bodenhindernisse den Wind bremsen — in der Luft fehlt diese Bremse','Weil die Drohne schneller fliegt','Windstärke ist in jeder Höhe gleich'],c:1,fb:'Am Boden bremsen Hindernisse wie Bäume und Gebäude den Wind. In der Luft fehlt diese Bremse — daher ist der Wind in Flughöhe in der Regel stärker.'},
+  {q:'Warum ist die korrekte RTH-Höhe so wichtig?',opts:['Damit die Drohne schneller zurückkommt','Wegen der gesetzlichen 120m-Grenze','Damit die Drohne bei der Rückkehr nicht in Bäume oder Gebäude fliegt','Höhere RTH-Höhe spart Batterie'],c:2,fb:'RTH fliegt die Drohne geradlinig zurück — in der eingestellten Höhe. Ist die Höhe zu niedrig, kollidiert sie mit Hindernissen auf dem Rückweg.'},
+  {q:'In welcher Reihenfolge wird beim Start vorgegangen?',opts:['UAS, Fernsteuerung, Ausrüstung','Ausrüstung, UAS, Fernsteuerung','Fernsteuerung, UAS, Zusatzausrüstung','Alles gleichzeitig einschalten'],c:2,fb:'Richtige Reihenfolge: 1. Fernsteuerung, 2. UAS, 3. Zusatzausrüstung. So ist die Steuerung immer zuerst aktiv.'},
+  {q:'Wie oft sollte der Batteriestand während des Fluges geprüft werden?',opts:['Nur am Anfang und Ende','Alle 10 Minuten','Mindestens einmal pro Minute','Nur wenn ein Warnsignal ertönt'],c:2,fb:'Mindestens einmal pro Minute — die Batterie-Entladekurve kann täuschen: nach einem ruhigen Plateau kommt oft ein schneller Abfall.'},
+  {q:'Welche Luftfahrzeuge stellen das höchste Luftrisiko dar?',opts:['Passagiermaschinen in großer Höhe','Niedrig fliegende Rettungs- und Polizeihubschrauber','Segelflugzeuge','Militärjets in großer Höhe'],c:1,fb:'Rettungs- und Polizeihubschrauber fliegen niedrig, schnell und oft ohne Vorankündigung — das höchste Risiko für Drohnenpiloten.'},
+  {q:'Wie sollen Batterien gelagert werden?',opts:['Vollgeladen im Kühlschrank','Teilentladen, 15–25°C, dunkel, keine entflammbaren Gegenstände in der Nähe','Vollgeladen bei Raumtemperatur','Im UAS eingebaut'],c:1,fb:'Batterien teilentladen lagern, bei 15–25°C, dunkel und fernab von brennbaren Materialien. Vollgeladene Batterien zu lagern kann sie beschädigen.'},
+  {q:'Was unterscheidet eine Sicherheitslandung von einer Notlandung?',opts:['Bei der Notlandung hat man mehr Zeit','Bei der Sicherheitslandung wird die Lage früh erkannt — es bleibt Zeit. Notlandung ist erzwungen, schnelles Handeln nötig','Notlandungen sind nur bei Motorausfall möglich','Bei Sicherheitslandung ist Technik defekt'],c:1,fb:'Sicherheitslandung = früh erkannte Situation, Zeit vorhanden, Technik funktioniert. Notlandung = erzwungen, kaum Optionen, sofortiges Handeln.'},
+  {q:'Warum hilft RTH bei einem GNSS-Fehler nicht?',opts:['RTH verbraucht zu viel Batterie','Ohne GNSS findet das UAS die Startposition nicht — RTH würde fehlschlagen','RTH ist nur bei Funkverlust verfügbar','RTH funktioniert nur in der Nähe'],c:1,fb:'RTH basiert auf GPS-Navigation. Ohne GNSS-Signal kann das UAS die Startposition nicht lokalisieren. Stattdessen: manueller Modus, manuell landen.'},
+  {q:'Was tun bei einem GNSS- oder Kompassfehler?',opts:['RTH aktivieren und warten','In manuellen oder stabilisierten Höhenmodus wechseln, Windeinfluss beachten, manuell zurückfliegen oder landen','Fernbedienung neu starten','Höher fliegen bis Signal stabiler wird'],c:1,fb:'Manueller Modus ist die Lösung — aber Windeinfluss bedenken. Das UAS driftet sofort. RTH funktioniert nicht weil GNSS fehlt.'},
+  {q:'Was passiert bei Vereisung an Propellern?',opts:['Nur optisches Problem, keine Auswirkung auf den Flug','Vereisung beeinträchtigt Aerodynamik erheblich und kann zum Absturz führen','Drohnen sind gegen Vereisung geschützt','Nur bei -10°C möglich'],c:1,fb:'Vereisung an Propellern oder Tragflächen verändert die Aerodynamik dramatisch und kann den Absturz verursachen — besonders bei 0°C mit Nebel.'},
+  {q:'Was muss bei einem Fly-away in Flugplatznähe getan werden?',opts:['Nichts, RTH reicht','Hersteller anrufen','Flugsicherung informieren mit verbleibender Flugzeit, Richtung und Höhe','Erst nach Landung Behörden informieren'],c:2,fb:'In Flugplatznähe muss die Flugsicherung sofort informiert werden: verbleibende Flugzeit (Batterie), Richtung und aktuelle Höhe.'},
+  {q:'Was ist der erste Schritt bei Kollisionsgefahr mit einem anderen Luftfahrzeug?',opts:['Prüfen wer Vorrang hat','Sofort ausweichen — davon ausgehen dass der andere dich nicht gesehen hat','Auf gleichem Kurs bleiben und Funkkontakt aufnehmen','Höher fliegen'],c:1,fb:'Bei Kollisionsgefahr sofort ausweichen. Immer davon ausgehen dass der andere die Drohne nicht sieht. Rechtsverhältnis ist zweitrangig.'},
+  {q:'Was sollte nach einem Absturz als erstes getan werden?',opts:['Die Drohne sofort reparieren','Nichts — Unfälle passieren einfach','Lautstark warnen, Speicherkarte sichern, ggf. Behörden informieren','Sozialen Medien informieren'],c:2,fb:'Zuerst lautstark warnen. Dann Speicherkarte des Flugreglers sichern um den Vorfall zu analysieren. Bei Verletzten oder Beinahe-Kollisionen Behörden informieren.'},
+  {q:'Was sind Beispiele für abnormale Situationen?',opts:['Motorausfall, beschädigter Propeller','Überflug unbeteiligter Personen, plötzliche Wetterverschlechterung, schnellere Batterieentladung','Technischer Totalausfall, Absturz','Verlust der Fernsteuerungsverbindung'],c:1,fb:'Abnormale Situationen: unerwarteter Personenüberflug, Wetterverschlechterung, schnellere Batterieentladung, ungewöhnliches Flugverhalten — keine unmittelbare Sicherheitsgefahr.'},
+  {q:'Wann und wie sollen Flugdaten gesichert werden?',opts:['Nur bei kommerziellen Flügen','Auf dem internen Speicher des UAS reicht','Nach jedem Flug auf externem Speichermedium — idealerweise mehrfach','Nur bei besonderen Vorkommnissen'],c:2,fb:'Flugdaten nach jedem Flug auf externem Speichermedium sichern. Interne Daten können verloren gehen. Bei Vorfällen ist die Datensicherung entscheidend.'},
+  {q:'Warum ist ein Briefing mit beteiligten Personen vor dem Flug wichtig?',opts:['Nur wegen Versicherungsvorschriften','Damit alle Beteiligten Flugverlauf, Aufgaben, Gefahren und Notverfahren kennen und explizit zugestimmt haben','Nur bei kommerziellen Einsätzen erforderlich','Damit mehr Personen die Drohne steuern können'],c:1,fb:'Das Briefing ist essenziell: alle Beteiligten müssen Flugverlauf, Aufgabenverteilung, Gefahren und Notverfahren kennen — und explizit zugestimmt haben.'}
+];
+
+let fqState = {questions:[],current:0,score:0};
+let quizPassed = false;
+
+function initFQ(){
+  fqState.questions = [...fqPool].sort(()=>Math.random()-0.5);
+  fqState.current=0; fqState.score=0;
+  document.getElementById('fqDots').innerHTML = fqState.questions.map((_,i)=>`<div class="qdot" id="fqdot${i}"></div>`).join('');
+  showFQ();
+}
+
+function showFQ(){
+  const q = fqState.questions[fqState.current];
+  document.getElementById('fqCounter').textContent = `Frage ${fqState.current+1} / ${fqState.questions.length}`;
+  document.getElementById('fqQuestion').textContent = q.q;
+  document.getElementById('fqOpts').innerHTML = q.opts.map((o,i)=>`<button class="quiz-opt" onclick="answerFQ(this,${i})"><span class="opt-l">${'ABCD'[i]}</span>${o}</button>`).join('');
+  document.getElementById('fqFeedback').style.display='none';
+  document.getElementById('fqFeedback').className='fq-feedback';
+  document.getElementById('fqNext').style.display='none';
+  const dot = document.getElementById('fqdot'+fqState.current);
+  if(dot) dot.style.background='rgba(255,214,0,.6)';
+}
+
+function answerFQ(btn,idx){
+  const q=fqState.questions[fqState.current];
+  document.querySelectorAll('#fqOpts .quiz-opt').forEach(o=>o.disabled=true);
+  const fb=document.getElementById('fqFeedback');
+  const dot=document.getElementById('fqdot'+fqState.current);
+  if(idx===q.c){
+    btn.classList.add('correct');
+    fb.innerHTML='✅ Richtig! '+q.fb;
+    fb.className='fq-feedback show';
+    fqState.score++;
+    if(dot) dot.style.background='var(--green)';
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('#fqOpts .quiz-opt')[q.c].classList.add('correct');
+    fb.innerHTML='❌ Falsch. '+q.fb;
+    fb.className='fq-feedback show';
+    if(dot) dot.style.background='var(--red)';
+  }
+  fb.style.display='block';
+  document.getElementById('fqNext').style.display='block';
+}
+
+function nextFQ(){
+  fqState.current++;
+  if(fqState.current>=fqState.questions.length){ showFQResult(); }
+  else { showFQ(); }
+}
+
+function showFQResult(){
+  const pct=Math.round(fqState.score/fqState.questions.length*100);
+  const passed=pct>=75;
+  document.getElementById('fqBody').style.display='none';
+  document.getElementById('fqDots').style.display='none';
+  const r=document.getElementById('fqResult');
+  r.style.display='block';
+  r.innerHTML=`<div class="fq-result">
+    <div class="fq-score">${pct}%</div>
+    <div class="fq-result-label">${passed?'🎉 Bestanden!':'💪 Noch nicht ganz'}</div>
+    <div class="fq-result-msg">${fqState.score} von ${fqState.questions.length} Fragen richtig.<br>${passed?'Ausgezeichnet! Du kennst alle betrieblichen Verfahren.':'Nochmal durch die Kapitel und dann erneut versuchen.'}</div>
+    <button onclick="retryFQ()" style="background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.3);color:#fff;padding:11px 22px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif">🔄 Nochmal</button>
+  </div>`;
+  if(passed){
+    quizPassed=true;
+    updateProgress();
+    showToast('🎉 Modul 3 abgeschlossen!','success');
+    document.getElementById('moduleEnd').style.display='block';
+    markModuleDone();
+  }
+}
+
+function retryFQ(){
+  document.getElementById('fqResult').style.display='none';
+  document.getElementById('fqBody').style.display='block';
+  document.getElementById('fqDots').style.display='flex';
+  initFQ();
+}
+
+function markModuleDone(){
+  try{
+    const p=JSON.parse(localStorage.getItem('drohnenschein_progress')||'{}');
+    p['m3_completed']=true;
+    localStorage.setItem('drohnenschein_progress',JSON.stringify(p));
+  }catch(e){}
+}
+
+function showToast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast '+type+' show';
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+// ─── INIT ──────────────────────────────────────────
+document.addEventListener('DOMContentLoaded',()=>{
+  // Always reset progress to 0% on load
+  document.getElementById('progressFill').style.width = '0%';
+  document.getElementById('progressPct').textContent = '0%';
+  if(document.getElementById('headerProgress')) document.getElementById('headerProgress').textContent = '0%';
+  // Open first lesson of chapter 1
+  const firstBody = document.getElementById('body_l0_1');
+  const firstTgl = document.getElementById('tgl_l0_1');
+  if(firstBody){ firstBody.classList.add('open'); if(firstTgl) firstTgl.classList.add('open'); }
+});
+</script>
+</body>
+</html>

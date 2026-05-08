@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Modul 1: Luftrecht & Sicherheit · drohnenschein.app</title>
+<meta name="theme-color" content="#004499"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="DrohnenSchein"/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icon-192.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--sky:#0066CC;--sky-light:#E8F4FF;--sky-dark:#004499;--yellow:#FFD600;--green:#00C853;--red:#FF3D00;--orange:#FF6D00;--purple:#9C27B0;--black:#0D0D0D;--white:#FAFAF8;--gray:#F2F2EF;--border:#E0E0DC;--text:#1A1A1A;--muted:#777}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);overflow-x:hidden;-webkit-tap-highlight-color:transparent;line-height:1.65}
+.app-header{background:var(--sky-dark);padding:.875rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;padding-top:max(.875rem,env(safe-area-inset-top));box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.header-back{color:#fff;text-decoration:none;font-size:14px;display:flex;align-items:center;gap:6px;opacity:.9;font-weight:500}
+.header-title{font-family:'Syne',sans-serif;font-size:14px;color:#fff;font-weight:700;text-align:center;flex:1;padding:0 1rem}
+.header-title small{display:block;font-size:11px;font-weight:400;opacity:.6;letter-spacing:.05em;text-transform:uppercase}
+.header-progress{font-size:13px;color:var(--yellow);font-weight:600;min-width:36px;text-align:right}
+.module-hero{background:linear-gradient(135deg,var(--sky-dark) 0%,var(--sky) 60%,#1976D2 100%);padding:2.5rem 1.25rem 3rem;color:#fff;position:relative;overflow:hidden}
+.module-hero::after{content:'';position:absolute;bottom:-30px;left:0;right:0;height:60px;background:var(--white);border-radius:40px 40px 0 0}
+.module-hero::before{content:'';position:absolute;top:-50%;right:-20%;width:400px;height:400px;background:radial-gradient(circle,rgba(255,214,0,.15) 0%,transparent 70%);pointer-events:none}
+.module-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);font-size:12px;font-weight:600;padding:5px 14px;border-radius:20px;margin-bottom:1rem;letter-spacing:.05em;backdrop-filter:blur(8px)}
+.module-hero h1{font-family:'Syne',sans-serif;font-size:clamp(26px,6vw,42px);font-weight:800;line-height:1.05;margin-bottom:.75rem;letter-spacing:-.02em}
+.module-hero .subtitle{font-size:15px;color:rgba(255,255,255,.85);line-height:1.6;max-width:520px;margin-bottom:1.5rem}
+.module-meta{display:flex;gap:.75rem;flex-wrap:wrap;font-size:13px}
+.meta-item{display:flex;align-items:center;gap:6px;color:rgba(255,255,255,.9);background:rgba(0,0,0,.15);padding:5px 12px;border-radius:20px}
+.progress-section{padding:1.25rem 1.25rem;background:var(--white);position:sticky;top:56px;z-index:50;border-bottom:1px solid var(--border)}
+.progress-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:500}
+.progress-track{height:6px;background:var(--gray);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--sky),var(--yellow));border-radius:3px;transition:width .5s ease;width:0%}
+.content{max-width:680px;margin:0 auto;padding:0 1.25rem 6rem}
+.intro-block{background:var(--gray);border-left:4px solid var(--sky);border-radius:0 12px 12px 0;padding:1.5rem;margin:2rem 0}
+.pilot-quote{display:flex;gap:14px;align-items:flex-start}
+.pilot-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--yellow),var(--orange));display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 4px 12px rgba(255,214,0,.3)}
+.pilot-quote-content .from{font-size:11px;font-weight:700;color:var(--orange);letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px}
+.pilot-quote-content p{font-size:15px;color:var(--text);line-height:1.65;font-style:italic}
+/* CHAPTER TABS */
+.chapter-nav{display:flex;gap:6px;padding:1.5rem 1.25rem .5rem;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;background:var(--white)}
+.chapter-nav::-webkit-scrollbar{display:none}
+.chapter-tab{flex-shrink:0;background:var(--gray);border:1.5px solid var(--border);border-radius:20px;padding:7px 14px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;font-family:'DM Sans',sans-serif}
+.chapter-tab.active{background:var(--sky-dark);color:#fff;border-color:var(--sky-dark)}
+.chapter-tab.done{background:#E8F5E9;color:#1B5E20;border-color:#A5D6A7}
+/* LESSON */
+.lesson{background:#fff;border:1px solid var(--border);border-radius:16px;margin-bottom:1.5rem;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.lesson-head{padding:1.25rem 1.5rem;background:linear-gradient(135deg,#fff 0%,var(--sky-light) 100%);border-bottom:1px solid var(--border);display:flex;gap:14px;align-items:center;cursor:pointer;user-select:none}
+.lesson-num{width:40px;height:40px;background:var(--sky-dark);color:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:18px;font-weight:800;flex-shrink:0}
+.lesson-head-info{flex:1;min-width:0}
+.lesson-eyebrow{font-size:11px;color:var(--sky);font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px}
+.lesson-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;line-height:1.3;color:var(--text)}
+.lesson-toggle{font-size:12px;color:var(--muted);transition:transform .3s;flex-shrink:0;background:var(--gray);width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.lesson-toggle.open{transform:rotate(180deg);background:var(--sky-dark);color:#fff}
+.lesson-body{max-height:0;overflow:hidden;transition:max-height .5s ease}
+.lesson-body.open{max-height:30000px}
+.lesson-content{padding:1.5rem}
+.lesson-content h3{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--sky-dark);margin:1.5rem 0 .65rem;line-height:1.3}
+.lesson-content h3:first-child{margin-top:0}
+.lesson-content h4{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin:1.1rem 0 .4rem}
+.lesson-content p{font-size:15px;line-height:1.8;color:#2a2a2a;margin-bottom:1rem}
+.lesson-content p strong{color:var(--sky-dark);font-weight:600}
+/* BOXES */
+.box{border-radius:12px;padding:1.1rem 1.25rem;margin:1.1rem 0;display:flex;gap:12px;align-items:flex-start}
+.box.info{background:#E3F2FD;border-left:3px solid var(--sky)}
+.box.warn{background:#FFF8E1;border-left:3px solid #FFB300}
+.box.danger{background:#FFEBEE;border-left:3px solid var(--red)}
+.box.success{background:#E8F5E9;border-left:3px solid var(--green)}
+.box.tip{background:#F3E5F5;border-left:3px solid var(--purple)}
+.box.law{background:#E8EAF6;border-left:3px solid #3949AB}
+.box-icon{font-size:22px;flex-shrink:0;line-height:1;margin-top:2px}
+.box-text{flex:1;font-size:14px;line-height:1.7;color:#333}
+.box-text strong{color:#000;font-weight:600}
+.box-text .label{display:block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;opacity:.7}
+/* MERKSATZ */
+.merksatz{background:linear-gradient(135deg,#FFF9C4,#FFEB3B);border-radius:12px;padding:1.1rem 1.4rem;margin:1.4rem 0;position:relative;box-shadow:0 4px 16px rgba(255,235,59,.3)}
+.merksatz::before{content:'💡 MERKE';position:absolute;top:-10px;left:1.25rem;background:var(--sky-dark);color:var(--yellow);font-size:10px;font-weight:700;padding:3px 10px;border-radius:4px;letter-spacing:.1em}
+.merksatz p{font-size:14px;color:#3E2723;font-weight:500;line-height:1.65;margin:0;font-style:italic}
+.merksatz p strong{color:#1B5E20;font-weight:700;font-style:normal}
+/* DEFINITION CARDS */
+.def-grid{display:grid;grid-template-columns:1fr;gap:8px;margin:1.1rem 0}
+.def-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:.9rem 1.1rem;display:flex;gap:12px;align-items:flex-start}
+.def-badge{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;background:var(--sky-dark);color:#fff;padding:3px 8px;border-radius:5px;flex-shrink:0;letter-spacing:.05em;margin-top:2px}
+.def-text{flex:1;font-size:14px;line-height:1.6;color:#333}
+.def-text strong{color:var(--text);font-weight:600}
+/* CATEGORY TABLE */
+.cat-table{border-radius:12px;overflow:hidden;border:1px solid var(--border);margin:1.1rem 0}
+.cat-row{display:grid;grid-template-columns:80px 1fr 1fr;border-bottom:1px solid var(--border)}
+.cat-row:last-child{border-bottom:none}
+.cat-row.header{background:var(--sky-dark);color:#fff;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:.05em}
+.cat-cell{padding:.75rem .9rem;font-size:13px;line-height:1.5;border-right:1px solid var(--border)}
+.cat-cell:last-child{border-right:none}
+.cat-row.a1{background:#E8F5E9}
+.cat-row.a2{background:#FFF8E1}
+.cat-row.a3{background:#FFF3E0}
+/* CLASS TABLE */
+.class-table{border-radius:12px;overflow:hidden;border:1px solid var(--border);margin:1.1rem 0;font-size:13px}
+.class-row{display:grid;grid-template-columns:50px 90px 1fr 1fr;border-bottom:1px solid var(--border)}
+.class-row:last-child{border-bottom:none}
+.class-row.header{background:var(--sky-dark);color:#fff;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.05em}
+.class-cell{padding:.65rem .8rem;border-right:1px solid var(--border);line-height:1.4}
+.class-cell:last-child{border-right:none}
+.class-badge{display:inline-block;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;padding:2px 8px;border-radius:5px;color:#fff}
+.c0{background:#43A047}.c1{background:#1E88E5}.c2{background:#FB8C00}.c3{background:#E53935}.c4{background:#6D4C41}
+/* QUIZ */
+.quiz-block{background:linear-gradient(135deg,var(--sky-dark),var(--sky));border-radius:14px;padding:1.4rem;margin:1.4rem 0;color:#fff}
+.quiz-tag{display:inline-block;background:rgba(255,255,255,.15);font-size:11px;font-weight:600;padding:3px 10px;border-radius:4px;letter-spacing:.08em;margin-bottom:.65rem}
+.quiz-q{font-size:15px;font-weight:500;line-height:1.45;margin-bottom:.9rem}
+.quiz-opts{display:flex;flex-direction:column;gap:6px}
+.quiz-opt{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);border-radius:8px;padding:10px 14px;font-size:13px;cursor:pointer;text-align:left;color:#fff;width:100%;font-family:'DM Sans',sans-serif;transition:all .15s;display:flex;align-items:center;gap:10px;line-height:1.45}
+.quiz-opt:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3)}
+.quiz-opt.correct{background:rgba(0,200,83,.25);border-color:var(--green)}
+.quiz-opt.wrong{background:rgba(255,61,0,.25);border-color:var(--red)}
+.quiz-opt:disabled{cursor:default}
+.opt-l{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;font-family:'Syne',sans-serif}
+.quiz-opt.correct .opt-l{background:var(--green)}
+.quiz-opt.wrong .opt-l{background:var(--red)}
+.quiz-fb{font-size:13px;line-height:1.6;padding:10px 14px;border-radius:8px;margin-top:.65rem;display:none}
+.quiz-fb.show{display:block}
+.quiz-fb.correct{background:rgba(0,200,83,.15);color:#A5D6A7}
+.quiz-fb.wrong{background:rgba(255,61,0,.15);color:#FFAB91}
+/* SCENARIO */
+.scenario{background:#fff;border:2px solid var(--orange);border-radius:14px;margin:1.4rem 0;position:relative}
+.scenario-tag{position:absolute;top:-10px;left:1rem;background:var(--orange);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:4px;letter-spacing:.08em;z-index:2}
+.scenario-q{padding:1.1rem 1.25rem;font-size:14px;font-weight:500;background:var(--gray);border-bottom:1px solid var(--border);line-height:1.6}
+.scenario-opts{display:flex;flex-direction:column;gap:7px;padding:.9rem}
+.sc-opt{background:#fff;border:1.5px solid var(--border);border-radius:9px;padding:10px 14px;font-size:13px;cursor:pointer;transition:all .15s;text-align:left;color:var(--text);width:100%;font-family:'DM Sans',sans-serif;display:flex;align-items:flex-start;gap:10px;line-height:1.5}
+.sc-opt:hover{border-color:var(--sky);background:var(--sky-light)}
+.sc-opt.correct{border-color:var(--green);background:#E8F5E9;color:#1B5E20}
+.sc-opt.wrong{border-color:var(--red);background:#FFEBEE;color:#BF360C}
+.sc-opt:disabled{cursor:default}
+.sc-opt .opt-l{width:24px;height:24px;border-radius:50%;background:var(--gray);color:var(--muted);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;margin-top:1px}
+.sc-opt.correct .opt-l{background:var(--green);color:#fff}
+.sc-opt.wrong .opt-l{background:var(--red);color:#fff}
+.sc-fb{padding:.9rem 1.1rem;font-size:13px;line-height:1.65;display:none;border-top:2px solid var(--border)}
+.sc-fb.show{display:block}
+.sc-fb.correct{background:#E8F5E9;color:#1B5E20;border-color:var(--green)}
+.sc-fb.wrong{background:#FFEBEE;color:#BF360C;border-color:var(--red)}
+/* FINAL QUIZ */
+.final-quiz{background:linear-gradient(135deg,var(--sky-dark),#1565C0);border-radius:16px;padding:1.75rem 1.5rem;margin:2rem 0;color:#fff}
+.fq-header{text-align:center;margin-bottom:1.25rem}
+.fq-header h3{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:.25rem}
+.fq-header p{font-size:13px;color:rgba(255,255,255,.7)}
+.fq-dots{display:flex;gap:5px;justify-content:center;margin-bottom:1.25rem;flex-wrap:wrap}
+.qdot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.2);transition:all .3s}
+.fq-counter{font-size:12px;color:rgba(255,255,255,.65);text-align:center;margin-bottom:.65rem;letter-spacing:.05em;text-transform:uppercase}
+.fq-question{font-size:16px;font-weight:500;line-height:1.5;margin-bottom:1.1rem}
+.fq-opts{display:flex;flex-direction:column;gap:7px}
+.fq-feedback{background:rgba(0,0,0,.2);border-radius:10px;padding:.9rem;margin-top:.9rem;font-size:14px;line-height:1.6;display:none}
+.fq-feedback.show{display:block}
+.fq-next{display:block;width:100%;background:var(--yellow);color:#000;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:.9rem;display:none;transition:all .2s}
+.fq-next:hover{background:#E6C200}
+.fq-result{text-align:center;padding:1rem}
+.fq-score{font-family:'Syne',sans-serif;font-size:56px;font-weight:800;color:var(--yellow);line-height:1;margin-bottom:.5rem}
+.fq-result-label{font-size:18px;font-weight:600;margin-bottom:.65rem}
+.fq-result-msg{font-size:14px;color:rgba(255,255,255,.8);line-height:1.6;margin-bottom:1.4rem}
+.module-end{background:linear-gradient(135deg,var(--sky-dark),var(--sky));color:#fff;border-radius:16px;padding:2rem 1.5rem;margin:2.5rem 0 0;text-align:center}
+.module-end-icon{font-size:52px;margin-bottom:.75rem}
+.module-end h2{font-family:'Syne',sans-serif;font-size:22px;margin-bottom:.5rem;font-weight:800}
+.module-end p{font-size:14px;color:rgba(255,255,255,.8);margin-bottom:1.4rem;line-height:1.6}
+.btn-next{display:inline-block;background:var(--yellow);color:var(--black);padding:13px 28px;border-radius:8px;font-weight:700;font-size:15px;text-decoration:none;border:none;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
+.btn-next:hover{background:#E6C200;transform:translateY(-1px)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--sky-dark);color:#fff;padding:12px 24px;border-radius:24px;font-size:14px;font-weight:500;z-index:200;opacity:0;transition:all .3s ease;box-shadow:0 8px 24px rgba(0,0,0,.2);max-width:90%;text-align:center;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{background:var(--green)}
+.chapter-section{display:none}
+.chapter-section.active{display:block}
+.vorrang-list{display:flex;flex-direction:column;gap:8px;margin:1.1rem 0}
+.vorrang-item{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:.8rem 1rem}
+.vorrang-num{width:30px;height:30px;background:var(--sky-dark);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;flex-shrink:0}
+.vorrang-text{flex:1;font-size:14px;line-height:1.5}
+.vorrang-text strong{color:var(--sky-dark)}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <a href="index.html" class="header-back">← Übersicht</a>
+  <div class="header-title">
+    <small>Modul 1 · 1 von 4</small>
+    Luftrecht & Sicherheit
+  </div>
+  <div class="header-progress" id="headerProgress">0%</div>
+</header>
+
+<div class="module-hero">
+  <div class="module-tag">⚖️ Modul 1 von 4</div>
+  <h1>Luftrecht<br>& Sicherheit</h1>
+  <p class="subtitle">Das rechtliche Fundament jedes Fluges. Kategorien, Klassen, Behörden, Verantwortung, Datenschutz und Versicherung — alles was Du als Pilot kennen musst.</p>
+  <div class="module-meta">
+    <div class="meta-item">⏱️ ca. 60–75 Min</div>
+    <div class="meta-item">📚 5 Kapitel</div>
+    <div class="meta-item">🎯 Prüfungsrelevant</div>
+  </div>
+</div>
+
+<div class="progress-section">
+  <div class="progress-label">
+    <span>Dein Fortschritt</span>
+    <span id="progressPct">0%</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+
+<div class="chapter-nav" id="chapterNav">
+  <button class="chapter-tab active" onclick="showChapter(0)" id="ctab0">1 · Klassifizierungen</button>
+  <button class="chapter-tab" onclick="showChapter(1)" id="ctab1">2 · Verwaltung</button>
+  <button class="chapter-tab" onclick="showChapter(2)" id="ctab2">3 · Lufträume</button>
+  <button class="chapter-tab" onclick="showChapter(3)" id="ctab3">4 · Betrieb</button>
+  <button class="chapter-tab" onclick="showChapter(4)" id="ctab4">5 · Sicherheit</button>
+</div>
+
+<div class="content">
+
+<!-- ==================== KAPITEL 1: KLASSIFIZIERUNGEN ==================== -->
+<div class="chapter-section active" id="ch0">
+
+  <div class="intro-block">
+    <div class="pilot-quote">
+      <div class="pilot-avatar">✈️</div>
+      <div class="pilot-quote-content">
+        <div class="from">Torsten Flieger sagt:</div>
+        <p>"Als ich mit Drohnen angefangen hab, dachte ich: Klein, leicht, harmlos — was soll das schon für Regeln geben? Dann hab ich gemerkt: Die EU hat das komplett durchdacht. Wer die Systematik einmal verstanden hat, findet sich überall zurecht."</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson" id="l0_1">
+    <div class="lesson-head" onclick="toggleLesson('l0_1','ch0')">
+      <div class="lesson-num">1</div>
+      <div class="lesson-head-info">
+        <div class="lesson-eyebrow">Kapitel 1 · Lektion 1 · ca. 15 Min</div>
+        <div class="lesson-title">Die drei Betriebskategorien — Open, Specific, Certified</div>
+      </div>
+      <div class="lesson-toggle open" id="tgl_l0_1">▾</div>
+    </div>
+    <div class="lesson-body open" id="body_l0_1">
+      <div class="lesson-content">
+
+        <h3>Was ist ein UAS?</h3>
+        <div class="box info">
+          <div class="box-icon">💡</div>
+          <div class="box-text">
+            <span class="label">Begriff</span>
+            <strong>UAS</strong> steht für <strong>Unmanned Aircraft System</strong> — auf Deutsch: <em>unbemanntes Luftfahrzeugsystem</em>. Gemeint ist damit das, was wir im Alltag einfach <strong>Drohne</strong> nennen: das fliegende Gerät inklusive Fernbedienung, App und allem was dazugehört. Im gesamten Kurs wird der Begriff UAS verwendet — jetzt weißt du, was damit gemeint ist.
+          </div>
+        </div>
+
+        <h3>Warum es Kategorien gibt</h3>
+        <p>Eine 100g-Kameradrohne im Garten und eine 20kg-Industriedrohne über einem Kraftwerk — das sind fundamental verschiedene Risiken. Die EASA (Europäische Agentur für Flugsicherheit) hat deshalb den gesamten UAS-Betrieb in <strong>drei Kategorien</strong> eingeteilt, die nach Risiko gestaffelt sind. Je mehr Risiko, desto mehr Regeln.</p>
+
+        <div class="box law">
+          <div class="box-icon">📜</div>
+          <div class="box-text">
+            <span class="label">Rechtliche Grundlage</span>
+            Die drei Kategorien sind festgelegt in der <strong>EU-Durchführungsverordnung 2019/947</strong>. Sie gilt direkt in allen EU-Mitgliedstaaten — keine Übersetzung in nationales Recht nötig.
+          </div>
+        </div>
+
+        <h3>Die offene Kategorie (OPEN)</h3>
+        <p>Das ist Deine Welt als Hobby- und Freizeitpilot. Die offene Kategorie umfasst alle UAS-Betriebe, die <strong>alle fünf folgenden Kriterien erfüllen:</strong></p>
+
+        <div class="def-grid">
+          <div class="def-card">
+            <div class="def-badge">1</div>
+            <div class="def-text"><strong>Gewicht unter 25 kg</strong> — Maximale Abflugmasse (MTOM) inklusive Akku, Kamera, alles</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge">2</div>
+            <div class="def-text"><strong>Keine Menschenansammlungen</strong> — Keine Flüge über Menschenansammlungen (Definition weiter unten)</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge">3</div>
+            <div class="def-text"><strong>Max. 120m Höhe (AGL)</strong> — Above Ground Level: gemessen vom nächsten Punkt der Erdoberfläche — <em>nicht</em> vom Startpunkt der Drohne!</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge">4</div>
+            <div class="def-text"><strong>Nur VLOS</strong> — Visual Line of Sight: Drohne muss mit bloßem Auge sichtbar bleiben</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge">5</div>
+            <div class="def-text"><strong>Kein Gefahrgut, keine Menschen</strong> — Transport von gefährlichen Gütern oder Personen verboten</div>
+          </div>
+        </div>
+
+        <div class="box warn">
+          <div class="box-icon">⚠️</div>
+          <div class="box-text">
+            <span class="label">Achtung: Der Höhenmesser kann täuschen!</span>
+            Der eingebaute Höhenmesser misst immer ab dem <strong>Startpunkt</strong> der Drohne — nicht ab dem Gelände darunter. Am Berghang kann die Anzeige 100m zeigen, während die Drohne in Wirklichkeit nur noch 20m vom Hang entfernt ist. <strong>Kollisionsgefahr mit dem Gelände!</strong> Im Zweifel: GPS nutzen und Gelände immer im Blick behalten.
+          </div>
+        </div>
+
+        <div class="merksatz">
+          <p><strong>Merke:</strong> "Offen" bedeutet nicht "alles erlaubt". Es bedeutet: <strong>Keine vorherige Genehmigung nötig</strong> — wenn alle Regeln eingehalten werden. Die offene Kategorie hat sehr wohl klare Regeln.</p>
+        </div>
+
+        <h3>Was ist eine Menschenansammlung?</h3>
+        <p>Das ist eine der wichtigsten Definitionen im Luftrecht, und sie ist präziser als man denkt:</p>
+
+        <div class="box danger">
+          <div class="box-icon">👥</div>
+          <div class="box-text">
+            <span class="label">Offizielle EASA-Definition</span>
+            Eine Menschenansammlung liegt vor, wenn <strong>einzelne Personen sich nicht mehr frei bewegen können</strong> — also wenn sie einem außer Kontrolle geratenen UAS nicht mehr ausweichen könnten.<br><br>
+            <strong>Beispiele:</strong> Sportgroßveranstaltungen, kulturelle/religiöse/politische Events, Strände und Parks an sonnigen gut-besuchten Tagen, Einkaufsstraßen während der Öffnungszeiten, Skipisten.
+          </div>
+        </div>
+
+        <div class="quiz-block">
+          <div class="quiz-tag">🧠 Check 1</div>
+          <div class="quiz-q">Du fliegst Deine 800g Drohne und überfliegst eine sonnige Einkaufsstraße voller Menschen. Ist das in der offenen Kategorie erlaubt?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_1')"><span class="opt-l">A</span>Ja — 800g ist leicht genug</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_1')"><span class="opt-l">B</span>Ja — Einkaufsstraßen sind keine Menschenansammlungen</button>
+            <button class="quiz-opt" onclick="answerQ(this,'correct','q0_1')"><span class="opt-l">C</span>Nein — Einkaufsstraßen während der Öffnungszeiten sind Menschenansammlungen</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_1')"><span class="opt-l">D</span>Ja, wenn man unter 50m Höhe bleibt</button>
+          </div>
+          <div class="quiz-fb" id="fb_q0_1"></div>
+        </div>
+
+        <h3>Die spezielle Kategorie (SPECIFIC)</h3>
+        <p>Sobald auch nur <strong>eines</strong> dieser Kriterien erfüllt ist, fällt der Betrieb in die spezielle Kategorie — mit deutlich mehr Aufwand:</p>
+        <div class="def-grid">
+          <div class="def-card"><div class="def-badge">oder</div><div class="def-text">Gewicht <strong>über 25 kg</strong></div></div>
+          <div class="def-card"><div class="def-badge">oder</div><div class="def-text">Betrieb <strong>oberhalb von 120m AGL</strong> oder in speziellen Lufträumen</div></div>
+          <div class="def-card"><div class="def-badge">oder</div><div class="def-text">Betrieb <strong>außerhalb der Sichtlinie (BVLOS)</strong> — Beyond Visual Line of Sight</div></div>
+        </div>
+
+        <h3>Die zertifizierungspflichtige Kategorie (CERTIFIED)</h3>
+        <p>Die höchste Risikostufe. Hier gelten vergleichbare Anforderungen wie in der bemannten Luftfahrt:</p>
+        <div class="def-grid">
+          <div class="def-card"><div class="def-badge">oder</div><div class="def-text">Betrieb <strong>über Menschenansammlungen</strong></div></div>
+          <div class="def-card"><div class="def-badge">oder</div><div class="def-text">Transport von <strong>risikoreichen Gefahrgütern</strong></div></div>
+          <div class="def-card"><div class="def-badge">oder</div><div class="def-text">Transport von <strong>Menschen</strong> (fliegende Taxis etc.)</div></div>
+        </div>
+
+        <div class="box info">
+          <div class="box-icon">🏠</div>
+          <div class="box-text">
+            <span class="label">Ausnahmen von der EASA-Regulierung</span>
+            <strong>Innenraumdrohnen</strong> (z.B. Mini-Drohnen fürs Wohnzimmer) und UAS von <strong>Militär, Polizei, Feuerwehr, Grenzschutz, Zoll und Küstenwache</strong> fallen grundsätzlich nicht unter die EASA-Vorschriften.
+          </div>
+        </div>
+
+        <div class="quiz-block">
+          <div class="quiz-tag">🧠 Check 2</div>
+          <div class="quiz-q">Ein Filmteam möchte eine 30kg Drohne bei einem Konzert einsetzen. In welche Kategorie fällt das — und warum?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_2')"><span class="opt-l">A</span>Offene Kategorie — professioneller Einsatz ist immer erlaubt</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_2')"><span class="opt-l">B</span>Spezielle Kategorie — wegen des Gewichts über 25 kg</button>
+            <button class="quiz-opt" onclick="answerQ(this,'correct','q0_2')"><span class="opt-l">C</span>Zertifizierungspflichtige Kategorie — Gewicht über 25kg UND Betrieb über einer Menschenansammlung</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_2')"><span class="opt-l">D</span>Spezielle Kategorie — Konzerte sind immer spezielle Ereignisse</button>
+          </div>
+          <div class="quiz-fb" id="fb_q0_2"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson" id="l0_2">
+    <div class="lesson-head" onclick="toggleLesson('l0_2','ch0')">
+      <div class="lesson-num">2</div>
+      <div class="lesson-head-info">
+        <div class="lesson-eyebrow">Kapitel 1 · Lektion 2 · ca. 18 Min</div>
+        <div class="lesson-title">UAS-Klassen C0–C4 und Unterkategorien A1–A3</div>
+      </div>
+      <div class="lesson-toggle" id="tgl_l0_2">▾</div>
+    </div>
+    <div class="lesson-body" id="body_l0_2">
+      <div class="lesson-content">
+
+        <h3>Das Zwei-Dimensionen-System</h3>
+        <p>Innerhalb der offenen Kategorie gibt es ein cleveres Zwei-Achsen-System: Das <strong>UAS selbst</strong> wird in eine technische Klasse eingestuft (C0–C4), und das <strong>Einsatzgebiet</strong> bestimmt die Unterkategorie (A1–A3). Welche Klasse in welcher Unterkategorie fliegen darf — das ist die zentrale Frage.</p>
+
+        <div class="class-table">
+          <div class="class-row header">
+            <div class="class-cell">Klasse</div>
+            <div class="class-cell">Max. Masse</div>
+            <div class="class-cell">Besonderheiten</div>
+            <div class="class-cell">Unterkategorie</div>
+          </div>
+          <div class="class-row">
+            <div class="class-cell"><span class="class-badge c0">C0</span></div>
+            <div class="class-cell">unter 250g</div>
+            <div class="class-cell">Max. 19 m/s, Höhenbegrenzung auf 120m ab Werk</div>
+            <div class="class-cell">A1</div>
+          </div>
+          <div class="class-row">
+            <div class="class-cell"><span class="class-badge c1">C1</span></div>
+            <div class="class-cell">250g–900g</div>
+            <div class="class-cell">Max. 19 m/s, Remote ID, Geo-Awareness Pflicht</div>
+            <div class="class-cell">A1</div>
+          </div>
+          <div class="class-row">
+            <div class="class-cell"><span class="class-badge c2">C2</span></div>
+            <div class="class-cell">900g–4kg</div>
+            <div class="class-cell">Langsamflugmodus, Remote ID, Geo-Awareness</div>
+            <div class="class-cell">A2</div>
+          </div>
+          <div class="class-row">
+            <div class="class-cell"><span class="class-badge c3">C3</span></div>
+            <div class="class-cell">4kg–25kg</div>
+            <div class="class-cell">Remote ID, Geo-Awareness, 150m Abstand Bebauung</div>
+            <div class="class-cell">A3</div>
+          </div>
+          <div class="class-row">
+            <div class="class-cell"><span class="class-badge c4">C4</span></div>
+            <div class="class-cell">bis 25kg</div>
+            <div class="class-cell">Keine technischen Sonderanforderungen</div>
+            <div class="class-cell">A3</div>
+          </div>
+        </div>
+
+        <div class="merksatz">
+          <p><strong>Merke zur Höchstgeschwindigkeit:</strong> C0 und C1 haben eine Maximalgeschwindigkeit von <strong>19 m/s</strong>. Warum genau 19? Das ist der Wert, bis zu dem Experten berechnet haben, dass ein Aufprall mit einer Person noch keine schweren Verletzungen verursachen sollte. C2–C4 haben keine Geschwindigkeitsbegrenzung — aber auch keine Erlaubnis, nahe bei Menschen zu fliegen.</p>
+        </div>
+
+        <h3>Die drei Unterkategorien im Detail</h3>
+
+        <div class="cat-table">
+          <div class="cat-row header">
+            <div class="cat-cell">Unterk.</div>
+            <div class="cat-cell">Wo darf geflogen werden?</div>
+            <div class="cat-cell">Qualifikation</div>
+          </div>
+          <div class="cat-row a1">
+            <div class="cat-cell" style="font-weight:700;color:#1B5E20">A1</div>
+            <div class="cat-cell">Auch in dicht besiedelten Gebieten und über vereinzelten Menschen — <strong>aber nicht über Menschenansammlungen</strong></div>
+            <div class="cat-cell">C0: keine Prüfung nötig<br>C1: Online-Kurs + Online-Prüfung</div>
+          </div>
+          <div class="cat-row a2">
+            <div class="cat-cell" style="font-weight:700;color:#E65100">A2</div>
+            <div class="cat-cell">In sicherer Entfernung zu Menschen — <strong>30m Abstand (5m im Langsamflug)</strong></div>
+            <div class="cat-cell">Online-Kurs + Online-Prüfung + Praktisches Selbsttraining + Theorieprüfung vor Ort</div>
+          </div>
+          <div class="cat-row a3">
+            <div class="cat-cell" style="font-weight:700;color:#BF360C">A3</div>
+            <div class="cat-cell"><strong>Mindestens 150m Abstand</strong> zu Wohn-, Industrie-, Freizeit- und Erholungsgebieten</div>
+            <div class="cat-cell">Online-Kurs + Online-Prüfung</div>
+          </div>
+        </div>
+
+        <h3>Unterkategorie A2: Die Sonderregel für Langsamflug</h3>
+        <p>In A2 darf man sich mit C2-Drohnen auf <strong>5 Meter an Menschen heranfliegen</strong> — aber nur im sogenannten <strong>Langsamflugmodus</strong>. Dieser ist gegeben wenn:</p>
+        <div class="def-grid">
+          <div class="def-card"><div class="def-badge">oder</div><div class="def-text">Geschwindigkeit unter <strong>3 m/s (= 10 km/h)</strong></div></div>
+          <div class="def-card"><div class="def-badge">oder</div><div class="def-text">Das UAS ist als <strong>Ballon oder Luftschiff</strong> konstruiert</div></div>
+        </div>
+        <p>Bei normalem Flug gilt in A2 ein Mindestabstand von <strong>30 Metern</strong> zu unbeteiligten Personen. Dieser Abstand muss noch größer sein bei: starkem Wind, niedrigem Akkustand, schwierigem Gelände.</p>
+
+        <h3>Unterkategorie A3: Die 1:1-Regel</h3>
+        <p>In A3 darf man nicht über unbeteiligte Personen fliegen. Als sicherer <strong>horizontaler</strong> Mindestabstand gilt dabei die sogenannte <strong>1:1-Regel</strong> — die besagt: Je höher du fliegst, desto weiter musst du <em>seitlich</em> von Personen entfernt sein.</p>
+
+        <div class="box info">
+          <div class="box-icon">📐</div>
+          <div class="box-text">
+            <span class="label">Wichtig: Es geht um den HORIZONTALEN Abstand!</span>
+            Die 1:1-Regel beschreibt nicht wie weit du über jemandem fliegen darfst — sondern wie weit du <strong>seitlich entfernt</strong> sein musst. In A3 fliegst du sowieso nicht über Menschen. Der Abstand ist der Puffer für den Fall, dass die Drohne abstürzt und wegfliegt.
+          </div>
+        </div>
+
+        <div class="box warn">
+          <div class="box-icon">📏</div>
+          <div class="box-text">
+            <span class="label">Die 1:1-Regel konkret</span>
+            <strong>Mindestens 30 Meter</strong> horizontaler Abstand zu Personen — und niemals weniger als:<br>
+            → <strong>1 Meter horizontaler Abstand für jeden Meter Flughöhe</strong><br>
+            → Bei 50m Höhe = mind. 50m seitlicher Abstand zur nächsten Person<br>
+            → Bei 100m Höhe = mind. 100m seitlicher Abstand<br>
+            → <strong>UND</strong> mindestens die Strecke die das UAS in <strong>2 Sekunden</strong> zurücklegt (= Reaktionszeit)
+          </div>
+        </div>
+
+        <svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:340px;display:block;margin:16px auto;border-radius:12px;background:#0a2540">
+          <!-- Sky background -->
+          <rect width="340" height="220" fill="#0a2540" rx="12"/>
+          <!-- Ground -->
+          <rect x="0" y="170" width="340" height="50" fill="#1a3a1a" rx="0"/>
+          <line x1="0" y1="170" x2="340" y2="170" stroke="#2d5a2d" stroke-width="2"/>
+          <!-- Ground texture dots -->
+          <circle cx="40" cy="182" r="2" fill="#2d5a2d"/>
+          <circle cx="90" cy="178" r="2" fill="#2d5a2d"/>
+          <circle cx="150" cy="185" r="2" fill="#2d5a2d"/>
+          <circle cx="210" cy="179" r="2" fill="#2d5a2d"/>
+          <circle cx="270" cy="183" r="2" fill="#2d5a2d"/>
+          <circle cx="320" cy="180" r="2" fill="#2d5a2d"/>
+
+          <!-- Drone at top left area -->
+          <g transform="translate(80, 60)">
+            <!-- Drone body -->
+            <rect x="-18" y="-6" width="36" height="12" rx="4" fill="#0066CC"/>
+            <!-- Arms -->
+            <line x1="-18" y1="0" x2="-30" y2="-8" stroke="#004499" stroke-width="3"/>
+            <line x1="18" y1="0" x2="30" y2="-8" stroke="#004499" stroke-width="3"/>
+            <!-- Propellers -->
+            <ellipse cx="-30" cy="-10" rx="10" ry="3" fill="#FFD600" opacity="0.8"/>
+            <ellipse cx="30" cy="-10" rx="10" ry="3" fill="#FFD600" opacity="0.8"/>
+            <!-- Camera -->
+            <circle cx="0" cy="8" r="4" fill="#333"/>
+            <circle cx="0" cy="8" r="2" fill="#666"/>
+          </g>
+
+          <!-- Vertical line: Flughöhe (drone down to ground) -->
+          <line x1="80" y1="72" x2="80" y2="170" stroke="#FFD600" stroke-width="2" stroke-dasharray="5,3"/>
+          <!-- Vertical label -->
+          <text x="54" y="125" fill="#FFD600" font-size="11" font-family="sans-serif" font-weight="bold" transform="rotate(-90,54,125)">Flughöhe</text>
+          <!-- Vertical arrows -->
+          <polygon points="80,74 76,84 84,84" fill="#FFD600"/>
+          <polygon points="80,168 76,158 84,158" fill="#FFD600"/>
+          <!-- Height value -->
+          <text x="88" y="122" fill="#FFD600" font-size="11" font-family="sans-serif">= h</text>
+
+          <!-- Horizontal line: Mindestabstand (ground level, from drone x to person x) -->
+          <line x1="80" y1="170" x2="240" y2="170" stroke="#00C853" stroke-width="3"/>
+          <!-- Horizontal arrows -->
+          <polygon points="82,170 92,165 92,175" fill="#00C853"/>
+          <polygon points="238,170 228,165 228,175" fill="#00C853"/>
+          <!-- Horizontal label -->
+          <text x="140" y="163" fill="#00C853" font-size="11" font-family="sans-serif" font-weight="bold" text-anchor="middle">Mindestabstand = h</text>
+
+          <!-- Person -->
+          <g transform="translate(240, 148)">
+            <circle cx="0" cy="0" r="8" fill="#FF6D00"/>
+            <line x1="0" y1="8" x2="0" y2="25" stroke="#FF6D00" stroke-width="3"/>
+            <line x1="0" y1="14" x2="-8" y2="22" stroke="#FF6D00" stroke-width="2"/>
+            <line x1="0" y1="14" x2="8" y2="22" stroke="#FF6D00" stroke-width="2"/>
+          </g>
+
+          <!-- Dashed diagonal: crash path -->
+          <line x1="80" y1="72" x2="240" y2="170" stroke="#FF3D00" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.6"/>
+
+          <!-- Legend -->
+          <rect x="260" y="60" width="70" height="80" rx="6" fill="rgba(255,255,255,0.08)"/>
+          <line x1="266" y1="76" x2="278" y2="76" stroke="#FFD600" stroke-width="2" stroke-dasharray="3,2"/>
+          <text x="282" y="79" fill="#FFD600" font-size="9" font-family="sans-serif">Flughöhe</text>
+          <line x1="266" y1="94" x2="278" y2="94" stroke="#00C853" stroke-width="2"/>
+          <text x="282" y="97" fill="#00C853" font-size="9" font-family="sans-serif">Abstand</text>
+          <line x1="266" y1="112" x2="278" y2="112" stroke="#FF3D00" stroke-width="1.5" stroke-dasharray="3,2" opacity="0.7"/>
+          <text x="282" y="115" fill="#FF3D00" font-size="9" font-family="sans-serif">Absturz</text>
+          <circle cx="271" cy="128" r="5" fill="#FF6D00"/>
+          <text x="282" y="131" fill="#FF6D00" font-size="9" font-family="sans-serif">Person</text>
+
+          <!-- Title -->
+          <text x="170" y="200" fill="rgba(255,255,255,0.6)" font-size="10" font-family="sans-serif" text-anchor="middle">1:1-Regel: Höhe h → mind. h Meter seitlicher Abstand</text>
+        </svg>
+
+        <div class="merksatz">
+          <p><strong>Merke:</strong> 1:1-Regel = horizontaler Puffer. Je höher die Drohne, desto weiter kann sie beim Absturz wegfliegen — daher wächst der Sicherheitsabstand proportional mit der Höhe.</p>
+        </div>
+
+        <h3>Remote ID — wer fliegt da?</h3>
+        <p>Das Remote Identification System (Fernidentifizierung) ist in Klassen C1, C2 und C3 vorgeschrieben. Es sendet kontinuierlich:</p>
+        <div class="def-grid">
+          <div class="def-card"><div class="def-badge">📡</div><div class="def-text">Seriennummer des UAS</div></div>
+          <div class="def-card"><div class="def-badge">📍</div><div class="def-text">Geografische Position von UAS UND Fernpilot</div></div>
+          <div class="def-card"><div class="def-badge">⬆️</div><div class="def-text">Aktuelle Höhe und Geschwindigkeit</div></div>
+          <div class="def-card"><div class="def-badge">👤</div><div class="def-text">Identität des Betreibers</div></div>
+        </div>
+        <div class="box tip">
+          <div class="box-icon">👁️</div>
+          <div class="box-text">
+            <span class="label">Was das für Dich bedeutet</span>
+            Wenn Du mit einer C1/C2/C3-Drohne fliegst und dabei mit der Kamera filmst, bist Du <strong>nicht anonym</strong>. Jede Behörde — und mittelfristig auch spezielle Apps — kann Deine Identität und Position feststellen.
+          </div>
+        </div>
+
+        <h3>Geo-Awareness vs. Geofencing</h3>
+        <p>Zwei ähnliche Begriffe mit wichtigem Unterschied:</p>
+        <div class="def-grid">
+          <div class="def-card">
+            <div class="def-badge">GEO-A</div>
+            <div class="def-text"><strong>Geo-Awareness (Geosensibilisierung):</strong> Das UAS vergleicht seine Position mit behördlichen Verbotszonen und <strong>warnt den Piloten</strong>. Pflicht für C1, C2, C3.</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge">GEO-F</div>
+            <div class="def-text"><strong>Geofencing:</strong> Das UAS warnt nicht nur — es <strong>verhindert aktiv</strong> das Einflogen in verbotene Zonen. Gemäß EU möglich, aber nicht verpflichtend.</div>
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-tag">SITUATION</div>
+          <div class="scenario-q">🎯 Du hast eine DJI Mini 4 Pro (249g, Klasse C0). Du möchtest einen Marktplatz in der Innenstadt fotografieren. Es sind ca. 30 Menschen verteilt auf dem Platz — keine Menschenansammlung. Was darfst Du?</div>
+          <div class="scenario-opts">
+            <button class="sc-opt" onclick="answerSc(this,'wrong','sc0_1')"><span class="opt-l">A</span>Gar nicht fliegen — Innenstadt immer verboten</button>
+            <button class="sc-opt" onclick="answerSc(this,'correct','sc0_1')"><span class="opt-l">B</span>Fliegen mit äußerster Vorsicht — C0 darf über vereinzelte Personen in A1, aber nur mit größter Sorgfalt</button>
+            <button class="sc-opt" onclick="answerSc(this,'wrong','sc0_1')"><span class="opt-l">C</span>Fliegen ist frei — unter 250g gelten keine Regeln</button>
+            <button class="sc-opt" onclick="answerSc(this,'wrong','sc0_1')"><span class="opt-l">D</span>Nur erlaubt mit A2-Lizenz</button>
+          </div>
+          <div class="sc-fb" id="fb_sc0_1"></div>
+        </div>
+
+        <div class="box success">
+          <div class="box-icon">🛒</div>
+          <div class="box-text">
+            <span class="label">Kaufentscheidung — was bedeutet das?</span>
+            Kaufe immer ein UAS mit <strong>CE-Kennzeichen und Klassenidentifizierungskennzeichen</strong> (C0–C4). Nur solche dürfen im europäischen Raum geflogen werden. Der Hauptfaktor für die Klassen-Wahl sollte Dein geplantes <strong>Einsatzgebiet</strong> sein.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:0 20px 24px">
+    <button onclick="showChapter(1)" style="width:100%;background:#004499;color:#fff;border:none;border-radius:14px;padding:16px;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+      Weiter zu Kapitel 2 · Verwaltung →
+    </button>
+  </div>
+</div><!-- end ch0 -->
+
+<!-- ==================== KAPITEL 2: VERWALTUNG ==================== -->
+<div class="chapter-section" id="ch1">
+
+  <div class="intro-block">
+    <div class="pilot-quote">
+      <div class="pilot-avatar">🏛️</div>
+      <div class="pilot-quote-content">
+        <div class="from">Torsten Flieger sagt:</div>
+        <p>"Behörden und Gesetze — klingt trocken. Aber zu wissen, wer eigentlich zuständig ist, hat mir schon einmal genau die richtige Anlaufstelle bei einer Genehmigungsfrage gezeigt. Das Wissen lohnt sich."</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson" id="l1_1">
+    <div class="lesson-head" onclick="toggleLesson('l1_1','ch1')">
+      <div class="lesson-num">1</div>
+      <div class="lesson-head-info">
+        <div class="lesson-eyebrow">Kapitel 2 · Lektion 1 · ca. 12 Min</div>
+        <div class="lesson-title">EASA, LBA und die EU-Verordnungen</div>
+      </div>
+      <div class="lesson-toggle" id="tgl_l1_1">▾</div>
+    </div>
+    <div class="lesson-body" id="body_l1_1">
+      <div class="lesson-content">
+
+        <h3>Die EASA — Europas Luftfahrtbehörde</h3>
+        <p>Die <strong>EASA</strong> (European Union Aviation Safety Agency / Europäische Agentur für Flugsicherheit) ist das Herzstück der europäischen Luftfahrtregulierung. Sie hat aktuell <strong>32 Mitgliedstaaten</strong> — inklusive dem Vereinigten Königreich.</p>
+
+        <div class="box info">
+          <div class="box-icon">⚙️</div>
+          <div class="box-text">
+            <span class="label">Wie funktioniert die EASA?</span>
+            1. EASA erarbeitet Gesetzesentwürfe und veröffentlicht sie<br>
+            2. Nationale Behörden und Luftfahrtvertreter können kommentieren und Änderungen vorschlagen<br>
+            3. EASA nimmt Stellung und passt Entwurf an<br>
+            4. EU-Ministerrat + EU-Parlament verabschieden → <strong>gilt automatisch in allen EU-Mitgliedstaaten</strong><br>
+            5. Abweichungen sind dann nicht mehr möglich — nur wenige nationale Anpassungen erlaubt
+          </div>
+        </div>
+
+        <div class="box warn">
+          <div class="box-icon">⚠️</div>
+          <div class="box-text">
+            <span class="label">Wichtige Unterscheidung</span>
+            EASA wird manchmal "Europäische Luftfahrtbehörde" genannt — das ist <strong>formal falsch</strong>. Sie ist eine Agentur der EU, keine Behörde. Die eigentlichen Luftfahrtbehörden sitzen in den einzelnen Mitgliedstaaten.
+          </div>
+        </div>
+
+        <h3>Die nationalen Luftfahrtbehörden</h3>
+        <div class="def-grid">
+          <div class="def-card"><div class="def-badge">🇩🇪</div><div class="def-text"><strong>Deutschland:</strong> Luftfahrtbundesamt (LBA) — zuständig für Fernpiloten und Betreiber</div></div>
+          <div class="def-card"><div class="def-badge">🇦🇹</div><div class="def-text"><strong>Österreich:</strong> Austrocontrol — übernimmt alle Luftfahrtaufsichtsaufgaben</div></div>
+          <div class="def-card"><div class="def-badge">🇨🇭</div><div class="def-text"><strong>Schweiz:</strong> BAZL (Bundesamt für Zivilluftfahrt) — hat EASA-Normen eingeführt, muss aber erst in nationales Recht überführt werden</div></div>
+        </div>
+
+        <h3>Die drei wichtigsten EU-Verordnungen für Drohnenpiloten</h3>
+
+        <div class="def-grid">
+          <div class="def-card">
+            <div class="def-badge">2018/1139</div>
+            <div class="def-text"><strong>EASA-Grundverordnung</strong> — Die Basis. Essenzielle Anforderungen für die europäische Luftfahrt: Betreiber müssen die Regeln kennen, Drohnen müssen sicher konstruiert sein, Piloten müssen Kompetenzen nachweisen.</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge">2019/945</div>
+            <div class="def-text"><strong>Delegierte Verordnung UAS</strong> — Technische Anforderungen für die Drohnen selbst. Hier stecken die Spezifikationen für die Klassen C0–C4 drin.</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge">2019/947</div>
+            <div class="def-text"><strong>UAS-Durchführungsverordnung</strong> — Die Betriebsregeln. Alles was beim tatsächlichen Fliegen gilt: Kategorien, Unterkategorien, Qualifikationsanforderungen, Registrierungspflicht.</div>
+          </div>
+        </div>
+
+        <div class="merksatz">
+          <p><strong>Merke:</strong> 2018/<strong>1139</strong> = Grundlage, 2019/<strong>945</strong> = Technik, 2019/<strong>947</strong> = Betrieb. Die drei Nummern klingen sich ähnlich — aber das Jahr und die letzte Zahl helfen: <strong>945 = das Gerät, 947 = der Betrieb.</strong></p>
+        </div>
+
+        <div class="quiz-block">
+          <div class="quiz-tag">🧠 Check</div>
+          <div class="quiz-q">Welche EU-Verordnung legt fest, welche technischen Anforderungen eine Drohne der Klasse C1 erfüllen muss?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_1')"><span class="opt-l">A</span>EU 2018/1139 (Grundverordnung)</button>
+            <button class="quiz-opt" onclick="answerQ(this,'correct','q1_1')"><span class="opt-l">B</span>EU 2019/945 (Delegierte Verordnung — technische Anforderungen)</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_1')"><span class="opt-l">C</span>EU 2019/947 (Durchführungsverordnung — Betriebsregeln)</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_1')"><span class="opt-l">D</span>Das ist nationale Sache — kein EU-Recht</button>
+          </div>
+          <div class="quiz-fb" id="fb_q1_1"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson" id="l1_2">
+    <div class="lesson-head" onclick="toggleLesson('l1_2','ch1')">
+      <div class="lesson-num">2</div>
+      <div class="lesson-head-info">
+        <div class="lesson-eyebrow">Kapitel 2 · Lektion 2 · ca. 14 Min</div>
+        <div class="lesson-title">Qualifikation, Mindestalter und Registrierung</div>
+      </div>
+      <div class="lesson-toggle" id="tgl_l1_2">▾</div>
+    </div>
+    <div class="lesson-body" id="body_l1_2">
+      <div class="lesson-content">
+
+        <h3>Mindestalter — nicht überall gleich</h3>
+        <p>Das Mindestalter für Fernpiloten in der offenen Kategorie beträgt <strong>16 Jahre</strong>. Aber die EU erlaubt einzelnen Mitgliedstaaten, dieses Alter auf bis zu <strong>12 Jahre herabzusetzen</strong>. In Deutschland und Österreich findet eine solche Herabsetzung nicht statt — hier bleibt es bei 16.</p>
+
+        <div class="box info">
+          <div class="box-icon">👶</div>
+          <div class="box-text">
+            <span class="label">Ausnahmen vom Mindestalter</span>
+            Das Mindestalter gilt nicht wenn:<br>
+            1. Eine <strong>C0-Drohne in A1</strong> betrieben wird<br>
+            2. Das UAS als <strong>Spielzeug</strong> nach EU-Richtlinie gilt<br>
+            3. Ein <strong>qualifizierter Fernpilot den jungen Piloten direkt beaufsichtigt</strong>
+          </div>
+        </div>
+
+        <h3>Was braucht man als Qualifikation?</h3>
+        <p>Das hängt von der Unterkategorie ab. Hier eine klare Übersicht:</p>
+
+        <div class="def-grid">
+          <div class="def-card">
+            <div class="def-badge">C0/A1</div>
+            <div class="def-text"><strong>Keine Prüfung nötig</strong> — einfach losfliegen (mit Bedacht)</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge">C1/A1</div>
+            <div class="def-text"><strong>Online-Kurs + Online-Prüfung</strong> (40 Multiple-Choice-Aufgaben) → Kompetenznachweis</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge">C2/A2</div>
+            <div class="def-text"><strong>Online-Kurs + Online-Prüfung + Praktisches Selbsttraining + Theorieprüfung vor Ort</strong> (30 MC-Aufgaben) → Fernpilotenzeugnis A2</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge">C3-C4/A3</div>
+            <div class="def-text"><strong>Online-Kurs + Online-Prüfung</strong> → Kompetenznachweis (gleich wie A1/C1)</div>
+          </div>
+        </div>
+
+        <div class="merksatz">
+          <p><strong>Merke:</strong> Der Online-Kompetenznachweis gilt <strong>5 Jahre</strong>. Danach müssen Kurs UND Prüfung wiederholt werden. Nicht vergessen — wer mit abgelaufenem Schein fliegt, fliegt illegal.</p>
+        </div>
+
+        <h3>Das praktische Selbsttraining für A2 — was genau?</h3>
+        <p>Wer mit C2-Drohnen in A2 fliegen will, muss zusätzlich in Eigenregie praktisch üben — in einem Bereich ohne unbeteiligte Personen, mindestens <strong>150m von Wohn-, Industrie-, Freizeit- und Erholungsgebieten</strong> entfernt (entspricht A3-Bedingungen).</p>
+
+        <div class="box success">
+          <div class="box-icon">✅</div>
+          <div class="box-text">
+            <span class="label">Was beim Selbsttraining gelernt werden soll</span>
+            <strong>Mindestens 5 Flüge</strong> durchführen und dabei:<br>
+            • Alle Betriebsbereiche und Limits kennenlernen<br>
+            • Alle Steuerungsmodi kennenlernen<br>
+            • Sich mit Steuerung, Knöpfen und Tasten vertraut machen<br>
+            • <strong>Notverfahren ausprobieren:</strong> RTH, Ausfall der Funkverbindung, etc.<br>
+            Am Ende: eigenverantwortliche Erklärung dass das Training abgeschlossen ist
+          </div>
+        </div>
+
+        <h3>Wer muss sich registrieren?</h3>
+        <p>Als UAS-Betreiber musst Du Dich registrieren, wenn <strong>mindestens eines</strong> der folgenden Kriterien zutrifft:</p>
+
+        <div class="def-grid">
+          <div class="def-card"><div class="def-badge">oder</div><div class="def-text">Maximale Abflugmasse <strong>über 250g</strong></div></div>
+          <div class="def-card"><div class="def-badge">oder</div><div class="def-text">Aufprallenergie <strong>über 80 Joule</strong></div></div>
+          <div class="def-card"><div class="def-badge">oder</div><div class="def-text">UAS ausgestattet mit Sensor zur <strong>Aufzeichnung personenbezogener Daten</strong> (Videokamera, Mikrofon, Infrarotkamera...)</div></div>
+        </div>
+
+        <div class="box danger">
+          <div class="box-icon">💡</div>
+          <div class="box-text">
+            <span class="label">Der Aufprallenergie-Trick — Achtung!</span>
+            Ein C1-UAS mit 800g und Maximalgeschwindigkeit 19 m/s, das aus 25m Höhe abstürzt, kann eine <strong>Aufprallenergie von über 110 Joule</strong> entwickeln — weit über dem 80 Joule-Limit! Auch scheinbar "leichte" Drohnen können die Registrierungspflicht auslösen.
+          </div>
+        </div>
+
+        <div class="quiz-block">
+          <div class="quiz-tag">🧠 Check</div>
+          <div class="quiz-q">Du hast eine 200g-Drohne mit Kamera (Videofunktion). Musst Du Dich registrieren?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" onclick="answerQ(this,'correct','q1_2')"><span class="opt-l">A</span>Ja — die Kamera kann personenbezogene Daten aufzeichnen, das löst die Registrierungspflicht aus</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_2')"><span class="opt-l">B</span>Nein — unter 250g ist man immer registrierungsfrei</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_2')"><span class="opt-l">C</span>Nur wenn man gewerblich fliegt</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_2')"><span class="opt-l">D</span>Nur wenn die Kamera Fotos macht, nicht bei Video</button>
+          </div>
+          <div class="quiz-fb" id="fb_q1_2"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:0 20px 24px">
+    <button onclick="showChapter(2)" style="width:100%;background:#004499;color:#fff;border:none;border-radius:14px;padding:16px;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+      Weiter zu Kapitel 3 · Lufträume →
+    </button>
+  </div>
+</div><!-- end ch1 -->
+
+<!-- ==================== KAPITEL 3: LUFTRÄUME ==================== -->
+<div class="chapter-section" id="ch2">
+
+  <div class="intro-block">
+    <div class="pilot-quote">
+      <div class="pilot-avatar">🗺️</div>
+      <div class="pilot-quote-content">
+        <div class="from">Torsten Flieger sagt:</div>
+        <p>"Ich dachte anfangs, Luftraum ist nur was für Piloten mit Flugzeug. Falsch gedacht. Schon ein falscher Spot in der Nähe eines Krankenhauses und der Rettungshubschrauber ist gefährdet. Das ist mir erst klargeworden als ich die Karten studiert habe."</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson" id="l2_1">
+    <div class="lesson-head" onclick="toggleLesson('l2_1','ch2')">
+      <div class="lesson-num">1</div>
+      <div class="lesson-head-info">
+        <div class="lesson-eyebrow">Kapitel 3 · Lektion 1 · ca. 13 Min</div>
+        <div class="lesson-title">Luftraumstruktur und kritische Zonen</div>
+      </div>
+      <div class="lesson-toggle" id="tgl_l2_1">▾</div>
+    </div>
+    <div class="lesson-body" id="body_l2_1">
+      <div class="lesson-content">
+
+        <h3>Grundprinzip: Unkontrolliert ist der Standard</h3>
+        <p>Der Luftraum ist grundsätzlich <strong>unkontrolliert</strong> — solange es keinen Grund gibt, ihn zu kontrollieren. Nur dort wo Sicherheitsbedenken bestehen, wird er zum kontrollierten Luftraum. Das ist gut zu wissen: Nicht überall ist es kompliziert.</p>
+
+        <p>Für Drohnenpiloten ist der allergrößte Teil des Luftraums irrelevant, denn wir bewegen uns nur im untersten Bereich. Aber genau dort gibt es einige wichtige Einschränkungen.</p>
+
+        <h3>Diese Zonen müssen Drohnenpiloten kennen</h3>
+
+        <div class="def-grid">
+          <div class="def-card">
+            <div class="def-badge">CTR</div>
+            <div class="def-text"><strong>Kontrollzonen (Control Zones)</strong> — Rings um Flughäfen mit gewerblichem Betrieb. Schützen den An- und Abflugverkehr. UAS hier nur mit ausdrücklicher Genehmigung.</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge">🚫</div>
+            <div class="def-text"><strong>Flugverbotszonen</strong> — Militärische Übungsgebiete, Atomkraftwerke, kritische Infrastruktur. Absolutes Flugverbot.</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge">⚠️</div>
+            <div class="def-text"><strong>Flugbeschränkungsgebiete / Gefahrengebiete</strong> — Eingeschränkter Betrieb, oft zeitabhängig. Immer aktuelle NOTAM checken.</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge">🌿</div>
+            <div class="def-text"><strong>Naturschutzgebiete / Nationalparks</strong> — Häufig Flugverbote zum Schutz von Wildtieren. In vielen Bundesländern unterschiedlich geregelt.</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge">🪖</div>
+            <div class="def-text"><strong>Militärische Tieffluggebiete</strong> — Militärflugzeuge können auf sehr geringen Höhen übungsweise fliegen. UAS dort grundsätzlich meiden.</div>
+          </div>
+        </div>
+
+        <div class="box danger">
+          <div class="box-icon">🏥</div>
+          <div class="box-text">
+            <span class="label">Krankenhäuser — oft unterschätzt!</span>
+            Sehr viele Krankenhäuser haben Landeplätze für Rettungshubschrauber. Rettungshubschrauber nähern sich in <strong>sehr geringen Flughöhen und aus jeder Richtung</strong>. In der Nähe von Krankenhäusern ist daher höchste Vorsicht geboten — und eingerichtete Flugverbotszonen müssen beachtet werden.
+          </div>
+        </div>
+
+        <h3>Kleine Flugplätze — auch gefährlich</h3>
+        <p>Rings um kleine Flugplätze gibt es oft <strong>keine Kontrollzone</strong> — aber trotzdem viel Flugverkehr. Besonders: Luftfahrzeuge im Anflug nehmen oft schon <strong>5–10 Minuten vor dem Landeplatz</strong> geringe Flughöhen ein und können sich <strong>aus allen Richtungen</strong> nähern. Nie davon ausgehen, dass ein kleiner Flugplatz = sicher ist.</p>
+
+        <div class="merksatz">
+          <p><strong>Merke:</strong> Vor jedem Flug die <strong>geografischen UAS-Zonen der Region</strong> prüfen — per App (z.B. DronIQ/Unifly in Deutschland, AIM Austria, AIS Swiss). Was nicht veröffentlicht ist, gilt als allgemeine offene Kategorie. Was veröffentlicht ist, ist verbindlich.</p>
+        </div>
+
+        <h3>Krankenhäuser & Hubschrauberlandeplätze</h3>
+        <p>Sehr viele Krankenhäuser verfügen über <strong>Landeplätze für Rettungshubschrauber</strong>. Rettungshubschrauber nähern sich in <strong>sehr geringen Flughöhen und aus jeder Richtung</strong> — ohne Vorwarnung. Das macht die Umgebung von Krankenhäusern besonders gefährlich für den Drohnenbetrieb.</p>
+
+        <div class="box warn">
+          <div class="box-icon">🚁</div>
+          <div class="box-text">
+            <span class="label">Achtung</span>
+            In der Nähe von Krankenhäusern und Hubschrauberlandeplätzen ist <strong>äußerste Vorsicht</strong> geboten. Drohnen sollten dort nur betrieben werden, wenn es unbedingt notwendig ist — und immer unter Beachtung eingerichteter Flugverbotszonen.
+          </div>
+        </div>
+
+        <div class="merksatz">
+          <p><strong>Merke:</strong> Rettungshubschrauber haben <strong>immer Vorrang</strong> und sind im Anflug kaum vorhersehbar. Krankenhaus in der Nähe = erhöhte Aufmerksamkeit, eingerichtete UAS-Verbotszonen immer prüfen.</p>
+        </div>
+
+        <div class="quiz-block">
+          <div class="quiz-tag">🧠 Check</div>
+          <div class="quiz-q">Du planst einen Flug in der Nähe eines kleinen Sportflugplatzes ohne Kontrollzone. Was gilt?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q2_1')"><span class="opt-l">A</span>Keine Kontrollzone = kein Problem, einfach fliegen</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q2_1')"><span class="opt-l">B</span>Nur erlaubt wenn der Flugplatz nicht in Betrieb ist</button>
+            <button class="quiz-opt" onclick="answerQ(this,'correct','q2_1')"><span class="opt-l">C</span>Besonders aufpassen: Luftfahrzeuge nähern sich aus allen Richtungen in geringen Höhen, UAS-Zonen beachten</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q2_1')"><span class="opt-l">D</span>Nur gefährlich bei Nacht</button>
+          </div>
+          <div class="quiz-fb" id="fb_q2_1"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson" id="l2_2">
+    <div class="lesson-head" onclick="toggleLesson('l2_2','ch2')">
+      <div class="lesson-num">2</div>
+      <div class="lesson-head-info">
+        <div class="lesson-eyebrow">Kapitel 3 · Lektion 2 · ca. 10 Min</div>
+        <div class="lesson-title">Geografische UAS-Zonen und Flugverbote am Boden</div>
+      </div>
+      <div class="lesson-toggle" id="tgl_l2_2">▾</div>
+    </div>
+    <div class="lesson-body" id="body_l2_2">
+      <div class="lesson-content">
+
+        <h3>Das 5-Stufen-Konzept der UAS-Zonen</h3>
+        <p>Jeder europäische Staat muss geografische Zonen für UAS definieren. Diese können in fünf Typen eingeteilt werden — von absolut verboten bis zu erleichterten Bedingungen:</p>
+
+        <div class="def-grid">
+          <div class="def-card"><div class="def-badge" style="background:#C62828">🚫</div><div class="def-text"><strong>Verbotszone:</strong> UAS-Betrieb vollständig verboten (z.B. Flughäfen, AKW, Staatsobjekte)</div></div>
+          <div class="def-card"><div class="def-badge" style="background:#E65100">📋</div><div class="def-text"><strong>Genehmigungszone:</strong> Vorherige Erlaubnis der Behörde erforderlich</div></div>
+          <div class="def-card"><div class="def-badge" style="background:#F57F17">⚙️</div><div class="def-text"><strong>Auflagenzone:</strong> Zusätzliche Anforderungen gelten (z.B. nur bis 50m Höhe, bestimmte Klassen)</div></div>
+          <div class="def-card"><div class="def-badge" style="background:#2E7D32">✅</div><div class="def-text"><strong>Allgemeine Regelungen:</strong> Normale Regeln der offenen Kategorie</div></div>
+          <div class="def-card"><div class="def-badge" style="background:#1565C0">🔓</div><div class="def-text"><strong>Erleichterungszone:</strong> Gelockerte Anforderungen (z.B. Modellfluggeländen, bestimmte Freiräume)</div></div>
+        </div>
+
+        <p>In allen Bereichen ohne veröffentlichte Informationen gelten automatisch die <strong>allgemeinen Betriebsregeln der offenen Kategorie</strong>.</p>
+
+        <h3>Flugverbote am Boden — was liegt unter Dir?</h3>
+        <p>Neben Luftraumbeschränkungen gibt es auch bodengebundene Verbote:</p>
+
+        <div class="box danger">
+          <div class="box-icon">🚑</div>
+          <div class="box-text">
+            <span class="label">Notfalleinsätze — absolutes Flugverbot</span>
+            Es ist verboten, mit einem UAS in Bereiche zu fliegen oder an Bereiche heranzufliegen, <strong>in denen ein Notfalleinsatz stattfindet</strong>. Polizei, Feuerwehr und Rettungskräfte nutzen häufig selbst UAS — ein freier Luftraum ist für ihre Arbeit lebenswichtig. Nur mit ausdrücklicher Erlaubnis der Einsatzleitung erlaubt.
+          </div>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-tag">SITUATION</div>
+          <div class="scenario-q">🚒 Du filmst in einem Park. Plötzlich kommt die Feuerwehr zum Nachbargebäude — offenbar ein Brand. Du denkst: "Tolle Aufnahmen!" Was ist die richtige Entscheidung?</div>
+          <div class="scenario-opts">
+            <button class="sc-opt" onclick="answerSc(this,'wrong','sc2_1')"><span class="opt-l">A</span>Weiterfilmen — ich bin ja schon in der Luft und nicht direkt über dem Brand</button>
+            <button class="sc-opt" onclick="answerSc(this,'wrong','sc2_1')"><span class="opt-l">B</span>Höher steigen — dann bin ich nicht im Weg</button>
+            <button class="sc-opt" onclick="answerSc(this,'correct','sc2_1')"><span class="opt-l">C</span>Sofort landen und einpacken — Notfalleinsatz im Bereich = absolutes Flugverbot für alle anderen</button>
+            <button class="sc-opt" onclick="answerSc(this,'wrong','sc2_1')"><span class="opt-l">D</span>Erlaubt wenn ich mindestens 50m Abstand halte</button>
+          </div>
+          <div class="sc-fb" id="fb_sc2_1"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:0 20px 24px">
+    <button onclick="showChapter(3)" style="width:100%;background:#004499;color:#fff;border:none;border-radius:14px;padding:16px;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+      Weiter zu Kapitel 4 · Betrieb →
+    </button>
+  </div>
+</div><!-- end ch2 -->
+
+<!-- ==================== KAPITEL 4: BETRIEB ==================== -->
+<div class="chapter-section" id="ch3">
+
+  <div class="intro-block">
+    <div class="pilot-quote">
+      <div class="pilot-avatar">🎮</div>
+      <div class="pilot-quote-content">
+        <div class="from">Torsten Flieger sagt:</div>
+        <p>"Verantwortung ist das Wort das mich in der Drohnenwelt am meisten begleitet. Du teilst Dir den Luftraum mit Hubschraubern, die mit 200 km/h auf 50m Höhe fliegen. Die sehen Dich nicht. Du bist dafür verantwortlich, aus dem Weg zu gehen."</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson" id="l3_1">
+    <div class="lesson-head" onclick="toggleLesson('l3_1','ch3')">
+      <div class="lesson-num">1</div>
+      <div class="lesson-head-info">
+        <div class="lesson-eyebrow">Kapitel 4 · Lektion 1 · ca. 13 Min</div>
+        <div class="lesson-title">Verantwortung, Good Airmanship und Luftverkehrsregeln</div>
+      </div>
+      <div class="lesson-toggle" id="tgl_l3_1">▾</div>
+    </div>
+    <div class="lesson-body" id="body_l3_1">
+      <div class="lesson-content">
+
+        <h3>Fernpilot vs. Betreiber — wer ist wofür verantwortlich?</h3>
+        <p>Im UAS-Betrieb gibt es zwei rechtlich unterschiedliche Rollen:</p>
+        <div class="def-grid">
+          <div class="def-card">
+            <div class="def-badge">BETREIBER</div>
+            <div class="def-text"><strong>UAS-Betreiber:</strong> Juristische oder natürliche Person, die ein UAS betreibt oder betreiben will. Verantwortlich für Registrierung, Versicherung, Ausstattung des UAS.</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge">PILOT</div>
+            <div class="def-text"><strong>Fernpilot:</strong> Die natürliche Person, die das UAS tatsächlich steuert. Im privaten Betrieb oft identisch mit dem Betreiber. Verantwortlich für den sicheren Flugbetrieb.</div>
+          </div>
+        </div>
+
+        <div class="box info">
+          <div class="box-icon">📋</div>
+          <div class="box-text">
+            <span class="label">Pflichten des Fernpiloten VOR dem Flug</span>
+            ✓ Gültiges Zeugnis für die Unterkategorie prüfen<br>
+            ✓ Aktuelle geografische Zonen einholen<br>
+            ✓ Umgebung kontrollieren — Hindernisse, unbeteiligte Personen<br>
+            ✓ UAS in sicherem Zustand prüfen: Steuerung, Remote ID, maximale Abflugmasse nicht überschritten
+          </div>
+        </div>
+
+        <div class="box info">
+          <div class="box-icon">🚀</div>
+          <div class="box-text">
+            <span class="label">Pflichten WÄHREND des Fluges</span>
+            ✓ VLOS durchgehend sicherstellen<br>
+            ✓ Luftraum überwachen — jedes Kollisionsrisiko vermeiden<br>
+            ✓ Flug sofort beenden wenn Risiko für Luftfahrzeuge, Menschen, Tiere, Umwelt oder Sachen<br>
+            ✓ Geografische Zonen beachten<br>
+            ✓ UAS im Einklang mit Betriebshandbuch des Herstellers betreiben
+          </div>
+        </div>
+
+        <h3>Good Airmanship — was das bedeutet</h3>
+        <p>In der Luftfahrt gibt es den englischen Begriff <strong>"Good Airmanship"</strong> — das, was aus einem Piloten einen <em>guten</em> Piloten macht:</p>
+
+        <div class="def-grid">
+          <div class="def-card"><div class="def-badge">①</div><div class="def-text">Vertraut mit den <strong>Prinzipien der Aerodynamik</strong></div></div>
+          <div class="def-card"><div class="def-badge">②</div><div class="def-text">Fähigkeit, das Luftfahrzeug <strong>kompetent und genau zu steuern</strong> — am Boden und in der Luft</div></div>
+          <div class="def-card"><div class="def-badge">③</div><div class="def-text">Gutes <strong>Urteilsvermögen</strong> für sicheren und effizienten Betrieb</div></div>
+        </div>
+
+        <h3>Bodenrisiko und Luftrisiko</h3>
+        <p>Jeder UAS-Betrieb birgt zwei Arten von Risiken. Als guter Pilot erkennst und minimierst Du beide:</p>
+
+        <div class="def-grid">
+          <div class="def-card">
+            <div class="def-badge" style="background:#E53935">LUFT</div>
+            <div class="def-text">Zusammenstöße mit Luftfahrzeugen, Verlust der Sichtverbindung, Ausfall der Funkverbindung, Erschöpfung der Energiequelle, unkontrolliertes Davonfliegen</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge" style="background:#FB8C00">BODEN</div>
+            <div class="def-text">Verletzung von Menschen, Sachbeschädigung, Akkubrand, Ruhestörung, Datenschutzverletzungen, Eindringen in die Privatsphäre, Störung des Flughafenbetriebs</div>
+          </div>
+        </div>
+
+        <h3>Die Vorrangregeln in der Luft</h3>
+        <p>Ähnlich der Straßenverkehrsordnung gibt es Vorrangregeln in der Luft — und sie sind klar:</p>
+
+        <div class="vorrang-list">
+          <div class="vorrang-item">
+            <div class="vorrang-num">1</div>
+            <div class="vorrang-text"><strong>Bemannte Luftfahrzeuge haben IMMER Vorrang</strong> — ohne Ausnahme</div>
+          </div>
+          <div class="vorrang-item">
+            <div class="vorrang-num">2</div>
+            <div class="vorrang-text">Luftfahrzeuge in <strong>Notlage</strong> haben Vorrang</div>
+          </div>
+          <div class="vorrang-item">
+            <div class="vorrang-num">3</div>
+            <div class="vorrang-text"><strong>Landende</strong> Luftfahrzeuge haben Vorrang vor startenden</div>
+          </div>
+          <div class="vorrang-item">
+            <div class="vorrang-num">4</div>
+            <div class="vorrang-text">Niemals rücksichtslos in die Nähe anderer Luftfahrzeuge fliegen</div>
+          </div>
+        </div>
+
+        <div class="box danger">
+          <div class="box-icon">✈️</div>
+          <div class="box-text">
+            <span class="label">Warum Piloten Dich nicht sehen</span>
+            Für Piloten bemannter Luftfahrzeuge ist es <strong>fast unmöglich</strong>, Drohnen zu erkennen. Sie sind mit Navigation, Funkverkehr, Checklisten und dem Ausschauhalten nach anderen Luftfahrzeugen ausgelastet. Eine Drohne bei einer Annäherungsgeschwindigkeit von <strong>200 km/h</strong> zu erkennen ist kaum machbar. <strong>Du bist dafür verantwortlich, auszuweichen.</strong>
+          </div>
+        </div>
+
+        <div class="merksatz">
+          <p><strong>Merke:</strong> Taucht unerwartet ein anderes Luftfahrzeug auf → <strong>Flug schnellstmöglich und sicher beenden</strong>. Erst fortsetzen wenn das Kollisionsrisiko ausgeschlossen ist.</p>
+        </div>
+
+        <h3>VLOS, Follow-Me und FPV</h3>
+        <p><strong>VLOS</strong> (Visual Line of Sight / Sichtreichweite) bedeutet: ununterbrochener Sichtkontakt <strong>ohne technische Hilfsmittel</strong> — sodass Kollisionen mit Luftfahrzeugen, Menschen und Hindernissen vermieden werden können. Ob Tag oder Nacht (mit Lichtern) spielt keine Rolle: BVLOS bleibt in der offenen Kategorie verboten.</p>
+
+        <div class="def-grid">
+          <div class="def-card">
+            <div class="def-badge">FOLLOW</div>
+            <div class="def-text"><strong>Follow-Me-Modus:</strong> UAS folgt dem Piloten automatisch. Erlaubt für C0/C1. <strong>Maximal 50m Abstand</strong> zwischen Pilot und UAS — die Software erzwingt das.</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge">FPV</div>
+            <div class="def-text"><strong>First Person View:</strong> Pilot fliegt mit VR-Brille. Dann <strong>muss ein qualifizierter Beobachter neben dem Piloten stehen</strong>, der VLOS sicherstellt und Luftraumüberwachung übernimmt. Direkte und effektive Kommunikation zwischen beiden ist Pflicht.</div>
+          </div>
+        </div>
+
+        <div class="quiz-block">
+          <div class="quiz-tag">🧠 Check</div>
+          <div class="quiz-q">Du fliegst FPV mit der VR-Brille ohne Beobachter. Ist das erlaubt?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q3_1')"><span class="opt-l">A</span>Ja — FPV ist VLOS, weil ich die Kamera sehe</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q3_1')"><span class="opt-l">B</span>Ja — wenn ich unter 30m Höhe bleibe</button>
+            <button class="quiz-opt" onclick="answerQ(this,'correct','q3_1')"><span class="opt-l">C</span>Nein — ohne qualifizierten Beobachter der VLOS sicherstellt ist FPV verboten</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q3_1')"><span class="opt-l">D</span>Nur erlaubt auf privaten Geländen</button>
+          </div>
+          <div class="quiz-fb" id="fb_q3_1"></div>
+        </div>
+
+        <h3>Gefahrgut und Störungsmeldungen</h3>
+        <p>Der Transport von <strong>Gefahrgut ist in der offenen Kategorie verboten</strong>. UAS dürfen generell keinerlei Gegenstände abwerfen — ausgenommen ist nur Treibstoff/Energiequelle. Gefahrgut umfasst: explosive Stoffe, Gase, entzündbare Stoffe, giftige und radioaktive Stoffe, ätzende Stoffe.</p>
+
+        <div class="box success">
+          <div class="box-icon">📢</div>
+          <div class="box-text">
+            <span class="label">Störungsmeldungen — kein Strafwerkzeug!</span>
+            Das Meldepflichtsystem der Zivilluftfahrt hat <strong>nur ein Ziel: zukünftige Unfälle verhindern</strong>. Behörden dürfen aufgrund von Störungsmeldungen keine Sanktionen verhängen. Meldepflicht besteht wenn: schwere Verletzung, Tod durch UAS, oder Beinahe-Kollision mit einem Luftfahrzeug. In Deutschland: Online-Formular der BFU.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:0 20px 24px">
+    <button onclick="showChapter(4)" style="width:100%;background:#004499;color:#fff;border:none;border-radius:14px;padding:16px;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+      Weiter zu Kapitel 5 · Sicherheit →
+    </button>
+  </div>
+</div><!-- end ch3 -->
+
+<!-- ==================== KAPITEL 5: SICHERHEIT ==================== -->
+<div class="chapter-section" id="ch4">
+
+  <div class="intro-block">
+    <div class="pilot-quote">
+      <div class="pilot-avatar">🛡️</div>
+      <div class="pilot-quote-content">
+        <div class="from">Torsten Flieger sagt:</div>
+        <p>"Datenschutz war für mich lange ein Thema für IT-Leute. Dann hab ich verstanden: Jeder Überflug über Menschen mit Kamera ist eine potentielle Datenschutzverletzung. Seitdem schaue ich genauer hin, was ich aufnehme — und was ich lösche."</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson" id="l4_1">
+    <div class="lesson-head" onclick="toggleLesson('l4_1','ch4')">
+      <div class="lesson-num">1</div>
+      <div class="lesson-head-info">
+        <div class="lesson-eyebrow">Kapitel 5 · Lektion 1 · ca. 12 Min</div>
+        <div class="lesson-title">Security vs. Safety und Datenschutz</div>
+      </div>
+      <div class="lesson-toggle" id="tgl_l4_1">▾</div>
+    </div>
+    <div class="lesson-body" id="body_l4_1">
+      <div class="lesson-content">
+
+        <h3>Security und Safety — zwei verschiedene Dinge</h3>
+        <p>Der deutsche Begriff "Sicherheit" wird im Englischen in zwei Begriffe aufgeteilt, die Piloten kennen müssen:</p>
+
+        <div class="def-grid">
+          <div class="def-card">
+            <div class="def-badge" style="background:#C62828">SECURITY</div>
+            <div class="def-text"><strong>Schutz vor vorsätzlichen Beeinträchtigungen:</strong> Terrorismus, vorsätzliche Straftaten, missbräuchliche Verwendung von UAS für kriminelle Zwecke</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge" style="background:#1565C0">SAFETY</div>
+            <div class="def-text"><strong>Schutz vor zufälligen Gefahrenquellen:</strong> Antriebsausfall, Orientierungsverlust, Steuerungsausfall, Ausfall der Energiequelle</div>
+          </div>
+        </div>
+
+        <div class="box warn">
+          <div class="box-icon">🤔</div>
+          <div class="box-text">
+            <span class="label">Vor jedem Flug diese Fragen stellen</span>
+            <strong>1.</strong> Fliege ich für einen legalen, erlaubten Zweck?<br>
+            <strong>2.</strong> Werde ich niemanden gefährden — auch andere Luftfahrer nicht?<br>
+            <strong>3.</strong> Ist ausgeschlossen, dass ich in die Privatsphäre anderer eindringe?<br>
+            <strong>4.</strong> Ist ausgeschlossen, dass ich Behörden, Polizei oder Rettungskräfte behindere?
+          </div>
+        </div>
+
+        <p>Straftaten mit UAS werden nach den Gesetzen des Staates beurteilt, in dem sie stattfinden. <strong>Stalking, Gefährdung der Luftfahrt, Beihilfe zu Straftaten</strong> — all das ist in europäischen Staaten unter Strafe gestellt und reicht von Geldbußen bis zu mehrjährigen Haftstrafen.</p>
+
+        <h3>Datenschutz — ein Grundrecht</h3>
+        <p>Das Recht auf Datenschutz ist ein fundamentales Grundrecht in der EU, geregelt hauptsächlich in der <strong>DSGVO (Datenschutz-Grundverordnung)</strong>. Mit einer Kameradrohne kann man leicht in die Privatsphäre anderer eingreifen — deshalb gelten klare Regeln.</p>
+
+        <div class="box law">
+          <div class="box-icon">⚖️</div>
+          <div class="box-text">
+            <span class="label">Was sind personenbezogene Daten?</span>
+            Alle Informationen, die sich auf eine <strong>identifizierte oder identifizierbare natürliche Person</strong> beziehen — also:<br>
+            • Videoaufzeichnungen von Personen<br>
+            • Audioaufnahmen<br>
+            • Bildaufnahmen (Fotos)<br>
+            • Standortdaten wenn einer Person zuordenbar<br>
+            Auch Wärmebildkameras und Infrarotkameras erfassen personenbezogene Daten!
+          </div>
+        </div>
+
+        <h3>Die DSGVO-Grundprinzipien für Drohnenpiloten</h3>
+
+        <div class="def-grid">
+          <div class="def-card"><div class="def-badge">①</div><div class="def-text"><strong>Transparenz:</strong> Betroffene Personen müssen informiert sein oder sich bewusst sein, dass Daten verarbeitet werden</div></div>
+          <div class="def-card"><div class="def-badge">②</div><div class="def-text"><strong>Datensparsamkeit:</strong> Immer wenn möglich, keine personenbezogenen Daten verarbeiten oder aufzeichnen</div></div>
+          <div class="def-card"><div class="def-badge">③</div><div class="def-text"><strong>Zweckbindung:</strong> Daten nur für den Zweck nutzen, für den sie erhoben wurden</div></div>
+        </div>
+
+        <div class="box danger">
+          <div class="box-icon">🚫</div>
+          <div class="box-text">
+            <span class="label">Verbotenes Filmen/Fotografieren</span>
+            Verboten wenn:<br>
+            • Es sich um ein Eindringen in die <strong>Privatsphäre</strong> handelt<br>
+            • Die Aufnahmen für <strong>Gesichtserkennung oder automatisierte Prozesse</strong> genutzt werden<br>
+            • Die Aufnahmen <strong>besonders geschützte Daten</strong> enthalten<br>
+            • Die betroffene Person <strong>die Zustimmung entzogen hat</strong> — auch nachträglich! Dann muss das Foto sofort gelöscht werden.
+          </div>
+        </div>
+
+        <div class="quiz-block">
+          <div class="quiz-tag">🧠 Check</div>
+          <div class="quiz-q">Du machst Luftbilder und eine Person fordert nachträglich die Löschung ihres Fotos. Was tust Du?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q4_1')"><span class="opt-l">A</span>Das Foto behalten — es war in einem öffentlichen Bereich aufgenommen</button>
+            <button class="quiz-opt" onclick="answerQ(this,'correct','q4_1')"><span class="opt-l">B</span>Sofort löschen — die Zustimmung kann nachträglich entzogen werden, dann muss gelöscht werden</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q4_1')"><span class="opt-l">C</span>Ich muss nur löschen wenn ich gewerblich fotografiere</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q4_1')"><span class="opt-l">D</span>Entscheidung liegt bei mir als Urheber des Fotos</button>
+          </div>
+          <div class="quiz-fb" id="fb_q4_1"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson" id="l4_2">
+    <div class="lesson-head" onclick="toggleLesson('l4_2','ch4')">
+      <div class="lesson-num">2</div>
+      <div class="lesson-head-info">
+        <div class="lesson-eyebrow">Kapitel 5 · Lektion 2 · ca. 10 Min</div>
+        <div class="lesson-title">Versicherungspflicht</div>
+      </div>
+      <div class="lesson-toggle" id="tgl_l4_2">▾</div>
+    </div>
+    <div class="lesson-body" id="body_l4_2">
+      <div class="lesson-content">
+
+        <h3>Warum Versicherung Pflicht ist</h3>
+        <p>Der Betrieb von Luftfahrzeugen — bemannt oder unbemannt — birgt immer Risiken. Im Fall eines Unfalls haftet der Betreiber oder Fernpilot für den entstandenen Schaden. Bei Personenschäden kann das <strong>existenzbedrohend teuer</strong> werden. Deshalb ist eine Haftpflichtversicherung in den meisten Staaten <strong>gesetzlich verpflichtend</strong>.</p>
+
+        <div class="box law">
+          <div class="box-icon">📜</div>
+          <div class="box-text">
+            <span class="label">Deutschland und Österreich — die konkreten Zahlen</span>
+            Für UAS mit einer Höchstabflugmasse unter 500 kg muss eine gültige Haftpflichtversicherung im Ausmaß von mindestens <strong>750.000 SDR</strong> (Sonderziehungsrechte) vorliegen.<br><br>
+            <strong>SDR = Special Drawing Rights</strong> — eine fiktive Währung des IWF, international im Versicherungswesen verwendet. 750.000 SDR entsprechen ca. <strong>1 Million Euro</strong>.<br><br>
+            In Deutschland geregelt in <strong>§ 37 Luftverkehrsgesetz</strong>.
+          </div>
+        </div>
+
+        <div class="box danger">
+          <div class="box-icon">⚠️</div>
+          <div class="box-text">
+            <span class="label">WICHTIG: Private Haftpflicht deckt Drohnen NICHT!</span>
+            Eine bestehende private Haftpflichtversicherung deckt Schäden durch UAS in der Regel <strong>nicht ab</strong>. Das muss vor dem Betrieb explizit mit der Versicherungsgesellschaft abgeklärt und eine Zusatzversicherung oder spezielle Drohnenversicherung abgeschlossen werden.
+          </div>
+        </div>
+
+        <div class="box warn">
+          <div class="box-icon">📋</div>
+          <div class="box-text">
+            <span class="label">Nachweis beim Fliegen mitführen</span>
+            Der Versicherungsnachweis muss <strong>während des Betriebs mitgeführt werden</strong> — nicht zuhause im Ordner liegen. Und: Versicherungen zahlen nur wenn <strong>alle Vorschriften eingehalten</strong> wurden. Wer BVLOS fliegt, hat keinen Versicherungsschutz.
+          </div>
+        </div>
+
+        <div class="merksatz">
+          <p><strong>Merke:</strong> <strong>750.000 SDR ≈ 1 Million Euro.</strong> Die meisten Drohnenversicherungen bieten 1 Mio. € oder 1,5 Mio. € Deckungssumme an. Nicht mehr und nicht weniger — aber auf keinen Fall weniger als die gesetzliche Mindestanforderung.</p>
+        </div>
+
+        <div class="quiz-block">
+          <div class="quiz-tag">🧠 Check</div>
+          <div class="quiz-q">Deine Drohne stürzt ab und beschädigt ein geparktes Auto. Deine private Haftpflicht deckt laut Vertrag "alle Schäden im Alltag". Bist Du versichert?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q4_2')"><span class="opt-l">A</span>Ja — "alle Schäden im Alltag" deckt auch Drohnen</button>
+            <button class="quiz-opt" onclick="answerQ(this,'correct','q4_2')"><span class="opt-l">B</span>Wahrscheinlich nicht — Drohnenschäden sind von normalen Haftpflichten meist ausgeschlossen, muss extra abgeklärt werden</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q4_2')"><span class="opt-l">C</span>Ja — Sachschäden sind immer gedeckt, nur Personenschäden nicht</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q4_2')"><span class="opt-l">D</span>Egal — unter 500g gibt es keine Haftung</button>
+          </div>
+          <div class="quiz-fb" id="fb_q4_2"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div><!-- end ch4 -->
+
+<!-- ==================== FINALES QUIZ ==================== -->
+<div class="final-quiz" id="finalQuizSection" style="display:none">
+  <div class="fq-header">
+    <h3>🎯 Modul-Abschlussquiz</h3>
+    <p>20 Fragen aus allen 5 Kapiteln · 75% zum Bestehen</p>
+  </div>
+  <div class="fq-dots" id="fqDots"></div>
+  <div id="fqBody">
+    <div class="fq-counter" id="fqCounter"></div>
+    <div class="fq-question" id="fqQuestion"></div>
+    <div class="fq-opts" id="fqOpts"></div>
+    <div class="fq-feedback" id="fqFeedback"></div>
+    <button class="fq-next" id="fqNext" onclick="nextFQ()">Weiter →</button>
+  </div>
+  <div id="fqResult" style="display:none"></div>
+</div>
+
+<div class="module-end" id="moduleEnd" style="display:none">
+  <div class="module-end-icon">⚖️</div>
+  <h2>Modul 1 abgeschlossen!</h2>
+  <p>Du kennst jetzt das komplette Luftrecht für die offene Kategorie. Weiter zu Modul 2 — dort geht es um Dich als Pilot: Fitness, Wahrnehmung und Situational Awareness.</p>
+  <a href="modul-2.html" class="btn-next">Zu Modul 2: Menschliches Leistungsvermögen →</a>
+</div>
+
+</div><!-- end content -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── STATE ─────────────────────────────────────────
+const chapterDone = [false,false,false,false,false];
+const quizAnswered = {};
+let currentChapter = 0;
+let finalQuizStarted = false;
+
+// ─── CHAPTER NAVIGATION ────────────────────────────
+function showChapter(n){
+  document.querySelectorAll('.chapter-section').forEach((s,i)=>{
+    s.classList.toggle('active', i===n);
+  });
+  document.querySelectorAll('.chapter-tab').forEach((t,i)=>{
+    t.classList.toggle('active', i===n);
+  });
+  currentChapter = n;
+  window.scrollTo({top:0,behavior:'smooth'});
+  // Open first lesson of chapter
+  const firstLesson = document.querySelector(`#ch${n} .lesson-body`);
+  if(firstLesson && !firstLesson.classList.contains('open')){
+    const firstHead = document.querySelector(`#ch${n} .lesson-head`);
+    if(firstHead) firstHead.click();
+  }
+}
+
+// ─── LESSON TOGGLE ─────────────────────────────────
+function toggleLesson(id, chId){
+  const body = document.getElementById('body_'+id);
+  const tgl = document.getElementById('tgl_'+id);
+  const isOpen = body.classList.toggle('open');
+  tgl.classList.toggle('open', isOpen);
+  if(isOpen){
+    markChapterProgress(chId);
+    setTimeout(()=>{ body.scrollIntoView({behavior:'smooth',block:'start'}); },100);
+  }
+}
+
+// Chapter keys mapping for localStorage
+const chapterKeys = ['m1_ch1','m1_ch2','m1_ch3','m1_ch4','m1_ch5'];
+
+function markChapterProgress(chId){
+  const chIdx = parseInt(chId.replace('ch',''));
+  if(!chapterDone[chIdx]){
+    chapterDone[chIdx] = true;
+    document.getElementById('ctab'+chIdx).classList.add('done');
+    // Save chapter progress to localStorage
+    try {
+      const p = JSON.parse(localStorage.getItem('drohnenschein_progress')||'{}');
+      p[chapterKeys[chIdx]] = true;
+      localStorage.setItem('drohnenschein_progress', JSON.stringify(p));
+    } catch(e) {}
+    updateProgress();
+    // Show final quiz when all chapters done
+    if(chapterDone.every(Boolean) && !finalQuizStarted){
+      setTimeout(()=>{
+        document.getElementById('finalQuizSection').style.display='block';
+        document.getElementById('finalQuizSection').scrollIntoView({behavior:'smooth'});
+        finalQuizStarted = true;
+        initFQ();
+      }, 800);
+    }
+  }
+}
+
+// ─── PROGRESS ──────────────────────────────────────
+function updateProgress(){
+  const done = chapterDone.filter(Boolean).length;
+  const total = chapterDone.length + 1; // +1 for quiz
+  let pct = Math.round(done/total*100);
+  if(quizPassed) pct = 100;
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressPct').textContent = pct+'%';
+  document.getElementById('headerProgress').textContent = pct+'%';
+}
+
+// ─── INLINE QUIZ ───────────────────────────────────
+const qFeedbacks = {
+  q0_1:{correct:'✅ Richtig! Einkaufsstraßen während der Öffnungszeiten sind laut EASA explizit Menschenansammlungen — egal wie leicht die Drohne ist.',wrong:'❌ Falsch. Einkaufsstraßen während der Öffnungszeiten sind laut EASA ausdrücklich als Menschenansammlungen definiert. Das Gewicht der Drohne spielt dafür keine Rolle.'},
+  q0_2:{correct:'✅ Genau! Gewicht über 25kg macht es speziell, der Konzert-Betrieb über Menschenansammlungen macht es zertifizierungspflichtig. Beides gleichzeitig → zertifizierungspflichtig.',wrong:'❌ Falsch. Zwar macht das Gewicht den Betrieb bereits speziell — aber ein Konzert ist eine Menschenansammlung. Betrieb über Menschenansammlungen = zertifizierungspflichtige Kategorie.'},
+  q1_1:{correct:'✅ Korrekt! 2019/945 enthält die technischen Anforderungen für die UAS-Klassen. 947 regelt den Betrieb, 1139 ist die Grundverordnung.',wrong:'❌ Falsch. 2019/945 (Delegierte Verordnung) enthält die technischen Anforderungen für UAS-Klassen. 2019/947 regelt die Betriebsregeln.'},
+  q1_2:{correct:'✅ Richtig! Videokameras können personenbezogene Daten aufzeichnen — das löst die Registrierungspflicht aus, unabhängig vom Gewicht der Drohne.',wrong:'❌ Falsch. Eine Videokamera ist ein Sensor zur Aufzeichnung personenbezogener Daten. Das löst die Registrierungspflicht aus — unabhängig davon, dass die Drohne unter 250g wiegt.'},
+  q2_1:{correct:'✅ Richtig! Kein Kontrollzone ≠ kein Risiko. Luftfahrzeuge nähern sich von allen Seiten in geringen Höhen. Immer UAS-Zonen prüfen und erhöhte Vorsicht walten lassen.',wrong:'❌ Falsch. Kleine Flugplätze ohne Kontrollzone sind trotzdem riskante Gebiete. Luftfahrzeuge nähern sich 5-10 Minuten vor der Landung in geringen Höhen und aus allen Richtungen.'},
+  q3_1:{correct:'✅ Korrekt! FPV gilt nicht als VLOS, weil der Pilot die Drohne nicht direkt sieht. Ohne qualifizierten Beobachter ist FPV in der offenen Kategorie verboten.',wrong:'❌ Falsch. Bei FPV sieht der Pilot nicht direkt die Drohne — das ist kein VLOS. Ein qualifizierter Beobachter direkt neben dem Piloten ist Pflicht.'},
+  q4_1:{correct:'✅ Richtig! Der Zustimmungsentzug kann auch nachträglich erfolgen. Dann muss das Foto umgehend gelöscht werden.',wrong:'❌ Falsch. Laut DSGVO kann die Zustimmung auch nachträglich entzogen werden. Das aufgenommene Material muss dann sofort gelöscht werden.'},
+  q4_2:{correct:'✅ Richtig! Normale Haftpflichtversicherungen decken Drohnenschäden meist explizit aus. Immer vor dem ersten Flug mit der Versicherung klären und ggf. Zusatzversicherung abschließen.',wrong:'❌ Falsch. Normale Haftpflichtversicherungen schließen Drohnenschäden in der Regel aus. Das muss vor dem Betrieb explizit abgeklärt werden.'}
+};
+
+function answerQ(btn, type, id){
+  if(quizAnswered[id]) return;
+  quizAnswered[id] = true;
+  btn.closest('.quiz-block').querySelectorAll('.quiz-opt').forEach(o=>o.disabled=true);
+  btn.classList.add(type);
+  const fb = document.getElementById('fb_'+id);
+  fb.innerHTML = qFeedbacks[id][type];
+  fb.className = 'quiz-fb show '+type;
+}
+
+const scFeedbacks = {
+  sc0_1:{correct:'✅ Korrekt! C0-Drohnen (unter 250g) dürfen in A1 auch über vereinzelte Personen fliegen — aber nur mit äußerster Vorsicht und möglichst vermieden. Das ist keine generelle Erlaubnis, sondern eine begrenzte Ausnahmeregelung.',wrong:'❌ Falsch. C0-Drohnen dürfen in A1 mit äußerster Vorsicht über vereinzelte (nicht angesammelte) Personen fliegen. Keine Prüfung nötig, aber sehr wohl Regeln.'},
+  sc2_1:{correct:'✅ Richtig! Sobald ein Notfalleinsatz stattfindet, gilt für alle anderen UAS sofortiges Flugverbot in und um das Gebiet. Rettungskräfte brauchen freien Luftraum.',wrong:'❌ Falsch. Bei jedem Notfalleinsatz gilt sofortiges Flugverbot für alle anderen UAS — ohne Ausnahme, außer die Einsatzleitung erteilt ausdrücklich Erlaubnis.'}
+};
+
+function answerSc(btn, type, id){
+  if(quizAnswered['sc_'+id]) return;
+  quizAnswered['sc_'+id] = true;
+  btn.closest('.scenario').querySelectorAll('.sc-opt').forEach(o=>o.disabled=true);
+  btn.classList.add(type);
+  const fb = document.getElementById('fb_'+id);
+  fb.innerHTML = scFeedbacks[id][type];
+  fb.className = 'sc-fb show '+type;
+}
+
+// ─── FINAL QUIZ ────────────────────────────────────
+const fqPool = [
+  {q:'Was sind die fünf Kriterien der offenen Kategorie?',opts:['Unter 25kg, kein Gefahrgut, keine Menschen, keine Innenräume, max. 50m','Unter 25kg, keine Menschenansammlungen, max. 120m, nur VLOS, kein Gefahrgut/Menschen-Transport','Unter 10kg, max. 100m, keine Städte, kein Nacht, keine Kamera','Nur tagsüber, max. 250g, kein Wind, freies Gelände, kein Militär'],c:1,fb:'Die 5 Kriterien: Unter 25kg MTOM, keine Menschenansammlungen, max. 120m Höhe, nur VLOS, kein Gefahrgut- und kein Menschentransport.'},
+  {q:'Was ist eine Menschenansammlung laut EASA-Definition?',opts:['Mehr als 50 Personen im gleichen Bereich','Wenn Einzelpersonen sich nicht mehr frei bewegen und einem außer Kontrolle geratenen UAS nicht ausweichen können','Mehr als 10 Personen pro 100m²','Alle öffentlichen Veranstaltungen mit Eintritt'],c:1,fb:'Eine Menschenansammlung liegt vor wenn einzelne Personen sich nicht mehr frei bewegen können — also einem außer Kontrolle geratenen UAS nicht mehr ausweichen könnten.'},
+  {q:'Welche Klasse darf über vereinzelte Personen fliegen (mit äußerster Vorsicht)?',opts:['C2 in A2','C1 in A1, wenn keine unbeteiligten Personen überflogen werden','C0 in A1 und selbst gebaute UAS unter 250g','Alle Klassen unter 120m'],c:2,fb:'C0 und selbst gebaute UAS unter 250g dürfen in A1 mit äußerster Vorsicht über vereinzelte Personen fliegen. C1 darf das nur wenn der Pilot vorher einschätzt, dass keine unbeteiligten Personen überflogen werden.'},
+  {q:'Was bedeutet die 1:1-Regel in Unterkategorie A3?',opts:['1 Akku pro 1 Flug','1 Meter Abstand pro 1 Meter Flughöhe zu unbeteiligten Personen','1 Minute Wartezeit pro 1 Meter Wind','Maximale Flugzeit = maximale Windstärke in Beaufort'],c:1,fb:'Die 1:1-Regel: Mindestens 1 Meter Abstand zu Personen für jeden Meter Flughöhe. Dazu kommt: mindestens die Strecke die das UAS in 2 Sekunden zurücklegt (= Reaktionszeit).'},
+  {q:'Für welche UAS-Klassen ist Remote ID (Fernidentifizierung) Pflicht?',opts:['Alle Klassen C0-C4','Nur C3 und C4','C1, C2 und C3','Nur bei gewerblichem Betrieb'],c:2,fb:'Remote ID ist Pflicht für C1, C2 und C3. C0 ist ausgenommen weil die Drohnen unter 250g so leicht sind, dass das Risiko geringer ist. C4 (speziell für Modellflugzeuge) hat kein Remote ID und keine Geschwindigkeitsbegrenzung.'},
+  {q:'Was ist der Unterschied zwischen Geo-Awareness und Geofencing?',opts:['Kein Unterschied — beides ist dasselbe','Geo-Awareness warnt nur, Geofencing verhindert aktiv den Einflug in verbotene Zonen','Geo-Awareness ist für Profis, Geofencing für Hobbyisten','Geofencing ist nur in Deutschland, Geo-Awareness europaweit'],c:1,fb:'Geo-Awareness (Geosensibilisierung) warnt den Piloten wenn er sich einer verbotenen Zone nähert. Geofencing geht weiter und verhindert aktiv den Einflug. Geo-Awareness ist für C1/C2/C3 Pflicht — Geofencing ist für Hersteller nicht vorgeschrieben.'},
+  {q:'Welche drei EU-Verordnungen sind für Drohnenpiloten am wichtigsten?',opts:['2018/1139, 2019/945, 2019/947','2015/100, 2017/200, 2020/500','2019/947, 2020/639, 2021/100','2016/679 (DSGVO), 2018/1139, 2020/639'],c:0,fb:'2018/1139 (Grundverordnung), 2019/945 (technische Anforderungen für UAS), 2019/947 (Betriebsregeln). Merkhilfe: 945 = das Gerät, 947 = der Betrieb — keine echte Eselsbrücke, aber besser als nichts. 😅'},
+  {q:'Wie lange gilt ein EU-Kompetenznachweis?',opts:['1 Jahr','3 Jahre','5 Jahre','Unbegrenzt'],c:2,fb:'Der Kompetenznachweis gilt 5 Jahre. Danach müssen Kurs und Prüfung wiederholt werden.'},
+  {q:'Was versteht man unter dem "Praktischen Selbsttraining" für A2?',opts:['10 Flüge in einem Flugverein','Eigenständiges Training in einem Bereich ohne unbeteiligte Personen, mind. 150m von Bebauung entfernt','Simulation am Computer','Prüfungsflug vor einem Prüfer'],c:1,fb:'Das praktische Selbsttraining für A2 erfolgt eigenständig, in einem Bereich ohne unbeteiligte Personen, mindestens 150m von Wohn-, Industrie-, Freizeit- und Erholungsgebieten entfernt — also unter A3-Bedingungen.'},
+  {q:'Ab wann besteht Registrierungspflicht als UAS-Betreiber?',opts:['Ab 500g Gewicht','Ab 250g, ab 80 Joule Aufprallenergie, ODER wenn das UAS personenbezogene Daten aufzeichnen kann','Immer — jeder Betreiber muss sich registrieren','Nur bei gewerblichem Betrieb'],c:1,fb:'Registrierungspflicht besteht wenn: Gewicht über 250g, ODER Aufprallenergie über 80 Joule, ODER das UAS mit Sensor zur Aufzeichnung personenbezogener Daten ausgestattet ist (Kamera, Mikrofon, etc.).'},
+  {q:'Welchen Vorrang haben Drohnen gegenüber bemannten Luftfahrzeugen?',opts:['Drohnen haben Vorrang bei geringer Höhe unter 50m','Keinen — bemannte Luftfahrzeuge haben IMMER Vorrang','Gleiche Rechte — wer zuerst dort ist hat Vorrang','Drohnen haben Vorrang wenn sie unter 250g wiegen'],c:1,fb:'Bemannte Luftfahrzeuge haben IMMER Vorrang — ohne Ausnahme. Dazu kommen: Luftfahrzeuge in Notlage haben Vorrang, landende vor startenden.'},
+  {q:'Was bedeutet VLOS und was schließt es aus?',opts:['Video Line of Sight — Kameraübertragung reicht','Visual Line of Sight — ununterbrochener Sichtkontakt ohne technische Hilfsmittel, BVLOS ist in offener Kategorie verboten','Verified Location of Spot — GPS-Bestätigung','Very Low Observation Speed — Langsamflug'],c:1,fb:'VLOS = Visual Line of Sight: ununterbrochener Sichtkontakt ohne technische Hilfsmittel. BVLOS (Beyond Visual Line of Sight) ist in der offenen Kategorie verboten.'},
+  {q:'Was ist beim FPV-Fliegen mit VR-Brille Pflicht?',opts:['Sondererlaubnis der Behörde','Ein qualifizierter Beobachter direkt neben dem Piloten, der VLOS sicherstellt','Nur über 100m Höhe erlaubt','Mindestens 2 Piloten im Team'],c:1,fb:'Bei FPV mit VR-Brille ist ein qualifizierter Beobachter neben dem Piloten Pflicht. Diese Person übernimmt die Luftraumüberwachung und VLOS. Direkte und effektive Kommunikation zwischen beiden ist vorgeschrieben.'},
+  {q:'Was bedeutet "Security" im Unterschied zu "Safety"?',opts:['Safety = intern, Security = extern','Security = Schutz vor vorsätzlichen Beeinträchtigungen; Safety = Schutz vor zufälligen Gefahren','Sie bedeuten dasselbe — nur verschiedene Sprachen','Security = technische Sicherheit, Safety = Personensicherheit'],c:1,fb:'Security = Schutz vor vorsätzlichen Beeinträchtigungen (Terrorismus, Kriminalität, Missbrauch). Safety = Schutz vor zufälligen/ungewollten Gefahren (Antriebsausfall, Steuerungsausfall, etc.).'},
+  {q:'Was sind personenbezogene Daten im Kontext der Drohne?',opts:['Nur Videoaufnahmen in Innenräumen','Alle Informationen die eine identifizierte oder identifizierbare natürliche Person betreffen — also Fotos, Videos, Audio, auch Wärmebild','Nur Fotos von Ausweisdokumenten','Nur wenn die Person namentlich bekannt ist'],c:1,fb:'Personenbezogene Daten sind alle Informationen zu identifizierten oder identifizierbaren natürlichen Personen. Dazu gehören Videos, Fotos, Audioaufnahmen, auch Infrarot/Wärmebildkameras.'},
+  {q:'Was gilt wenn jemand nachträglich die Löschung seines Fotos fordert?',opts:['Man muss nicht löschen — das Foto wurde legal aufgenommen','Das Foto muss umgehend gelöscht werden — Zustimmung kann jederzeit entzogen werden','Nur löschen wenn die Person klagt','Nur bei kommerzieller Nutzung Löschpflicht'],c:1,fb:'Laut DSGVO kann die Zustimmung auch nachträglich entzogen werden. Das Foto oder Video muss dann umgehend gelöscht werden.'},
+  {q:'Wie hoch ist die Mindestversicherungssumme für UAS unter 500kg MTOM?',opts:['100.000 Euro','500.000 SDR','750.000 SDR (ca. 1 Million Euro)','1 Million Euro exakt'],c:2,fb:'750.000 SDR (Sonderziehungsrechte) = ca. 1 Million Euro. In Deutschland geregelt in § 37 Luftverkehrsgesetz. SDR ist eine fiktive Währung des IWF.'},
+  {q:'Deckt eine normale private Haftpflichtversicherung Drohnenschäden ab?',opts:['Ja — "alle Schäden" umfasst auch Drohnen','Nein — Drohnenschäden sind meist explizit ausgeschlossen, muss separat abgeklärt werden','Ja, wenn die Drohne unter 250g wiegt','Nur Sachschäden, keine Personenschäden'],c:1,fb:'Normale Haftpflichtversicherungen schließen UAS-Schäden in der Regel aus. Vor dem ersten Flug muss explizit mit der Versicherung geklärt werden, ob eine Zusatzversicherung oder spezielle Drohnenversicherung nötig ist.'},
+  {q:'Wann muss ein Vorfall mit einer Drohne den Behörden gemeldet werden?',opts:['Bei jedem Crash egal welcher Größe','Bei schwerer Verletzung, Tod, oder Beinahe-Kollision mit einem Luftfahrzeug','Nur bei kommerziellen Flügen','Nur wenn Sachschäden über 500 Euro entstehen'],c:1,fb:'Meldepflicht besteht bei: schwerer Verletzung durch UAS, Tod durch UAS, oder Beinahe-Kollision/Vorfall mit einem Luftfahrzeug. Ziel ist ausschließlich die Unfallverhütung — keine Sanktionen aufgrund von Meldungen.'},
+  {q:'Was bedeutet die Höhenangabe "120m AGL"?',opts:['120m über dem Startpunkt der Drohne','120m über dem Meeresspiegel','120m über dem nächsten Punkt der Erdoberfläche (Above Ground Level)','120m über der Baumgrenze'],c:2,fb:'AGL = Above Ground Level = über dem nächsten Punkt der Erdoberfläche. Der Höhenmesser misst ab Startpunkt — am Berghang kann die Drohne laut Anzeige noch 110m haben, aber nur noch 20m bis zum Hang. Kollisionsgefahr mit dem Gelände!'}
+];
+
+let fqState = {questions:[],current:0,score:0};
+let quizPassed = false;
+
+function initFQ(){
+  fqState.questions = [...fqPool].sort(()=>Math.random()-0.5);
+  fqState.current=0; fqState.score=0;
+  document.getElementById('fqDots').innerHTML = fqState.questions.map((_,i)=>`<div class="qdot" id="fqdot${i}"></div>`).join('');
+  showFQ();
+}
+
+function showFQ(){
+  const q = fqState.questions[fqState.current];
+  document.getElementById('fqCounter').textContent = `Frage ${fqState.current+1} / ${fqState.questions.length}`;
+  document.getElementById('fqQuestion').textContent = q.q;
+  document.getElementById('fqOpts').innerHTML = q.opts.map((o,i)=>`<button class="quiz-opt" onclick="answerFQ(this,${i})"><span class="opt-l">${'ABCD'[i]}</span>${o}</button>`).join('');
+  document.getElementById('fqFeedback').style.display='none';
+  document.getElementById('fqFeedback').className='fq-feedback';
+  document.getElementById('fqNext').style.display='none';
+  const dot = document.getElementById('fqdot'+fqState.current);
+  if(dot) dot.style.background='rgba(255,214,0,.6)';
+}
+
+function answerFQ(btn,idx){
+  const q=fqState.questions[fqState.current];
+  document.querySelectorAll('#fqOpts .quiz-opt').forEach(o=>o.disabled=true);
+  const fb=document.getElementById('fqFeedback');
+  const dot=document.getElementById('fqdot'+fqState.current);
+  if(idx===q.c){
+    btn.classList.add('correct');
+    fb.innerHTML='✅ Richtig! '+q.fb;
+    fb.className='fq-feedback show';
+    fqState.score++;
+    if(dot) dot.style.background='var(--green)';
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('#fqOpts .quiz-opt')[q.c].classList.add('correct');
+    fb.innerHTML='❌ Falsch. '+q.fb;
+    fb.className='fq-feedback show';
+    if(dot) dot.style.background='var(--red)';
+  }
+  fb.style.display='block';
+  document.getElementById('fqNext').style.display='block';
+}
+
+function nextFQ(){
+  fqState.current++;
+  if(fqState.current>=fqState.questions.length){ showFQResult(); }
+  else { showFQ(); }
+}
+
+function showFQResult(){
+  const pct=Math.round(fqState.score/fqState.questions.length*100);
+  const passed=pct>=75;
+  document.getElementById('fqBody').style.display='none';
+  document.getElementById('fqDots').style.display='none';
+  const r=document.getElementById('fqResult');
+  r.style.display='block';
+  r.innerHTML=`<div class="fq-result">
+    <div class="fq-score">${pct}%</div>
+    <div class="fq-result-label">${passed?'🎉 Bestanden!':'💪 Noch nicht ganz'}</div>
+    <div class="fq-result-msg">${fqState.score} von ${fqState.questions.length} Fragen richtig.<br>${passed?'Ausgezeichnet! Du kennst das Luftrecht der offenen Kategorie.':'Nochmal durch die Kapitel und dann neu versuchen.'}</div>
+    <button onclick="retryFQ()" style="background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.3);color:#fff;padding:11px 22px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif">🔄 Nochmal</button>
+  </div>`;
+  if(passed){
+    quizPassed=true;
+    updateProgress();
+    showToast('🎉 Modul 1 abgeschlossen!','success');
+    document.getElementById('moduleEnd').style.display='block';
+    markModuleDone();
+  }
+}
+
+function retryFQ(){
+  document.getElementById('fqResult').style.display='none';
+  document.getElementById('fqBody').style.display='block';
+  document.getElementById('fqDots').style.display='flex';
+  initFQ();
+}
+
+function markModuleDone(){
+  try{
+    const p=JSON.parse(localStorage.getItem('drohnenschein_progress')||'{}');
+    p['m1_completed']=true;
+    localStorage.setItem('drohnenschein_progress',JSON.stringify(p));
+  }catch(e){}
+}
+
+function showToast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast '+type+' show';
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+// ─── INIT ──────────────────────────────────────────
+document.addEventListener('DOMContentLoaded',()=>{
+  // Always reset progress to 0% on load
+  document.getElementById('progressFill').style.width = '0%';
+  document.getElementById('progressPct').textContent = '0%';
+  if(document.getElementById('headerProgress')) document.getElementById('headerProgress').textContent = '0%';
+  // Open first lesson of chapter 1
+  const firstBody = document.getElementById('body_l0_1');
+  const firstTgl = document.getElementById('tgl_l0_1');
+  if(firstBody){ firstBody.classList.add('open'); if(firstTgl) firstTgl.classList.add('open'); }
+});
+</script>
+</body>
+</html>

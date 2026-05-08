@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Modul 4: Allgemeine UAS-Kunde · drohnenschein.app</title>
+<meta name="theme-color" content="#6A1B9A"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="DrohnenSchein"/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icon-192.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--sky:#7B1FA2;--sky-light:#F3E5F5;--sky-dark:#6A1B9A;--yellow:#FFD600;--green:#00C853;--red:#FF3D00;--orange:#FF6D00;--purple:#9C27B0;--black:#0D0D0D;--white:#FAFAF8;--gray:#F2F2EF;--border:#E0E0DC;--text:#1A1A1A;--muted:#777}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);overflow-x:hidden;-webkit-tap-highlight-color:transparent;line-height:1.65}
+.app-header{background:var(--sky-dark);padding:.875rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;padding-top:max(.875rem,env(safe-area-inset-top));box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.header-back{color:#fff;text-decoration:none;font-size:14px;display:flex;align-items:center;gap:6px;opacity:.9;font-weight:500}
+.header-title{font-family:'Syne',sans-serif;font-size:14px;color:#fff;font-weight:700;text-align:center;flex:1;padding:0 1rem}
+.header-title small{display:block;font-size:11px;font-weight:400;opacity:.6;letter-spacing:.05em;text-transform:uppercase}
+.header-progress{font-size:13px;color:var(--yellow);font-weight:600;min-width:36px;text-align:right}
+.module-hero{background:linear-gradient(135deg,var(--sky-dark) 0%,var(--sky) 60%,#8E24AA 100%);padding:2.5rem 1.25rem 3rem;color:#fff;position:relative;overflow:hidden}
+.module-hero::after{content:'';position:absolute;bottom:-30px;left:0;right:0;height:60px;background:var(--white);border-radius:40px 40px 0 0}
+.module-hero::before{content:'';position:absolute;top:-50%;right:-20%;width:400px;height:400px;background:radial-gradient(circle,rgba(255,214,0,.15) 0%,transparent 70%);pointer-events:none}
+.module-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);font-size:12px;font-weight:600;padding:5px 14px;border-radius:20px;margin-bottom:1rem;letter-spacing:.05em;backdrop-filter:blur(8px)}
+.module-hero h1{font-family:'Syne',sans-serif;font-size:clamp(26px,6vw,42px);font-weight:800;line-height:1.05;margin-bottom:.75rem;letter-spacing:-.02em}
+.module-hero .subtitle{font-size:15px;color:rgba(255,255,255,.85);line-height:1.6;max-width:520px;margin-bottom:1.5rem}
+.module-meta{display:flex;gap:.75rem;flex-wrap:wrap;font-size:13px}
+.meta-item{display:flex;align-items:center;gap:6px;color:rgba(255,255,255,.9);background:rgba(0,0,0,.15);padding:5px 12px;border-radius:20px}
+.progress-section{padding:1.25rem 1.25rem;background:var(--white);position:sticky;top:56px;z-index:50;border-bottom:1px solid var(--border)}
+.progress-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:500}
+.progress-track{height:6px;background:var(--gray);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--sky),var(--yellow));border-radius:3px;transition:width .5s ease;width:0%}
+.content{max-width:680px;margin:0 auto;padding:0 1.25rem 6rem}
+.intro-block{background:var(--gray);border-left:4px solid var(--sky);border-radius:0 12px 12px 0;padding:1.5rem;margin:2rem 0}
+.pilot-quote{display:flex;gap:14px;align-items:flex-start}
+.pilot-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--yellow),var(--orange));display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 4px 12px rgba(255,214,0,.3)}
+.pilot-quote-content .from{font-size:11px;font-weight:700;color:var(--orange);letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px}
+.pilot-quote-content p{font-size:15px;color:var(--text);line-height:1.65;font-style:italic}
+/* CHAPTER TABS */
+.chapter-nav{display:flex;gap:6px;padding:1.5rem 1.25rem .5rem;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;background:var(--white)}
+.chapter-nav::-webkit-scrollbar{display:none}
+.chapter-tab{flex-shrink:0;background:var(--gray);border:1.5px solid var(--border);border-radius:20px;padding:7px 14px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;font-family:'DM Sans',sans-serif}
+.chapter-tab.active{background:var(--sky-dark);color:#fff;border-color:var(--sky-dark)}
+.chapter-tab.done{background:#E8F5E9;color:#1B5E20;border-color:#A5D6A7}
+/* LESSON */
+.lesson{background:#fff;border:1px solid var(--border);border-radius:16px;margin-bottom:1.5rem;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.lesson-head{padding:1.25rem 1.5rem;background:linear-gradient(135deg,#fff 0%,var(--sky-light) 100%);border-bottom:1px solid var(--border);display:flex;gap:14px;align-items:center;cursor:pointer;user-select:none}
+.lesson-num{width:40px;height:40px;background:var(--sky-dark);color:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:18px;font-weight:800;flex-shrink:0}
+.lesson-head-info{flex:1;min-width:0}
+.lesson-eyebrow{font-size:11px;color:var(--sky);font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px}
+.lesson-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;line-height:1.3;color:var(--text)}
+.lesson-toggle{font-size:12px;color:var(--muted);transition:transform .3s;flex-shrink:0;background:var(--gray);width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.lesson-toggle.open{transform:rotate(180deg);background:var(--sky-dark);color:#fff}
+.lesson-body{max-height:0;overflow:hidden;transition:max-height .5s ease}
+.lesson-body.open{max-height:30000px}
+.lesson-content{padding:1.5rem}
+.lesson-content h3{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--sky-dark);margin:1.5rem 0 .65rem;line-height:1.3}
+.lesson-content h3:first-child{margin-top:0}
+.lesson-content h4{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin:1.1rem 0 .4rem}
+.lesson-content p{font-size:15px;line-height:1.8;color:#2a2a2a;margin-bottom:1rem}
+.lesson-content p strong{color:var(--sky-dark);font-weight:600}
+/* BOXES */
+.box{border-radius:12px;padding:1.1rem 1.25rem;margin:1.1rem 0;display:flex;gap:12px;align-items:flex-start}
+.box.info{background:#E3F2FD;border-left:3px solid #1976D2}
+.box.warn{background:#FFF8E1;border-left:3px solid #FFB300}
+.box.danger{background:#FFEBEE;border-left:3px solid var(--red)}
+.box.success{background:#E8F5E9;border-left:3px solid var(--green)}
+.box.tip{background:#F3E5F5;border-left:3px solid var(--purple)}
+.box.law{background:#E8EAF6;border-left:3px solid #3949AB}
+.box-icon{font-size:22px;flex-shrink:0;line-height:1;margin-top:2px}
+.box-text{flex:1;font-size:14px;line-height:1.7;color:#333}
+.box-text strong{color:#000;font-weight:600}
+.box-text .label{display:block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;opacity:.7}
+/* MERKSATZ */
+.merksatz{background:linear-gradient(135deg,#FFF9C4,#FFEB3B);border-radius:12px;padding:1.1rem 1.4rem;margin:1.4rem 0;position:relative;box-shadow:0 4px 16px rgba(255,235,59,.3)}
+.merksatz::before{content:'💡 MERKE';position:absolute;top:-10px;left:1.25rem;background:var(--sky-dark);color:var(--yellow);font-size:10px;font-weight:700;padding:3px 10px;border-radius:4px;letter-spacing:.1em}
+.merksatz p{font-size:14px;color:#3E2723;font-weight:500;line-height:1.65;margin:0;font-style:italic}
+.merksatz p strong{color:#1B5E20;font-weight:700;font-style:normal}
+/* DEFINITION CARDS */
+.def-grid{display:grid;grid-template-columns:1fr;gap:8px;margin:1.1rem 0}
+.def-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:.9rem 1.1rem;display:flex;gap:12px;align-items:flex-start}
+.def-badge{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;background:var(--sky-dark);color:#fff;padding:3px 8px;border-radius:5px;flex-shrink:0;letter-spacing:.05em;margin-top:2px}
+.def-text{flex:1;font-size:14px;line-height:1.6;color:#333}
+.def-text strong{color:var(--text);font-weight:600}
+/* MINI QUIZ */
+.quiz-block{background:#F8F0FF;border:1.5px solid #CE93D8;border-radius:14px;padding:1.25rem;margin:1.4rem 0}
+.quiz-tag{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--sky-dark);margin-bottom:.6rem}
+.quiz-q{font-size:15px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:.9rem}
+.quiz-opts{display:flex;flex-direction:column;gap:7px}
+.quiz-opt{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:.7rem .9rem;font-size:14px;color:var(--text);cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif;transition:all .15s;line-height:1.4}
+.quiz-opt:hover{border-color:var(--sky);background:var(--sky-light)}
+.quiz-opt.correct{border-color:var(--green);background:#E8F5E9;color:#1B5E20}
+.quiz-opt.wrong{border-color:var(--red);background:#FFEBEE;color:#C62828}
+.quiz-opt:disabled{cursor:default}
+.opt-l{width:24px;height:24px;border-radius:50%;background:var(--gray);color:var(--muted);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;margin-top:1px}
+.quiz-opt.correct .opt-l{background:var(--green);color:#fff}
+.quiz-opt.wrong .opt-l{background:var(--red);color:#fff}
+.quiz-fb{padding:.9rem 1.1rem;font-size:13px;line-height:1.65;display:none;border-top:2px solid var(--border);margin-top:.5rem;border-radius:8px}
+.quiz-fb.show{display:block}
+.quiz-fb.correct{background:#E8F5E9;color:#1B5E20}
+.quiz-fb.wrong{background:#FFEBEE;color:#BF360C}
+/* SCENARIO */
+.scenario{border:2px solid var(--orange);border-radius:14px;padding:1.25rem;margin:1.4rem 0;background:#FFF8F0}
+.sc-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);margin-bottom:.5rem}
+.sc-situation{font-size:14px;line-height:1.65;color:var(--text);margin-bottom:.9rem}
+.sc-opts{display:flex;flex-direction:column;gap:7px}
+.sc-opt{display:flex;align-items:flex-start;gap:10px;background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:.7rem .9rem;font-size:14px;color:var(--text);cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif;transition:all .15s;line-height:1.4}
+.sc-opt:hover{border-color:var(--orange);background:#FFF3E0}
+.sc-opt.correct{border-color:var(--green);background:#E8F5E9;color:#1B5E20}
+.sc-opt.wrong{border-color:var(--red);background:#FFEBEE;color:#C62828}
+.sc-opt:disabled{cursor:default}
+.sc-opt .opt-l{width:24px;height:24px;border-radius:50%;background:var(--gray);color:var(--muted);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;margin-top:1px}
+.sc-opt.correct .opt-l{background:var(--green);color:#fff}
+.sc-opt.wrong .opt-l{background:var(--red);color:#fff}
+.sc-fb{padding:.9rem 1.1rem;font-size:13px;line-height:1.65;display:none;border-top:2px solid var(--border);margin-top:.5rem;border-radius:8px}
+.sc-fb.show{display:block}
+.sc-fb.correct{background:#E8F5E9;color:#1B5E20}
+.sc-fb.wrong{background:#FFEBEE;color:#BF360C}
+/* FINAL QUIZ */
+.final-quiz{background:linear-gradient(135deg,var(--sky-dark),#4A148C);border-radius:16px;padding:1.75rem 1.5rem;margin:2rem 0;color:#fff}
+.fq-header{text-align:center;margin-bottom:1.25rem}
+.fq-header h3{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:.25rem}
+.fq-header p{font-size:13px;color:rgba(255,255,255,.7)}
+.fq-dots{display:flex;gap:5px;justify-content:center;margin-bottom:1.25rem;flex-wrap:wrap}
+.qdot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.2);transition:all .3s}
+.fq-counter{font-size:12px;color:rgba(255,255,255,.65);text-align:center;margin-bottom:.65rem;letter-spacing:.05em;text-transform:uppercase}
+.fq-question{font-size:16px;font-weight:500;line-height:1.5;margin-bottom:1.1rem}
+.fq-opts{display:flex;flex-direction:column;gap:7px}
+.fq-feedback{background:rgba(0,0,0,.2);border-radius:10px;padding:.9rem;margin-top:.9rem;font-size:14px;line-height:1.6;display:none}
+.fq-feedback.show{display:block}
+.fq-next{display:block;width:100%;background:var(--yellow);color:#000;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:.9rem;display:none;transition:all .2s}
+.fq-next:hover{background:#E6C200}
+.fq-result{text-align:center;padding:1rem}
+.fq-score{font-family:'Syne',sans-serif;font-size:56px;font-weight:800;color:var(--yellow);line-height:1;margin-bottom:.5rem}
+.fq-result-label{font-size:18px;font-weight:600;margin-bottom:.65rem}
+.fq-result-msg{font-size:14px;color:rgba(255,255,255,.8);line-height:1.6;margin-bottom:1.4rem}
+.module-end{background:linear-gradient(135deg,var(--sky-dark),var(--sky));color:#fff;border-radius:16px;padding:2rem 1.5rem;margin:2.5rem 0 0;text-align:center}
+.module-end-icon{font-size:52px;margin-bottom:.75rem}
+.module-end h2{font-family:'Syne',sans-serif;font-size:22px;margin-bottom:.5rem;font-weight:800}
+.module-end p{font-size:14px;color:rgba(255,255,255,.8);margin-bottom:1.4rem;line-height:1.6}
+.btn-next{display:inline-block;background:var(--yellow);color:var(--black);padding:13px 28px;border-radius:8px;font-weight:700;font-size:15px;text-decoration:none;border:none;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
+.btn-next:hover{background:#E6C200;transform:translateY(-1px)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--sky-dark);color:#fff;padding:12px 24px;border-radius:24px;font-size:14px;font-weight:500;z-index:200;opacity:0;transition:all .3s ease;box-shadow:0 8px 24px rgba(0,0,0,.2);max-width:90%;text-align:center;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{background:var(--green)}
+.chapter-section{display:none}
+.chapter-section.active{display:block}
+/* SVG GRAFIKEN */
+.grafik-wrap{margin:1.4rem 0;border-radius:14px;overflow:hidden;border:1px solid var(--border);background:#1A0A2E}
+.grafik-title{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#FFD600;padding:.6rem 1rem;border-bottom:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.3)}
+/* KOMPONENTEN GRID */
+.komp-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:1.1rem 0}
+.komp-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:.85rem;display:flex;flex-direction:column;gap:5px}
+.komp-card .komp-icon{font-size:20px}
+.komp-card .komp-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--sky-dark)}
+.komp-card .komp-desc{font-size:12px;color:#555;line-height:1.5}
+/* FLUGMODI CARDS */
+.flugmodi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:1.1rem 0}
+.flugmodus-card{border-radius:12px;padding:1rem;display:flex;flex-direction:column;gap:6px}
+.flugmodus-card.manuell{background:#EDE7F6;border:1.5px solid #B39DDB}
+.flugmodus-card.stabilisiert{background:#E3F2FD;border:1.5px solid #90CAF9}
+.flugmodus-card.vorprogrammiert{background:#E8F5E9;border:1.5px solid #A5D6A7}
+.flugmodus-card.automatisch{background:#FFF8E1;border:1.5px solid #FFE082}
+.flugmodus-card .fm-icon{font-size:22px}
+.flugmodus-card .fm-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--text)}
+.flugmodus-card .fm-desc{font-size:12px;color:#555;line-height:1.5}
+/* WARTUNGS CHECKLISTE */
+.checklist{display:flex;flex-direction:column;gap:6px;margin:1.1rem 0}
+.check-item{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--border);border-radius:9px;padding:.75rem 1rem;font-size:14px;cursor:pointer;transition:all .2s;user-select:none}
+.check-item.checked{background:#E8F5E9;border-color:#A5D6A7;color:#1B5E20}
+.check-box{width:22px;height:22px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;transition:all .2s;background:#fff}
+.check-item.checked .check-box{background:var(--green);border-color:var(--green);color:#fff}
+/* RTH TABLE */
+.rth-table{border-radius:12px;overflow:hidden;border:1px solid var(--border);margin:1.1rem 0;font-size:13px}
+.rth-row{display:grid;grid-template-columns:90px 1fr;border-bottom:1px solid var(--border)}
+.rth-row:last-child{border-bottom:none}
+.rth-row.header{background:var(--sky-dark);color:#fff;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.05em}
+.rth-cell{padding:.75rem .9rem;line-height:1.5;border-right:1px solid var(--border)}
+.rth-cell:last-child{border-right:none}
+.rth-row.failsafe{background:#FFF3E0}
+.rth-row.smart{background:#E8F5E9}
+.rth-row.batt{background:#FFEBEE}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <a href="index.html" class="header-back">← Übersicht</a>
+  <div class="header-title">
+    <small>Modul 4 · 4 von 4</small>
+    Allgemeine UAS-Kunde
+  </div>
+  <div class="header-progress" id="headerProgress">0%</div>
+</header>
+
+<div class="module-hero">
+  <div class="module-tag">🔧 Modul 4 von 4</div>
+  <h1>Allgemeine<br>UAS-Kunde</h1>
+  <p class="subtitle">Wie deine Drohne fliegt, was drin steckt, wie sie mit dir spricht — und wie du sie in Schuss hältst. Technik ohne Langeweile.</p>
+  <div class="module-meta">
+    <div class="meta-item">⏱️ ca. 50–65 Min</div>
+    <div class="meta-item">📚 4 Kapitel</div>
+    <div class="meta-item">🎯 Prüfungsrelevant</div>
+  </div>
+</div>
+
+<div class="progress-section">
+  <div class="progress-label">
+    <span>Dein Fortschritt</span>
+    <span id="progressPct">0%</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+
+<div class="chapter-nav" id="chapterNav">
+  <button class="chapter-tab active" onclick="showChapter(0)" id="ctab0">1 · Grundlagen</button>
+  <button class="chapter-tab" onclick="showChapter(1)" id="ctab1">2 · Bauweise</button>
+  <button class="chapter-tab" onclick="showChapter(2)" id="ctab2">3 · Datenverbindung</button>
+  <button class="chapter-tab" onclick="showChapter(3)" id="ctab3">4 · Wartung</button>
+</div>
+
+<div class="content">
+
+<!-- ==================== KAPITEL 1: GRUNDLAGEN DES FLIEGENS ==================== -->
+<div class="chapter-section active" id="ch0">
+
+  <div class="intro-block">
+    <div class="pilot-quote">
+      <div class="pilot-avatar">👨‍✈️</div>
+      <div class="pilot-quote-content">
+        <div class="from">Torsten Flieger sagt:</div>
+        <p>"Ich hab am Anfang einfach Gas gegeben und gehofft, dass die Drohne das schon richtig macht. Irgendwann hab ich verstanden: Da oben passiert echte Physik. Vier Kräfte, drei Achsen — und wenn ich das begriffen habe, fliege ich viel sicherer und präziser."</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson" id="l0_1">
+    <div class="lesson-head" onclick="toggleLesson('l0_1','ch0')">
+      <div class="lesson-num">1</div>
+      <div class="lesson-head-info">
+        <div class="lesson-eyebrow">Kapitel 1 · Lektion 1 · ca. 12 Min</div>
+        <div class="lesson-title">Die vier Luftkräfte</div>
+      </div>
+      <div class="lesson-toggle" id="tgl_l0_1">▾</div>
+    </div>
+    <div class="lesson-body" id="body_l0_1">
+      <div class="lesson-content">
+
+        <h3>Luft ist kein Nichts</h3>
+        <p>Auf den ersten Blick scheint Luft wie „nichts" — aber ausschließlich die Eigenschaften von Luft ermöglichen das Fliegen. Es sind <strong>vier Kräfte</strong>, die auf jede Tragfläche und jedes Rotorblatt wirken.</p>
+
+        <!-- SVG: 4 Kräfte Diagramm -->
+        <div class="grafik-wrap">
+          <div class="grafik-title">📐 Die vier Kräfte im Gleichgewicht</div>
+          <svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+            <!-- Hintergrund -->
+            <rect width="340" height="220" fill="#1A0A2E"/>
+            <!-- Rotorblatt Profil -->
+            <ellipse cx="170" cy="112" rx="62" ry="18" fill="#FFD600" stroke="#E6B800" stroke-width="1.5"/>
+            <path d="M108 112 Q170 90 232 112" fill="none" stroke="#B8860B" stroke-width="1.5"/>
+            <!-- AUFTRIEB oben -->
+            <line x1="170" y1="94" x2="170" y2="38" stroke="#6A1B9A" stroke-width="3" marker-end="url(#arrowUp)"/>
+            <text x="178" y="62" font-family="Syne,sans-serif" font-size="11" font-weight="700" fill="#CE93D8">AUFTRIEB</text>
+            <!-- GEWICHT unten -->
+            <line x1="170" y1="130" x2="170" y2="182" stroke="#C62828" stroke-width="3" marker-end="url(#arrowDown)"/>
+            <text x="178" y="162" font-family="Syne,sans-serif" font-size="11" font-weight="700" fill="#EF9A9A">GEWICHT</text>
+            <!-- VORTRIEB links -->
+            <line x1="108" y1="112" x2="52" y2="112" stroke="#1565C0" stroke-width="3" marker-end="url(#arrowLeft)"/>
+            <text x="18" y="105" font-family="Syne,sans-serif" font-size="10" font-weight="700" fill="#90CAF9">VOR-</text>
+            <text x="14" y="118" font-family="Syne,sans-serif" font-size="10" font-weight="700" fill="#90CAF9">TRIEB</text>
+            <!-- WIDERSTAND rechts -->
+            <line x1="232" y1="112" x2="288" y2="112" stroke="#E65100" stroke-width="3" marker-end="url(#arrowRight)"/>
+            <text x="250" y="105" font-family="Syne,sans-serif" font-size="10" font-weight="700" fill="#FFCC80">WIDER-</text>
+            <text x="248" y="118" font-family="Syne,sans-serif" font-size="10" font-weight="700" fill="#FFCC80">STAND</text>
+            <!-- Gleichgewicht Label -->
+            <rect x="122" y="96" width="96" height="18" rx="9" fill="rgba(255,214,0,.2)"/>
+            <text x="170" y="109" font-family="DM Sans,sans-serif" font-size="10" fill="#FFD600" text-anchor="middle" font-weight="600">Kräftegleichgewicht</text>
+            <!-- Pfeilspitzen -->
+            <defs>
+              <marker id="arrowUp" markerWidth="8" markerHeight="8" refX="4" refY="8" orient="auto"><polygon points="0,8 4,0 8,8" fill="#6A1B9A"/></marker>
+              <marker id="arrowDown" markerWidth="8" markerHeight="8" refX="4" refY="0" orient="auto"><polygon points="0,0 4,8 8,0" fill="#C62828"/></marker>
+              <marker id="arrowLeft" markerWidth="8" markerHeight="8" refX="0" refY="4" orient="auto"><polygon points="8,0 0,4 8,8" fill="#1565C0"/></marker>
+              <marker id="arrowRight" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto"><polygon points="0,0 8,4 0,8" fill="#E65100"/></marker>
+            </defs>
+          </svg>
+        </div>
+
+        <div class="def-grid">
+          <div class="def-card">
+            <div class="def-badge" style="background:#6A1B9A">↑</div>
+            <div class="def-text"><strong>Auftriebskraft:</strong> Zieht die Tragfläche nach oben — entsteht durch Druckdifferenz zwischen Ober- und Unterseite</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge" style="background:#C62828">↓</div>
+            <div class="def-text"><strong>Gewichtskraft:</strong> Die Schwerkraft zieht das UAS nach unten — muss durch Auftrieb überwunden werden</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge" style="background:#1565C0">←</div>
+            <div class="def-text"><strong>Vortriebskraft:</strong> Bewegt das UAS vorwärts — nötig damit Luft über das Profil strömt und Auftrieb entsteht</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge" style="background:#E65100">→</div>
+            <div class="def-text"><strong>Widerstandskraft:</strong> Bremst die Vorwärtsbewegung — wirkt entgegen dem Vortrieb</div>
+          </div>
+        </div>
+
+        <div class="box info">
+          <div class="box-icon">🔄</div>
+          <div class="box-text">
+            <span class="label">Unbeschleunigter Horizontalflug</span>
+            Wenn alle vier Kräfte im <strong>Gleichgewicht</strong> sind, steigt oder sinkt das UAS nicht und wird nicht schneller oder langsamer. Das UAS schwebt stabil. Zur Steuerung muss dieses Gleichgewicht <strong>gezielt gestört</strong> werden.
+          </div>
+        </div>
+
+        <h3>Auftrieb: Wie entsteht er?</h3>
+        <p>Ein Rotorblatt ist im Prinzip eine kleine Tragfläche. Der Querschnitt hat eine runde Vorderkante und läuft nach hinten spitz zu. Der Trick: Das Profil wird gegenüber der Anströmung leicht <strong>„angestellt"</strong> (gekippt).</p>
+
+        <!-- SVG: Auftrieb Druckdifferenz -->
+        <div class="grafik-wrap">
+          <div class="grafik-title">💨 Druckdifferenz erzeugt Auftrieb</div>
+          <svg viewBox="0 0 340 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+            <rect width="340" height="160" fill="#1A0A2E"/>
+            <!-- Profil -->
+            <path d="M60 88 Q100 60 240 82 Q260 85 280 88 Q240 100 100 100 Z" fill="#FFD600" stroke="#B8860B" stroke-width="1.5"/>
+            <!-- Strömungslinien OBEN (schnell = blau, eng) -->
+            <path d="M20 62 Q150 38 310 62" fill="none" stroke="#1565C0" stroke-width="1.2" stroke-dasharray="none" opacity=".7"/>
+            <path d="M20 55 Q150 32 310 55" fill="none" stroke="#1565C0" stroke-width="1.2" opacity=".5"/>
+            <path d="M20 48 Q150 28 310 48" fill="none" stroke="#1565C0" stroke-width="1.2" opacity=".3"/>
+            <!-- Strömungslinien UNTEN (langsam = rot, weit) -->
+            <path d="M20 108 Q150 118 310 108" fill="none" stroke="#C62828" stroke-width="1.2" opacity=".7"/>
+            <path d="M20 118 Q150 128 310 118" fill="none" stroke="#C62828" stroke-width="1.2" opacity=".5"/>
+            <!-- Labels -->
+            <rect x="8" y="28" width="80" height="28" rx="6" fill="rgba(25,118,210,.4)"/>
+            <text x="48" y="40" font-family="DM Sans,sans-serif" font-size="9" fill="#90CAF9" text-anchor="middle" font-weight="700">SCHNELL</text>
+            <text x="48" y="52" font-family="DM Sans,sans-serif" font-size="9" fill="#90CAF9" text-anchor="middle">niedriger Druck</text>
+            <rect x="8" y="122" width="80" height="28" rx="6" fill="rgba(198,40,40,.4)"/>
+            <text x="48" y="134" font-family="DM Sans,sans-serif" font-size="9" fill="#EF9A9A" text-anchor="middle" font-weight="700">LANGSAM</text>
+            <text x="48" y="146" font-family="DM Sans,sans-serif" font-size="9" fill="#EF9A9A" text-anchor="middle">hoher Druck</text>
+            <!-- Auftriebspfeil -->
+            <line x1="300" y1="100" x2="300" y2="58" stroke="#CE93D8" stroke-width="3" marker-end="url(#arrowUp2)"/>
+            <text x="290" y="80" font-family="Syne,sans-serif" font-size="10" fill="#CE93D8" text-anchor="middle" font-weight="700">LIFT</text>
+            <defs>
+              <marker id="arrowUp2" markerWidth="8" markerHeight="8" refX="4" refY="8" orient="auto"><polygon points="0,8 4,0 8,8" fill="#6A1B9A"/></marker>
+            </defs>
+          </svg>
+        </div>
+
+        <p>Durch das Anstellen wird die Luft <strong>oberhalb beschleunigt</strong> (niedriger Druck) und <strong>unterhalb verlangsamt</strong> (hoher Druck). Der Druckunterschied zieht die Fläche nach oben — das ist Auftrieb.</p>
+
+        <div class="merksatz">
+          <p><strong>Anstellwinkel bestimmt Auftrieb:</strong> Je mehr das Profil zur Anströmung „gekippt" wird, desto stärker der Auftrieb. Bei Multirotor-UAS wird der Auftrieb durch <strong>höhere Propellerdrehzahl</strong> gesteigert — mehr Drehzahl = mehr Luftströmung = mehr Auftrieb.</p>
+        </div>
+
+        <div class="quiz-block">
+          <div class="quiz-tag">🧠 Check</div>
+          <div class="quiz-q">Wie entsteht Auftrieb an einem Rotorblatt?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_1')"><span class="opt-l">A</span>Der Motor drückt das UAS von unten nach oben</button>
+            <button class="quiz-opt" onclick="answerQ(this,'correct','q0_1')"><span class="opt-l">B</span>Durch eine Druckdifferenz: oben niedriger Druck, unten hoher Druck — das Profil wird nach oben gezogen</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_1')"><span class="opt-l">C</span>Die Propeller fangen Luft auf und heben das UAS wie ein Ballon</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_1')"><span class="opt-l">D</span>Durch die Rotation entsteht eine Zentrifugalkraft nach oben</button>
+          </div>
+          <div class="quiz-fb" id="fb_q0_1"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson" id="l0_2">
+    <div class="lesson-head" onclick="toggleLesson('l0_2','ch0')">
+      <div class="lesson-num">2</div>
+      <div class="lesson-head-info">
+        <div class="lesson-eyebrow">Kapitel 1 · Lektion 2 · ca. 14 Min</div>
+        <div class="lesson-title">Drei Achsen & Propellerdrehrichtungen</div>
+      </div>
+      <div class="lesson-toggle" id="tgl_l0_2">▾</div>
+    </div>
+    <div class="lesson-body" id="body_l0_2">
+      <div class="lesson-content">
+
+        <h3>Die drei Bewegungsachsen</h3>
+        <p>Jedes Luftfahrzeug kann sich um drei Achsen bewegen — diese stehen senkrecht zueinander und schneiden sich im Schwerpunkt des UAS.</p>
+
+        <!-- SVG: 3 Achsen Drohne -->
+        <div class="grafik-wrap">
+          <div class="grafik-title">🎯 Roll · Pitch · Yaw — die drei Achsen</div>
+          <svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+            <rect width="340" height="200" fill="#1A0A2E"/>
+            <!-- Drohne Körper -->
+            <rect x="148" y="88" width="44" height="26" rx="8" fill="#6A1B9A" opacity=".9"/>
+            <!-- Arme -->
+            <line x1="150" y1="90" x2="90" y2="56" stroke="#6A1B9A" stroke-width="4" stroke-linecap="round"/>
+            <line x1="190" y1="90" x2="250" y2="56" stroke="#6A1B9A" stroke-width="4" stroke-linecap="round"/>
+            <line x1="150" y1="112" x2="90" y2="146" stroke="#6A1B9A" stroke-width="4" stroke-linecap="round"/>
+            <line x1="190" y1="112" x2="250" y2="146" stroke="#6A1B9A" stroke-width="4" stroke-linecap="round"/>
+            <!-- Motoren -->
+            <circle cx="90" cy="56" r="12" fill="#FFD600" stroke="#E6B800" stroke-width="1.5"/>
+            <circle cx="250" cy="56" r="12" fill="#FFD600" stroke="#E6B800" stroke-width="1.5"/>
+            <circle cx="90" cy="146" r="12" fill="#FFD600" stroke="#E6B800" stroke-width="1.5"/>
+            <circle cx="250" cy="146" r="12" fill="#FFD600" stroke="#E6B800" stroke-width="1.5"/>
+            <!-- LÄNGSACHSE (Roll) — rot, horizontal -->
+            <line x1="50" y1="101" x2="290" y2="101" stroke="#C62828" stroke-width="2.5" stroke-dasharray="6,3"/>
+            <text x="18" y="105" font-family="Syne,sans-serif" font-size="9" fill="#FF8A80" font-weight="700">ROLL</text>
+            <!-- HOCHACHSE (Yaw) — grün, vertikal -->
+            <line x1="170" y1="20" x2="170" y2="185" stroke="#1B5E20" stroke-width="2.5" stroke-dasharray="6,3"/>
+            <text x="154" y="16" font-family="Syne,sans-serif" font-size="9" fill="#69F0AE" font-weight="700">YAW</text>
+            <!-- QUERACHSE (Pitch) — blau, diagonal für 3D-Effekt -->
+            <line x1="110" y1="152" x2="228" y2="52" stroke="#1565C0" stroke-width="2.5" stroke-dasharray="6,3"/>
+            <text x="226" y="50" font-family="Syne,sans-serif" font-size="9" fill="#82B1FF" font-weight="700">PITCH</text>
+            <!-- Legende -->
+            <rect x="8" y="162" width="322" height="32" rx="8" fill="rgba(255,255,255,.1)"/>
+            <circle cx="26" cy="178" r="5" fill="#C62828"/>
+            <text x="34" y="182" font-family="DM Sans,sans-serif" font-size="10" fill="#fff">Rollen (Roll)</text>
+            <circle cx="110" cy="178" r="5" fill="#1565C0"/>
+            <text x="118" y="182" font-family="DM Sans,sans-serif" font-size="10" fill="#fff">Nicken (Pitch)</text>
+            <circle cx="205" cy="178" r="5" fill="#1B5E20"/>
+            <text x="213" y="182" font-family="DM Sans,sans-serif" font-size="10" fill="#fff">Gieren (Yaw)</text>
+          </svg>
+        </div>
+
+        <div class="def-grid">
+          <div class="def-card">
+            <div class="def-badge" style="background:#C62828">ROLL</div>
+            <div class="def-text"><strong>Längsachse:</strong> Verläuft von vorn nach hinten. Kippen nach links/rechts → <strong>Seitwärtsbewegung</strong></div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge" style="background:#1565C0">PITCH</div>
+            <div class="def-text"><strong>Querachse:</strong> Verläuft quer durch die Arme. Kippen nach vorn/hinten → <strong>Vorwärts-/Rückwärtsbewegung</strong></div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge" style="background:#1B5E20">YAW</div>
+            <div class="def-text"><strong>Hochachse:</strong> Verläuft von oben nach unten. Drehung um eigene Achse → <strong>Gieren im/gegen Uhrzeigersinn</strong></div>
+          </div>
+        </div>
+
+        <h3>Propellerdrehrichtungen — warum wichtig?</h3>
+        <p>Bei einem Multirotor drehen sich die Propeller <strong>nicht alle in die gleiche Richtung</strong>. Gegenüberliegende Propeller drehen gleichsinnig, direkt benachbarte gegenläufig. Das verhindert eine ungewollte Eigenrotation des UAS.</p>
+
+        <!-- SVG: Propeller Drehrichtungen -->
+        <div class="grafik-wrap">
+          <div class="grafik-title">🔄 Propellerdrehrichtungen bei Quadrokopter</div>
+          <svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+            <rect width="340" height="200" fill="#1A0A2E"/>
+            <!-- Körper -->
+            <rect x="148" y="88" width="44" height="26" rx="8" fill="#6A1B9A" opacity=".9"/>
+            <!-- Arme -->
+            <line x1="150" y1="90" x2="90" y2="50" stroke="#6A1B9A" stroke-width="4" stroke-linecap="round"/>
+            <line x1="190" y1="90" x2="250" y2="50" stroke="#6A1B9A" stroke-width="4" stroke-linecap="round"/>
+            <line x1="150" y1="112" x2="90" y2="152" stroke="#6A1B9A" stroke-width="4" stroke-linecap="round"/>
+            <line x1="190" y1="112" x2="250" y2="152" stroke="#6A1B9A" stroke-width="4" stroke-linecap="round"/>
+            <!-- Motor 1 (VL) — CCW = blau -->
+            <circle cx="90" cy="50" r="18" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+            <path d="M74 42 A18 18 0 0 0 90 68" fill="none" stroke="#1565C0" stroke-width="2.5" marker-end="url(#arrCCW)"/>
+            <text x="90" y="54" font-family="Syne,sans-serif" font-size="11" font-weight="800" fill="#1565C0" text-anchor="middle">1</text>
+            <!-- Motor 2 (VR) — CW = rot -->
+            <circle cx="250" cy="50" r="18" fill="#FFEBEE" stroke="#C62828" stroke-width="2"/>
+            <path d="M266 42 A18 18 0 0 1 250 68" fill="none" stroke="#C62828" stroke-width="2.5" marker-end="url(#arrCW)"/>
+            <text x="250" y="54" font-family="Syne,sans-serif" font-size="11" font-weight="800" fill="#C62828" text-anchor="middle">2</text>
+            <!-- Motor 3 (HL) — CW = rot -->
+            <circle cx="90" cy="152" r="18" fill="#FFEBEE" stroke="#C62828" stroke-width="2"/>
+            <path d="M106 160 A18 18 0 0 1 90 134" fill="none" stroke="#C62828" stroke-width="2.5" marker-end="url(#arrCW)"/>
+            <text x="90" y="156" font-family="Syne,sans-serif" font-size="11" font-weight="800" fill="#C62828" text-anchor="middle">3</text>
+            <!-- Motor 4 (HR) — CCW = blau -->
+            <circle cx="250" cy="152" r="18" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+            <path d="M234 160 A18 18 0 0 0 250 134" fill="none" stroke="#1565C0" stroke-width="2.5" marker-end="url(#arrCCW)"/>
+            <text x="250" y="156" font-family="Syne,sans-serif" font-size="11" font-weight="800" fill="#1565C0" text-anchor="middle">4</text>
+            <!-- Legende -->
+            <rect x="8" y="168" width="322" height="26" rx="8" fill="rgba(255,255,255,.1)"/>
+            <circle cx="26" cy="181" r="6" fill="#E3F2FD" stroke="#1565C0" stroke-width="1.5"/>
+            <text x="36" y="185" font-family="DM Sans,sans-serif" font-size="11" fill="#90CAF9" font-weight="600">CCW (links)</text>
+            <circle cx="148" cy="181" r="6" fill="#FFEBEE" stroke="#C62828" stroke-width="1.5"/>
+            <text x="158" y="185" font-family="DM Sans,sans-serif" font-size="11" fill="#EF9A9A" font-weight="600">CW (rechts)</text>
+            <defs>
+              <marker id="arrCCW" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><polygon points="7,0 0,3.5 7,7" fill="#1565C0"/></marker>
+              <marker id="arrCW" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><polygon points="0,0 7,3.5 0,7" fill="#C62828"/></marker>
+            </defs>
+          </svg>
+        </div>
+
+        <div class="box warn">
+          <div class="box-icon">⚙️</div>
+          <div class="box-text">
+            <span class="label">Steigen, Sinken & Achsdrehung</span>
+            <strong>Steigen:</strong> Alle Propeller schneller drehen → Gesamtauftrieb > Gewicht<br>
+            <strong>Sinken:</strong> Alle Propeller langsamer drehen → Gesamtauftrieb &lt; Gewicht<br>
+            <strong>Achsdrehung (Yaw):</strong> Ein Propellerpaar schneller, das andere langsamer — das Drehmoment-Ungleichgewicht dreht das UAS um seine Hochachse
+          </div>
+        </div>
+
+        <div class="merksatz">
+          <p>Zur Horizontalbewegung wird das UAS <strong>geneigt</strong> (Pitch/Roll). Dann ist die Auftriebskraft nicht mehr senkrecht, sondern schräg — die horizontale Komponente bewegt das UAS vorwärts, seitwärts oder rückwärts.</p>
+        </div>
+
+        <div class="quiz-block">
+          <div class="quiz-tag">🧠 Check</div>
+          <div class="quiz-q">Wie dreht sich ein Quadrokopter um seine Hochachse (Yaw / Gieren)?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_2')"><span class="opt-l">A</span>Alle vier Propeller drehen sich in dieselbe Richtung</button>
+            <button class="quiz-opt" onclick="answerQ(this,'correct','q0_2')"><span class="opt-l">B</span>Ein Propellerpaar dreht schneller als das andere — das Drehmoment-Ungleichgewicht dreht das UAS</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_2')"><span class="opt-l">C</span>Ein Propeller wird abgeschaltet</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q0_2')"><span class="opt-l">D</span>Das UAS neigt sich zur Seite und nutzt den Auftrieb zum Drehen</button>
+          </div>
+          <div class="quiz-fb" id="fb_q0_2"></div>
+        </div>
+
+        <div class="scenario">
+          <div class="sc-label">🎬 Szenario</div>
+          <div class="sc-situation">Torsten fliegt seine Drohne geradeaus. Plötzlich beginnt sie sich langsam im Uhrzeigersinn um die eigene Achse zu drehen, obwohl er keinen Steuerbefehl gibt. Was ist die wahrscheinlichste Ursache?</div>
+          <div class="sc-opts">
+            <button class="sc-opt" onclick="answerSc(this,'wrong','sc0_1')"><span class="opt-l">A</span>Der GPS-Sensor ist ausgefallen</button>
+            <button class="sc-opt" onclick="answerSc(this,'correct','sc0_1')"><span class="opt-l">B</span>Ein Propeller ist beschädigt oder dreht mit falscher Drehzahl — das Drehmoment-Gleichgewicht ist gestört</button>
+            <button class="sc-opt" onclick="answerSc(this,'wrong','sc0_1')"><span class="opt-l">C</span>Der Wind kommt von oben</button>
+            <button class="sc-opt" onclick="answerSc(this,'wrong','sc0_1')"><span class="opt-l">D</span>Die Drohne wechselt automatisch in den Manuell-Modus</button>
+          </div>
+          <div class="sc-fb" id="fb_sc0_1"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:0 0 24px">
+    <button onclick="showChapter(1)" style="width:100%;background:#6A1B9A;color:#fff;border:none;border-radius:14px;padding:16px;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+      Weiter zu Kapitel 2 · Bauweise →
+    </button>
+  </div>
+
+</div><!-- end ch0 -->
+
+<!-- ==================== KAPITEL 2: BAUWEISE & LIMITIERUNGEN ==================== -->
+<div class="chapter-section" id="ch1">
+
+  <div class="intro-block">
+    <div class="pilot-quote">
+      <div class="pilot-avatar">👨‍✈️</div>
+      <div class="pilot-quote-content">
+        <div class="from">Torsten Flieger sagt:</div>
+        <p>"Ich hab lange nicht gewusst, was eigentlich in meiner Drohne steckt. Dann hab ich angefangen, die Komponenten zu verstehen — und plötzlich macht der Bordcomputer Sinn, die Telemetrie macht Sinn, und ich weiß auch warum ich bei Kälte weniger Flugzeit bekomme."</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson" id="l1_1">
+    <div class="lesson-head" onclick="toggleLesson('l1_1','ch1')">
+      <div class="lesson-num">1</div>
+      <div class="lesson-head-info">
+        <div class="lesson-eyebrow">Kapitel 2 · Lektion 1 · ca. 15 Min</div>
+        <div class="lesson-title">Hauptkomponenten des UAS</div>
+      </div>
+      <div class="lesson-toggle" id="tgl_l1_1">▾</div>
+    </div>
+    <div class="lesson-body" id="body_l1_1">
+      <div class="lesson-content">
+
+        <h3>Was steckt in deiner Drohne?</h3>
+        <p>Unabhängig von der Bauform haben alle UAS dieselben Grundkomponenten. Sie arbeiten als System zusammen — fällt eine aus, kann das die gesamte Flugfähigkeit gefährden.</p>
+
+        <div class="komp-grid">
+          <div class="komp-card">
+            <div class="komp-icon">⚡</div>
+            <div class="komp-name">Antriebssystem</div>
+            <div class="komp-desc">Batterie/Kraftstoff, Elektromotoren, Stromverteiler und Propeller</div>
+          </div>
+          <div class="komp-card">
+            <div class="komp-icon">🎛️</div>
+            <div class="komp-name">Drehzahlregler (ESC)</div>
+            <div class="komp-desc">Electronic Speed Controller — steuert die Drehzahl jedes einzelnen Motors</div>
+          </div>
+          <div class="komp-card">
+            <div class="komp-icon">🧠</div>
+            <div class="komp-name">Bordcomputer</div>
+            <div class="komp-desc">Das Gehirn: verarbeitet Sensordaten und schickt Befehle an die ESCs</div>
+          </div>
+          <div class="komp-card">
+            <div class="komp-icon">💾</div>
+            <div class="komp-name">Firmware</div>
+            <div class="komp-desc">Software auf dem Bordcomputer — muss regelmäßig aktualisiert werden</div>
+          </div>
+          <div class="komp-card">
+            <div class="komp-icon">📡</div>
+            <div class="komp-name">Telemetrie</div>
+            <div class="komp-desc">Bidirektionale Funkverbindung zwischen Fernsteuerung und UAS (Sender + Empfänger)</div>
+          </div>
+          <div class="komp-card">
+            <div class="komp-icon">🕹️</div>
+            <div class="komp-name">Fernsteuerung</div>
+            <div class="komp-desc">Bodenstation zur Steuerung — sendet Befehle per Funk an die Bordelektronik</div>
+          </div>
+        </div>
+
+        <!-- SVG: Schematische Ansicht Signalfluss -->
+        <div class="grafik-wrap">
+          <div class="grafik-title">📊 Signalfluss: Von der Hand zur Propellerdrehzahl</div>
+          <svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+            <rect width="340" height="180" fill="#1A0A2E"/>
+            <!-- Fernsteuerung -->
+            <rect x="10" y="72" width="60" height="38" rx="8" fill="#6A1B9A"/>
+            <text x="40" y="88" font-family="DM Sans,sans-serif" font-size="9" fill="#fff" text-anchor="middle" font-weight="600">Fern-</text>
+            <text x="40" y="100" font-family="DM Sans,sans-serif" font-size="9" fill="#fff" text-anchor="middle" font-weight="600">steuerung</text>
+            <!-- Pfeil + Funk -->
+            <line x1="70" y1="91" x2="98" y2="91" stroke="#6A1B9A" stroke-width="2" stroke-dasharray="4,2"/>
+            <text x="84" y="84" font-family="DM Sans,sans-serif" font-size="8" fill="#6A1B9A" text-anchor="middle">📡 Funk</text>
+            <!-- Bordcomputer -->
+            <rect x="98" y="66" width="70" height="50" rx="8" fill="#4A148C"/>
+            <text x="133" y="86" font-family="DM Sans,sans-serif" font-size="9" fill="#fff" text-anchor="middle" font-weight="600">Bord-</text>
+            <text x="133" y="98" font-family="DM Sans,sans-serif" font-size="9" fill="#fff" text-anchor="middle" font-weight="600">computer</text>
+            <text x="133" y="110" font-family="DM Sans,sans-serif" font-size="8" fill="#FFD600" text-anchor="middle">GNSS·Baro·IMU</text>
+            <!-- Pfeil -->
+            <line x1="168" y1="91" x2="196" y2="91" stroke="#4A148C" stroke-width="2"/>
+            <polygon points="196,87 204,91 196,95" fill="#4A148C"/>
+            <!-- ESC -->
+            <rect x="204" y="72" width="52" height="38" rx="8" fill="#1565C0"/>
+            <text x="230" y="88" font-family="DM Sans,sans-serif" font-size="9" fill="#fff" text-anchor="middle" font-weight="600">ESC</text>
+            <text x="230" y="100" font-family="DM Sans,sans-serif" font-size="8" fill="#fff" text-anchor="middle">Drehzahl</text>
+            <!-- Pfeil -->
+            <line x1="256" y1="91" x2="282" y2="91" stroke="#1565C0" stroke-width="2"/>
+            <polygon points="282,87 290,91 282,95" fill="#1565C0"/>
+            <!-- Motoren -->
+            <rect x="290" y="72" width="42" height="38" rx="8" fill="#E65100"/>
+            <text x="311" y="88" font-family="DM Sans,sans-serif" font-size="9" fill="#fff" text-anchor="middle" font-weight="600">Motoren</text>
+            <text x="311" y="100" font-family="DM Sans,sans-serif" font-size="8" fill="#fff" text-anchor="middle">+ Props</text>
+            <!-- Sensoren oben -->
+            <rect x="78" y="14" width="110" height="26" rx="6" fill="rgba(57,73,171,.4)" stroke="#90CAF9" stroke-width="1"/>
+            <text x="133" y="31" font-family="DM Sans,sans-serif" font-size="10" fill="#3949AB" text-anchor="middle" font-weight="600">GNSS · Barometer · Kompass · IMU</text>
+            <line x1="133" y1="40" x2="133" y2="66" stroke="#90CAF9" stroke-width="1.5" stroke-dasharray="3,2"/>
+            <!-- Batterie -->
+            <rect x="78" y="140" width="70" height="26" rx="6" fill="rgba(255,183,0,.2)" stroke="#FFB300" stroke-width="1"/>
+            <text x="113" y="157" font-family="DM Sans,sans-serif" font-size="10" fill="#FFCC80" text-anchor="middle" font-weight="600">🔋 Batterie → Verteiler</text>
+            <line x1="178" y1="153" x2="230" y2="116" stroke="#FFB300" stroke-width="1.5" stroke-dasharray="3,2"/>
+          </svg>
+        </div>
+
+        <div class="box tip">
+          <div class="box-icon">💡</div>
+          <div class="box-text">
+            <span class="label">Telemetrie — Zweiweg-Kommunikation</span>
+            Die Telemetrie überträgt nicht nur <strong>Steuerbefehle zum UAS</strong>, sondern schickt auch <strong>Statusinformationen zurück</strong>: aktuelle Höhe, Motortemperatur, Batteriestand, GPS-Position und Kamerabild. Beide Seiten haben Sender und Empfänger.
+          </div>
+        </div>
+
+        <div class="box warn">
+          <div class="box-icon">🔄</div>
+          <div class="box-text">
+            <span class="label">Firmware-Update — Pflicht des Fernpiloten</span>
+            Es ist <strong>deine Pflicht als Fernpilot</strong>, zu prüfen ob die Software des UAS-Betreibers regelmäßig aktualisiert wurde. Viele Hersteller erlauben Flüge nur mit der <strong>neusten Firmware-Version</strong>. Nach jedem Update: Testflug an einem sicheren Ort!
+          </div>
+        </div>
+
+        <div class="quiz-block">
+          <div class="quiz-tag">🧠 Check</div>
+          <div class="quiz-q">Was ist die Aufgabe des ESC (Drehzahlregler)?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_1')"><span class="opt-l">A</span>Er verbindet Fernsteuerung und Bordcomputer per Funk</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_1')"><span class="opt-l">B</span>Er speichert die Flugdaten auf einer SD-Karte</button>
+            <button class="quiz-opt" onclick="answerQ(this,'correct','q1_1')"><span class="opt-l">C</span>Er empfängt Befehle vom Bordcomputer und steuert die Drehzahl der einzelnen Motoren</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_1')"><span class="opt-l">D</span>Er überwacht den Batteriestand und schaltet bei 20% ab</button>
+          </div>
+          <div class="quiz-fb" id="fb_q1_1"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson" id="l1_2">
+    <div class="lesson-head" onclick="toggleLesson('l1_2','ch1')">
+      <div class="lesson-num">2</div>
+      <div class="lesson-head-info">
+        <div class="lesson-eyebrow">Kapitel 2 · Lektion 2 · ca. 13 Min</div>
+        <div class="lesson-title">Beschränkungen, Geo-Systeme & Fail-Safe</div>
+      </div>
+      <div class="lesson-toggle" id="tgl_l1_2">▾</div>
+    </div>
+    <div class="lesson-body" id="body_l1_2">
+      <div class="lesson-content">
+
+        <h3>Beschränkungen im Flugalltag</h3>
+        <p>Jedes UAS hat Grenzen — manche sind technisch, manche wetterbedingt, manche gesetzlich. Als Pilot musst du sie alle kennen.</p>
+
+        <div class="box danger">
+          <div class="box-icon">🔋</div>
+          <div class="box-text">
+            <span class="label">Flugzeit — nicht das, was der Hersteller verspricht</span>
+            Die Herstellerangabe gilt unter <strong>optimalen Bedingungen ohne Wind</strong>. LiPo-Batterien verlieren schnell an Kapazität. Faustregel: <strong>mindestens 20% der angegebenen Flugzeit abziehen</strong>. Bei Kälte noch mehr!
+          </div>
+        </div>
+
+        <div class="box warn">
+          <div class="box-icon">🌡️</div>
+          <div class="box-text">
+            <span class="label">Wetter als unterschätztes Risiko</span>
+            <strong>Regen, Schnee, Hagel:</strong> Elektronik-Schäden + Propellervereisen möglich<br>
+            <strong>Hitze (&gt;35°C):</strong> Motoren überhitzen, oft keine Temperaturwarnung<br>
+            <strong>Kälte:</strong> Batterie-Kapazität stark reduziert → Batterien warm lagern (Tasche/Auto)<br>
+            <strong>Wind:</strong> Windböen über UAS-Höchstgeschwindigkeit = kein Zurückfliegen möglich!
+          </div>
+        </div>
+
+        <h3>Geo-Systeme — der virtuelle Zaun</h3>
+
+        <div class="def-grid">
+          <div class="def-card">
+            <div class="def-badge" style="background:#1565C0">GEO-AWARE</div>
+            <div class="def-text"><strong>Geo-Awareness (Pflicht C1/C2/C3):</strong> Warnt den Fernpiloten wenn er sich einer verbotenen Zone nähert. Daten kommen von den EU-Mitgliedsstaaten und müssen aktuell sein.</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge" style="background:#C62828">GEO-FENCE</div>
+            <div class="def-text"><strong>Geo-Fence (virtueller Zaun):</strong> Verhindert aktiv das Einflug in gesperrte Bereiche — das UAS stoppt oder startet erst gar nicht. Kann vom Hersteller oder Piloten eingestellt werden.</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge" style="background:#1B5E20">GEO-CAGE</div>
+            <div class="def-text"><strong>Geo-Cage (umgekehrter Zaun):</strong> Das UAS bleibt <em>innerhalb</em> eines definierten Bereichs — z.B. maximale Entfernung und Höhe. Nur wirksam solange GNSS funktioniert!</div>
+          </div>
+        </div>
+
+        <h3>Ausfallsicherheit (Fail-Safe) — Return to Home</h3>
+        <p>Die meisten UAS haben automatische Sicherheitsmanöver für den Fall eines Problems. Die häufigste ist die <strong>RTH-Funktion (Return to Home)</strong>.</p>
+
+        <div class="rth-table">
+          <div class="rth-row header">
+            <div class="rth-cell">RTH-Typ</div>
+            <div class="rth-cell">Auslöser & Verhalten</div>
+          </div>
+          <div class="rth-row failsafe">
+            <div class="rth-cell"><strong>Failsafe</strong></div>
+            <div class="rth-cell">Signal &gt;3 Sek. unterbrochen → UAS kehrt zur Startposition zurück. Abbruch möglich sobald Signal wieder da.</div>
+          </div>
+          <div class="rth-row smart">
+            <div class="rth-cell"><strong>Smart RTH</strong></div>
+            <div class="rth-cell">Wie Failsafe, aber mit aktivem Kollisionsvermeidungssystem — weicht Hindernissen auf dem Rückweg aus.</div>
+          </div>
+          <div class="rth-row batt">
+            <div class="rth-cell"><strong>Niedr. Akku</strong></div>
+            <div class="rth-cell">Batterie unter kritischen Schwellwert → automatischer RTH. Meist Warnung auf Bodenstation vorher (Countdown).</div>
+          </div>
+        </div>
+
+        <div class="box danger">
+          <div class="box-icon">⚠️</div>
+          <div class="box-text">
+            <span class="label">RTH-Kollisionsgefahr — kritischer Hinweis</span>
+            Das RTH-Manöver wählt den <strong>kürzesten Weg</strong> zurück — ohne Rücksicht auf Hindernisse. Lösung: <strong>RTH-Höhe höher einstellen als alle Hindernisse im Fluggebiet</strong> + Kollisionsvermeidung aktivieren. Niemals hinter Hindernissen fliegen die sich zwischen UAS und Startpunkt befinden!
+          </div>
+        </div>
+
+        <div class="merksatz">
+          <p><strong>Propellerschäden sofort ersetzen!</strong> Ein beschädigter Propeller dreht asymmetrisch und verursacht Vibrationen — diese beschädigen Motoren und können zum Absturz führen. Nach dem Tausch immer <strong>Testflug an sicherem Ort</strong> durchführen.</p>
+        </div>
+
+        <div class="quiz-block">
+          <div class="quiz-tag">🧠 Check</div>
+          <div class="quiz-q">Was ist der Unterschied zwischen Geo-Fence und Geo-Cage?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_2')"><span class="opt-l">A</span>Geo-Fence ist für Europa, Geo-Cage nur für Deutschland</button>
+            <button class="quiz-opt" onclick="answerQ(this,'correct','q1_2')"><span class="opt-l">B</span>Geo-Fence verhindert das Einflug in gesperrte Bereiche — Geo-Cage hält das UAS innerhalb eines definierten Bereichs</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_2')"><span class="opt-l">C</span>Beide sind dasselbe — nur verschiedene Bezeichnungen</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q1_2')"><span class="opt-l">D</span>Geo-Fence warnt nur, Geo-Cage greift aktiv ein</button>
+          </div>
+          <div class="quiz-fb" id="fb_q1_2"></div>
+        </div>
+
+        <div class="scenario">
+          <div class="sc-label">🎬 Szenario</div>
+          <div class="sc-situation">Torsten fliegt an einem kalten Wintertag (–5°C). Die App zeigt 80% Akkustand an. Plötzlich gibt die Drohne eine Warnung und landet automatisch — er hatte noch nie so schnell einen leeren Akku. Was ist passiert?</div>
+          <div class="sc-opts">
+            <button class="sc-opt" onclick="answerSc(this,'wrong','sc1_1')"><span class="opt-l">A</span>Die App hat einen Anzeigefehler — der Akku war eigentlich voll</button>
+            <button class="sc-opt" onclick="answerSc(this,'correct','sc1_1')"><span class="opt-l">B</span>Bei Kälte sinkt die Kapazität von LiPo-Batterien stark — 80% in der Anzeige entsprechen bei Kälte deutlich weniger verfügbarer Energie</button>
+            <button class="sc-opt" onclick="answerSc(this,'wrong','sc1_1')"><span class="opt-l">C</span>Der Fail-Safe hat einen Softwarefehler</button>
+            <button class="sc-opt" onclick="answerSc(this,'wrong','sc1_1')"><span class="opt-l">D</span>Der Geo-Fence hat das Landen ausgelöst</button>
+          </div>
+          <div class="sc-fb" id="fb_sc1_1"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:0 0 24px">
+    <button onclick="showChapter(2)" style="width:100%;background:#6A1B9A;color:#fff;border:none;border-radius:14px;padding:16px;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;">
+      Weiter zu Kapitel 3 · Datenverbindung →
+    </button>
+  </div>
+
+</div><!-- end ch1 -->
+
+<!-- ==================== KAPITEL 3: DATENVERBINDUNG & FLUGMODI ==================== -->
+<div class="chapter-section" id="ch2">
+
+  <div class="intro-block">
+    <div class="pilot-quote">
+      <div class="pilot-avatar">👨‍✈️</div>
+      <div class="pilot-quote-content">
+        <div class="from">Torsten Flieger sagt:</div>
+        <p>"Der Funkkontakt ist buchstäblich die einzige Verbindung zwischen mir und der Drohne. Als ich das wirklich verstanden habe, bin ich viel bewusster mit Hindernissen und Entfernungen umgegangen. Kein Signal — keine Kontrolle."</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson" id="l2_1">
+    <div class="lesson-head" onclick="toggleLesson('l2_1','ch2')">
+      <div class="lesson-num">1</div>
+      <div class="lesson-head-info">
+        <div class="lesson-eyebrow">Kapitel 3 · Lektion 1 · ca. 12 Min</div>
+        <div class="lesson-title">Funkwellen & Datenverbindung</div>
+      </div>
+      <div class="lesson-toggle" id="tgl_l2_1">▾</div>
+    </div>
+    <div class="lesson-body" id="body_l2_1">
+      <div class="lesson-content">
+
+        <h3>Wie Funkkommunikation funktioniert</h3>
+        <p>Radio, WLAN, Mobilfunk, UAS-Steuerung — alle nutzen dasselbe Prinzip: elektromagnetische Funkwellen übertragen Informationen durch die Luft.</p>
+
+        <!-- SVG: Welle mit Beschriftung -->
+        <div class="grafik-wrap">
+          <div class="grafik-title">〰️ Amplitude, Wellenlänge & Frequenz</div>
+          <svg viewBox="0 0 340 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+            <rect width="340" height="130" fill="#1A0A2E"/>
+            <!-- Achsen -->
+            <line x1="20" y1="65" x2="320" y2="65" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
+            <line x1="20" y1="15" x2="20" y2="115" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
+            <text x="12" y="70" font-family="DM Sans,sans-serif" font-size="9" fill="rgba(255,255,255,.5)" text-anchor="middle">0</text>
+            <text x="170" y="125" font-family="DM Sans,sans-serif" font-size="9" fill="rgba(255,255,255,.5)" text-anchor="middle">Zeit / Entfernung →</text>
+            <text x="10" y="30" font-family="DM Sans,sans-serif" font-size="9" fill="rgba(255,255,255,.5)" text-anchor="middle" transform="rotate(-90,10,65)">Feldstärke</text>
+            <!-- Sinuskurve -->
+            <path d="M20 65 C45 65 55 18 80 18 C105 18 115 65 140 65 C165 65 175 112 200 112 C225 112 235 65 260 65 C285 65 295 18 320 18" fill="none" stroke="#6A1B9A" stroke-width="2.5"/>
+            <!-- Amplitude Pfeil -->
+            <line x1="80" y1="18" x2="80" y2="65" stroke="#C62828" stroke-width="1.5" stroke-dasharray="3,2"/>
+            <line x1="75" y1="18" x2="85" y2="18" stroke="#C62828" stroke-width="1.5"/>
+            <line x1="75" y1="65" x2="85" y2="65" stroke="#C62828" stroke-width="1.5"/>
+            <text x="90" y="44" font-family="Syne,sans-serif" font-size="10" fill="#EF9A9A" font-weight="700">Amplitude</text>
+            <!-- Wellenlänge Pfeil -->
+            <line x1="20" y1="110" x2="260" y2="110" stroke="#1565C0" stroke-width="1.5"/>
+            <line x1="20" y1="105" x2="20" y2="115" stroke="#1565C0" stroke-width="1.5"/>
+            <line x1="260" y1="105" x2="260" y2="115" stroke="#1565C0" stroke-width="1.5"/>
+            <text x="140" y="122" font-family="Syne,sans-serif" font-size="10" fill="#90CAF9" font-weight="700" text-anchor="middle">Wellenlänge (1 Periode)</text>
+          </svg>
+        </div>
+
+        <div class="def-grid">
+          <div class="def-card">
+            <div class="def-badge">λ</div>
+            <div class="def-text"><strong>Wellenlänge:</strong> Die Strecke, nach der sich eine vollständige Schwingung wiederholt</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge">A</div>
+            <div class="def-text"><strong>Amplitude:</strong> Maximale Auslenkung der Schwingung vom Nullpunkt — entspricht der Signalstärke</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge">f</div>
+            <div class="def-text"><strong>Frequenz:</strong> Anzahl der Schwingungen pro Sekunde — Einheit: Hertz (Hz). 2,4 GHz = 2.400.000.000 Schwingungen/s</div>
+          </div>
+        </div>
+
+        <div class="merksatz">
+          <p><strong>Je höher die Frequenz, desto kürzer die Wellenlänge</strong> — und umgekehrt. Höhere Frequenzen können mehr Daten übertragen, haben aber kürzere Reichweite und benötigen kleinere Antennen.</p>
+        </div>
+
+        <h3>UAS-Datenverbindung: Welche Frequenzen?</h3>
+
+        <div class="box info">
+          <div class="box-icon">📶</div>
+          <div class="box-text">
+            <span class="label">Standard-Frequenzen für UAS</span>
+            <strong>2,4 GHz & 5,8 GHz (UHF-Bereich):</strong> Standard-WLAN-Frequenzen, Reichweite ca. 600 m<br>
+            <strong>433 MHz & 868 MHz:</strong> Niedrigere Frequenz → größere Reichweite, weniger Datendurchsatz, größere Antennen nötig<br><br>
+            <strong>RFID-Code:</strong> Jeder Sender/Empfänger ist mit einem eindeutigen Radio Frequency IDentification-Code gekoppelt → verhindert dass dein UAS auf die Fernsteuerung einer anderen Person reagiert
+          </div>
+        </div>
+
+        <div class="box danger">
+          <div class="box-icon">🚧</div>
+          <div class="box-text">
+            <span class="label">Direkte Wellen — Sichtverbindung ist alles</span>
+            Ab ca. 30 MHz breiten sich Funkwellen als <strong>direkte (quasioptische) Wellen</strong> aus — also geradlinig vom Sender. <strong>Hindernisse zwischen Sender und Empfänger</strong> unterbrechen die Verbindung. Immer auf direkte Sichtverbindung zwischen Fernsteuerung und UAS achten!
+          </div>
+        </div>
+
+        <div class="quiz-block">
+          <div class="quiz-tag">🧠 Check</div>
+          <div class="quiz-q">Welche Aussage zur Frequenz ist korrekt?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q2_1')"><span class="opt-l">A</span>Je höher die Frequenz, desto größer die Wellenlänge</button>
+            <button class="quiz-opt" onclick="answerQ(this,'correct','q2_1')"><span class="opt-l">B</span>Je höher die Frequenz, desto kleiner die Wellenlänge — und desto mehr Daten können übertragen werden</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q2_1')"><span class="opt-l">C</span>Frequenz und Wellenlänge sind unabhängig voneinander</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q2_1')"><span class="opt-l">D</span>Niedrigere Frequenzen übertragen mehr Daten</button>
+          </div>
+          <div class="quiz-fb" id="fb_q2_1"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson" id="l2_2">
+    <div class="lesson-head" onclick="toggleLesson('l2_2','ch2')">
+      <div class="lesson-num">2</div>
+      <div class="lesson-head-info">
+        <div class="lesson-eyebrow">Kapitel 3 · Lektion 2 · ca. 12 Min</div>
+        <div class="lesson-title">Steuerungsmodi & Flugmodi</div>
+      </div>
+      <div class="lesson-toggle" id="tgl_l2_2">▾</div>
+    </div>
+    <div class="lesson-body" id="body_l2_2">
+      <div class="lesson-content">
+
+        <h3>Vier Kanäle — eine Drohne</h3>
+        <p>Die Fernsteuerung hat zwei Joysticks. Zusammen steuern sie die vier grundlegenden Bewegungskanäle des UAS:</p>
+
+        <div class="def-grid">
+          <div class="def-card">
+            <div class="def-badge" style="background:#6A1B9A">GAS</div>
+            <div class="def-text"><strong>Drehzahl / Throttle:</strong> Steuert die Gesamtdrehzahl aller Rotoren → UAS steigt oder sinkt</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge" style="background:#1B5E20">GIEREN</div>
+            <div class="def-text"><strong>Yaw:</strong> Dreht das UAS im oder gegen den Uhrzeigersinn um seine Hochachse</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge" style="background:#C62828">ROLLEN</div>
+            <div class="def-text"><strong>Roll:</strong> Kippt das UAS nach rechts oder links → leitet Seitwärtsflug ein</div>
+          </div>
+          <div class="def-card">
+            <div class="def-badge" style="background:#1565C0">NICKEN</div>
+            <div class="def-text"><strong>Pitch:</strong> Kippt das UAS nach vorne oder hinten → Vorwärts- bzw. Rückwärtsflug</div>
+          </div>
+        </div>
+
+        <h3>Steuerungsmodi 1 & 2</h3>
+        <p>Die vier Kanäle sind auf zwei Joysticks verteilt. Je nach <strong>Modus</strong> ist die Aufteilung unterschiedlich. <strong>Modus 2 ist der Industriestandard</strong> für kommerzielle UAS — und die Werkseinstellung der meisten Drohnen.</p>
+
+        <!-- SVG: Modus 1 vs Modus 2 -->
+        <div class="grafik-wrap">
+          <div class="grafik-title">🕹️ Modus 1 vs. Modus 2 — Joystick-Belegung</div>
+          <svg viewBox="0 0 340 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+            <rect width="340" height="160" fill="#1A0A2E"/>
+            <!-- Modus 1 -->
+            <text x="85" y="18" font-family="Syne,sans-serif" font-size="13" font-weight="800" fill="#CE93D8" text-anchor="middle">MODUS 1</text>
+            <!-- Controller links M1 -->
+            <rect x="20" y="26" width="60" height="60" rx="12" fill="#EDE7F6" stroke="#6A1B9A" stroke-width="1.5"/>
+            <circle cx="50" cy="56" r="14" fill="#fff" stroke="#B39DDB" stroke-width="1.5"/>
+            <line x1="50" y1="42" x2="50" y2="42" stroke="none"/>
+            <!-- Pfeile linker Stick M1: Pitch oben/unten, Gieren links/rechts -->
+            <text x="50" y="44" font-family="DM Sans,sans-serif" font-size="8" fill="#82B1FF" text-anchor="middle" font-weight="700">PITCH</text>
+            <text x="50" y="72" font-family="DM Sans,sans-serif" font-size="7" fill="#666" text-anchor="middle">↕</text>
+            <text x="34" y="60" font-family="DM Sans,sans-serif" font-size="7" fill="#69F0AE" text-anchor="middle">GI-</text>
+            <text x="34" y="68" font-family="DM Sans,sans-serif" font-size="7" fill="#69F0AE" text-anchor="middle">ERN</text>
+            <text x="67" y="64" font-family="DM Sans,sans-serif" font-size="7" fill="#69F0AE" text-anchor="middle">↔</text>
+            <!-- Controller rechts M1 -->
+            <rect x="90" y="26" width="60" height="60" rx="12" fill="#EDE7F6" stroke="#6A1B9A" stroke-width="1.5"/>
+            <circle cx="120" cy="56" r="14" fill="#fff" stroke="#B39DDB" stroke-width="1.5"/>
+            <text x="120" y="44" font-family="DM Sans,sans-serif" font-size="8" fill="#CE93D8" text-anchor="middle" font-weight="700">GAS</text>
+            <text x="104" y="64" font-family="DM Sans,sans-serif" font-size="7" fill="#EF9A9A" text-anchor="middle">ROL-</text>
+            <text x="104" y="72" font-family="DM Sans,sans-serif" font-size="7" fill="#EF9A9A" text-anchor="middle">LEN</text>
+            <text x="136" y="64" font-family="DM Sans,sans-serif" font-size="7" fill="#EF9A9A" text-anchor="middle">↔</text>
+            <!-- Modus 2 -->
+            <text x="255" y="18" font-family="Syne,sans-serif" font-size="13" font-weight="800" fill="#FFD600" text-anchor="middle">MODUS 2 ⭐</text>
+            <!-- Controller links M2 -->
+            <rect x="190" y="26" width="60" height="60" rx="12" fill="#E8F5E9" stroke="#388E3C" stroke-width="1.5"/>
+            <circle cx="220" cy="56" r="14" fill="#fff" stroke="#A5D6A7" stroke-width="1.5"/>
+            <text x="220" y="44" font-family="DM Sans,sans-serif" font-size="8" fill="#CE93D8" text-anchor="middle" font-weight="700">GAS</text>
+            <text x="204" y="64" font-family="DM Sans,sans-serif" font-size="7" fill="#69F0AE" text-anchor="middle">GI-</text>
+            <text x="204" y="72" font-family="DM Sans,sans-serif" font-size="7" fill="#69F0AE" text-anchor="middle">ERN</text>
+            <text x="236" y="64" font-family="DM Sans,sans-serif" font-size="7" fill="#69F0AE" text-anchor="middle">↔</text>
+            <!-- Controller rechts M2 -->
+            <rect x="260" y="26" width="60" height="60" rx="12" fill="#E8F5E9" stroke="#388E3C" stroke-width="1.5"/>
+            <circle cx="290" cy="56" r="14" fill="#fff" stroke="#A5D6A7" stroke-width="1.5"/>
+            <text x="290" y="44" font-family="DM Sans,sans-serif" font-size="8" fill="#82B1FF" text-anchor="middle" font-weight="700">PITCH</text>
+            <text x="274" y="64" font-family="DM Sans,sans-serif" font-size="7" fill="#EF9A9A" text-anchor="middle">ROL-</text>
+            <text x="274" y="72" font-family="DM Sans,sans-serif" font-size="7" fill="#EF9A9A" text-anchor="middle">LEN</text>
+            <text x="307" y="64" font-family="DM Sans,sans-serif" font-size="7" fill="#EF9A9A" text-anchor="middle">↔</text>
+            <!-- Standard Label -->
+            <rect x="152" y="96" width="136" height="20" rx="6" fill="rgba(56,142,60,.4)" stroke="#69F0AE" stroke-width="1"/>
+            <text x="220" y="110" font-family="DM Sans,sans-serif" font-size="10" fill="#69F0AE" text-anchor="middle" font-weight="600">✓ Industriestandard & Werkseinstellung</text>
+            <!-- Warnung Wechsel -->
+            <rect x="8" y="128" width="322" height="24" rx="6" fill="rgba(255,183,0,.2)" stroke="#FFB300" stroke-width="1"/>
+            <text x="170" y="144" font-family="DM Sans,sans-serif" font-size="10" fill="#FFD600" text-anchor="middle" font-weight="600">⚠️ Wechsel zwischen Modi ist anspruchsvoll — nur für erfahrene Piloten!</text>
+          </svg>
+        </div>
+
+        <h3>Die vier Flugmodi</h3>
+
+        <div class="flugmodi-grid">
+          <div class="flugmodus-card manuell">
+            <div class="fm-icon">🕹️</div>
+            <div class="fm-name">Manuell</div>
+            <div class="fm-desc">Gerade & richtungsstabil, aber <strong>keine Positionskorrektur</strong>. Wind und Schwerkraft wirken unkompensiert. Wichtig als Rückfallkompetenz!</div>
+          </div>
+          <div class="flugmodus-card stabilisiert">
+            <div class="fm-icon">📏</div>
+            <div class="fm-name">Stabilisiert</div>
+            <div class="fm-desc"><strong>Höhenmodus:</strong> hält Höhe<br><strong>GNSS-Modus:</strong> hält Position und Höhe automatisch. Braucht GPS-Signal!</div>
+          </div>
+          <div class="flugmodus-card vorprogrammiert">
+            <div class="fm-icon">🗺️</div>
+            <div class="fm-name">Vorprogrammiert</div>
+            <div class="fm-desc">Fliegt vorgegebene <strong>Wegpunkte oder Koordinaten</strong> ab. Für Vermessung, Inspektion, präzise Arbeit. Hohe Genauigkeit.</div>
+          </div>
+          <div class="flugmodus-card automatisch">
+            <div class="fm-icon">🤖</div>
+            <div class="fm-name">Automatisch</div>
+            <div class="fm-desc">Vorprogrammiert + automatischer Start & Landung. Fernpilot <strong>überwacht und kann jederzeit eingreifen</strong>. Voll-autonom ist verboten!</div>
+          </div>
+        </div>
+
+        <div class="box danger">
+          <div class="box-icon">🚫</div>
+          <div class="box-text">
+            <span class="label">Vollautonomer Betrieb — verboten!</span>
+            Ein vollkommen autonomer Modus (Pilot kann nicht eingreifen) ist derzeit <strong>nicht zulässig</strong>. Der Fernpilot muss <strong>jederzeit eingreifen können</strong> — entweder durch Übernahme der Steuerung oder Einleitung des RTH-Manövers.
+          </div>
+        </div>
+
+        <div class="merksatz">
+          <p><strong>Manuellen Modus üben!</strong> Wenn Sensoren ausfallen, die für den stabilisierten oder vorprogrammierten Modus nötig sind, ist manuelles Fliegen die letzte Rettung. Wer das nie geübt hat, verliert das UAS.</p>
+        </div>
+
+        <div class="quiz-block">
+          <div class="quiz-tag">🧠 Check</div>
+          <div class="quiz-q">Was unterscheidet den automatischen vom vorprogrammierten Flugmodus?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q2_2')"><span class="opt-l">A</span>Der automatische Modus braucht kein GPS</button>
+            <button class="quiz-opt" onclick="answerQ(this,'correct','q2_2')"><span class="opt-l">B</span>Der automatische Modus ergänzt vorprogrammierte Wegpunkte um automatischen Start und Landung — der Fernpilot überwacht nur noch</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q2_2')"><span class="opt-l">C</span>Im automatischen Modus kann der Pilot nicht mehr eingreifen</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q2_2')"><span class="opt-l">D</span>Der vorprogrammierte Modus fliegt höher als der automatische</button>
+          </div>
+          <div class="quiz-fb" id="fb_q2_2"></div>
+        </div>
+
+        <div class="scenario">
+          <div class="sc-label">🎬 Szenario</div>
+          <div class="sc-situation">Torsens Drohne schwebt stabil im GNSS-Modus auf 40 Meter. Plötzlich verliert der Bordcomputer das GPS-Signal — zu viele Gebäude in der Nähe. Welcher Modus bleibt jetzt noch als Stabilisierung verfügbar?</div>
+          <div class="sc-opts">
+            <button class="sc-opt" onclick="answerSc(this,'wrong','sc2_1')"><span class="opt-l">A</span>Der automatische Modus springt ein</button>
+            <button class="sc-opt" onclick="answerSc(this,'correct','sc2_1')"><span class="opt-l">B</span>Nur noch der Höhenmodus (Altitude-Modus) — er hält die Höhe, aber nicht mehr die Position</button>
+            <button class="sc-opt" onclick="answerSc(this,'wrong','sc2_1')"><span class="opt-l">C</span>Die Drohne landet automatisch</button>
+            <button class="sc-opt" onclick="answerSc(this,'wrong','sc2_1')"><span class="opt-l">D</span>Der Manuell-Modus aktiviert sich sofort</button>
+          </div>
+          <div class="sc-fb" id="fb_sc2_1"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:0 0 24px">
+    <button onclick="showChapter(3)" style="width:100%;background:#6A1B9A;color:#fff;border:none;border-radius:14px;padding:16px;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;">
+      Weiter zu Kapitel 4 · Wartung →
+    </button>
+  </div>
+
+</div><!-- end ch2 -->
+
+<!-- ==================== KAPITEL 4: WARTUNG ==================== -->
+<div class="chapter-section" id="ch3">
+
+  <div class="intro-block">
+    <div class="pilot-quote">
+      <div class="pilot-avatar">👨‍✈️</div>
+      <div class="pilot-quote-content">
+        <div class="from">Torsten Flieger sagt:</div>
+        <p>"Ich dachte, Wartung ist was für Profis mit teuren Drohnen. Dann ist mir ein Propeller abgefallen. Seitdem mache ich nach 25 Stunden meine Eigenkontrolle — dauert 20 Minuten und hat mir schon dreimal einen Absturz erspart."</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson" id="l3_1">
+    <div class="lesson-head" onclick="toggleLesson('l3_1','ch3')">
+      <div class="lesson-num">1</div>
+      <div class="lesson-head-info">
+        <div class="lesson-eyebrow">Kapitel 4 · Lektion 1 · ca. 10 Min</div>
+        <div class="lesson-title">Wartung, Reparatur & Intervalle</div>
+      </div>
+      <div class="lesson-toggle" id="tgl_l3_1">▾</div>
+    </div>
+    <div class="lesson-body" id="body_l3_1">
+      <div class="lesson-content">
+
+        <h3>Wartung ist Pilotenpflicht</h3>
+        <p>Der Fernpilot ist für die <strong>stetige Flugtauglichkeit</strong> des UAS verantwortlich. Das umfasst regelmäßige Kontrollen, dokumentierte Wartungen und den richtigen Umgang mit Reparaturen.</p>
+
+        <div class="box law">
+          <div class="box-icon">📋</div>
+          <div class="box-text">
+            <span class="label">Wartungsprotokoll — professionelle Pflicht</span>
+            Professionelle Fernpiloten führen für jedes UAS ein <strong>Wartungsprotokoll</strong> mit: Datum der Wartung, durchgeführte Prüfungen, ausgetauschte Teile. Nach jeder Wartung, Hardware-Änderung oder Firmware-Update: <strong>Testflug an einem sicheren Ort!</strong>
+          </div>
+        </div>
+
+        <div class="box warn">
+          <div class="box-icon">🚫</div>
+          <div class="box-text">
+            <span class="label">Ad-hoc-Reparaturen — Finger weg!</span>
+            UAS sind komplex und vollgepackt mit Elektronik. <strong>Innen öffnen nur durch Fachpersonal.</strong> Ad-hoc-Reparaturen außer einem Propellerwechsel und oberflächlichen Eingriffen sind nicht ratsam. Immer professionelle Reparaturbetriebe und Herstelleranweisungen beachten.
+          </div>
+        </div>
+
+        <h3>Wartungsintervalle</h3>
+
+        <!-- SVG: Wartungs-Timeline -->
+        <div class="grafik-wrap">
+          <div class="grafik-title">⏱️ Wartungsintervalle im Überblick</div>
+          <svg viewBox="0 0 340 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+            <rect width="340" height="100" fill="#1A0A2E"/>
+            <!-- Zeitlinie -->
+            <line x1="30" y1="50" x2="310" y2="50" stroke="rgba(255,255,255,.3)" stroke-width="2"/>
+            <!-- 0h -->
+            <circle cx="30" cy="50" r="6" fill="#6A1B9A"/>
+            <text x="30" y="72" font-family="DM Sans,sans-serif" font-size="10" fill="#CE93D8" text-anchor="middle" font-weight="600">0h</text>
+            <text x="30" y="84" font-family="DM Sans,sans-serif" font-size="9" fill="rgba(255,255,255,.6)" text-anchor="middle">Start</text>
+            <!-- 25h -->
+            <circle cx="140" cy="50" r="10" fill="#FFB300"/>
+            <line x1="140" y1="40" x2="140" y2="18" stroke="#FFB300" stroke-width="1.5"/>
+            <rect x="90" y="6" width="100" height="16" rx="6" fill="rgba(255,183,0,.25)" stroke="#FFB300" stroke-width="1"/>
+            <text x="140" y="18" font-family="Syne,sans-serif" font-size="9" fill="#FFD600" text-anchor="middle" font-weight="700">Eigenkontrolle (25h)</text>
+            <text x="140" y="72" font-family="DM Sans,sans-serif" font-size="10" fill="#FFD600" text-anchor="middle" font-weight="600">25h</text>
+            <text x="140" y="84" font-family="DM Sans,sans-serif" font-size="9" fill="rgba(255,255,255,.6)" text-anchor="middle">Du selbst</text>
+            <!-- 50h -->
+            <circle cx="250" cy="50" r="12" fill="#6A1B9A"/>
+            <line x1="250" y1="40" x2="250" y2="18" stroke="#6A1B9A" stroke-width="1.5"/>
+            <rect x="188" y="6" width="124" height="16" rx="6" fill="rgba(106,27,154,.5)" stroke="#CE93D8" stroke-width="1"/>
+            <text x="250" y="18" font-family="Syne,sans-serif" font-size="9" fill="#CE93D8" text-anchor="middle" font-weight="700">Profi-Wartung (50h)</text>
+            <text x="250" y="72" font-family="DM Sans,sans-serif" font-size="10" fill="#CE93D8" text-anchor="middle" font-weight="600">50h</text>
+            <text x="250" y="84" font-family="DM Sans,sans-serif" font-size="9" fill="rgba(255,255,255,.6)" text-anchor="middle">Fachbetrieb</text>
+            <!-- Wiederholung -->
+            <text x="310" y="54" font-family="DM Sans,sans-serif" font-size="12" fill="rgba(255,255,255,.4)">→</text>
+          </svg>
+        </div>
+
+        <h3>Eigenkontrolle nach 25 Stunden — interaktive Checkliste</h3>
+        <p>Tippe die Punkte an um sie abzuhaken:</p>
+
+        <div style="background:#F3E5F5;border-radius:12px;padding:1rem;margin:.5rem 0 1rem">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#6A1B9A;margin-bottom:.75rem">🔩 STRUKTUR</div>
+          <div class="checklist" id="checkliste">
+            <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div>UAS reinigen — Schmutz, Sand und Rückstände entfernen</div>
+            <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div>Auf Risse untersuchen — mit Lupe, auch versteckte Bereiche</div>
+            <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div>Alle sichtbaren Schrauben nachziehen</div>
+            <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div>Motoren von Hand drehen — auf Widerstand prüfen (Sand/Staub)</div>
+            <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div>Propellerblätter auf Risse und Beschädigungen prüfen</div>
+            <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div>Befestigung aller Antennen prüfen (auch Bodenstation!)</div>
+          </div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#6A1B9A;margin:.75rem 0 .5rem">💾 HARD-/SOFTWARE</div>
+          <div class="checklist">
+            <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div>Neue Softwareversionen für UAS und Bodenstation prüfen und ggf. aufspielen</div>
+          </div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#6A1B9A;margin:.75rem 0 .5rem">🔋 BATTERIE</div>
+          <div class="checklist">
+            <div class="check-item" onclick="toggleCheck(this)"><div class="check-box">✓</div>Batterie auf Beschädigungen und undichte Stellen prüfen — ggf. austauschen</div>
+          </div>
+        </div>
+
+        <div class="merksatz">
+          <p><strong>Motoren testen:</strong> Propeller vorsichtig von Hand drehen. Spürst du Widerstand? → Feine Partikel haben sich abgelagert. Motor kräftig durchblasen und genauer untersuchen. Motoren haben theoretisch bis zu <strong>20.000 Stunden Lebensdauer</strong> — aber nur unter idealen Bedingungen.</p>
+        </div>
+
+        <div class="quiz-block">
+          <div class="quiz-tag">🧠 Check</div>
+          <div class="quiz-q">Nach wie vielen Stunden soll die Eigenkontrolle durchgeführt werden, und was ist danach Pflicht?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q3_1')"><span class="opt-l">A</span>Nach 50 Stunden — dann sofort in einen Fachbetrieb</button>
+            <button class="quiz-opt" onclick="answerQ(this,'correct','q3_1')"><span class="opt-l">B</span>Nach 25 Stunden Eigenkontrolle, nach 50 Stunden professionelle Wartung gemäß Herstellerhandbuch — nach jeder Wartung Testflug!</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q3_1')"><span class="opt-l">C</span>Nach 10 Stunden — gesetzliche Pflicht in Deutschland</button>
+            <button class="quiz-opt" onclick="answerQ(this,'wrong','q3_1')"><span class="opt-l">D</span>Nur nach Unfällen oder Stürzen ist eine Kontrolle nötig</button>
+          </div>
+          <div class="quiz-fb" id="fb_q3_1"></div>
+        </div>
+
+        <div class="scenario">
+          <div class="sc-label">🎬 Szenario</div>
+          <div class="sc-situation">Torsten hat gerade ein Firmware-Update auf seinem UAS eingespielt. Er ist spät dran und will direkt zum nächsten Auftrag fliegen — der Flugplatz ist 30 Minuten entfernt. Was sollte er zuerst tun?</div>
+          <div class="sc-opts">
+            <button class="sc-opt" onclick="answerSc(this,'wrong','sc3_1')"><span class="opt-l">A</span>Direkt zum Auftrag fahren — Updates laufen sich meist selbst ein</button>
+            <button class="sc-opt" onclick="answerSc(this,'correct','sc3_1')"><span class="opt-l">B</span>Vor der Abfahrt einen kurzen Testflug an einem sicheren Ort durchführen und alle Funktionen und Flugmodi prüfen</button>
+            <button class="sc-opt" onclick="answerSc(this,'wrong','sc3_1')"><span class="opt-l">C</span>Das Update rückgängig machen und erst beim Auftrag updaten</button>
+            <button class="sc-opt" onclick="answerSc(this,'wrong','sc3_1')"><span class="opt-l">D</span>Den Kunden anrufen und fragen ob ein Update ein Problem ist</button>
+          </div>
+          <div class="sc-fb" id="fb_sc3_1"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div><!-- end ch3 -->
+
+<!-- ==================== FINALES QUIZ ==================== -->
+<div class="final-quiz" id="finalQuizSection" style="display:none">
+  <div class="fq-header">
+    <h3>🎯 Modul-Abschlussquiz</h3>
+    <p>20 Fragen aus allen 4 Kapiteln · 75% zum Bestehen</p>
+  </div>
+  <div class="fq-dots" id="fqDots"></div>
+  <div id="fqBody">
+    <div class="fq-counter" id="fqCounter"></div>
+    <div class="fq-question" id="fqQuestion"></div>
+    <div class="fq-opts" id="fqOpts"></div>
+    <div class="fq-feedback" id="fqFeedback"></div>
+    <button class="fq-next" id="fqNext" onclick="nextFQ()">Weiter →</button>
+  </div>
+  <div id="fqResult" style="display:none"></div>
+</div>
+
+<div class="module-end" id="moduleEnd" style="display:none">
+  <div class="module-end-icon">🔧</div>
+  <h2>Modul 4 abgeschlossen!</h2>
+  <p>Du kennst jetzt die Physik des Fliegens, die Bauteile deiner Drohne, Funk & Flugmodi — und weißt wie du sie in Schuss hältst.</p>
+  <p style="font-size:13px;color:rgba(255,255,255,.7);margin-bottom:1.4rem">Absolviere alle Module vollständig, um zum Abschlusstest zu kommen.</p>
+  <a href="index.html" class="btn-next">← Zurück zur Übersicht</a>
+</div>
+
+</div><!-- end content -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── STATE ─────────────────────────────────────────
+const chapterDone = [false,false,false,false];
+const quizAnswered = {};
+let currentChapter = 0;
+let finalQuizStarted = false;
+let quizPassed = false;
+
+// ─── CHAPTER NAVIGATION ────────────────────────────
+function showChapter(n){
+  document.querySelectorAll('.chapter-section').forEach((s,i)=>s.classList.toggle('active',i===n));
+  document.querySelectorAll('.chapter-tab').forEach((t,i)=>t.classList.toggle('active',i===n));
+  currentChapter = n;
+  window.scrollTo({top:0,behavior:'smooth'});
+  const firstLesson = document.querySelector('#ch'+n+' .lesson-body');
+  if(firstLesson && !firstLesson.classList.contains('open')){
+    const firstHead = document.querySelector('#ch'+n+' .lesson-head');
+    if(firstHead) firstHead.click();
+  }
+}
+
+// ─── LESSON TOGGLE ─────────────────────────────────
+function toggleLesson(id, chId){
+  const body = document.getElementById('body_'+id);
+  const tgl = document.getElementById('tgl_'+id);
+  const isOpen = body.classList.toggle('open');
+  tgl.classList.toggle('open', isOpen);
+  if(isOpen){
+    markChapterProgress(chId);
+    setTimeout(()=>{ body.scrollIntoView({behavior:'smooth',block:'start'}); },100);
+  }
+}
+
+const chapterKeys = ['m4_ch1','m4_ch2','m4_ch3','m4_ch4'];
+
+function markChapterProgress(chId){
+  const chIdx = parseInt(chId.replace('ch',''));
+  if(!chapterDone[chIdx]){
+    chapterDone[chIdx] = true;
+    document.getElementById('ctab'+chIdx).classList.add('done');
+    try{
+      const p = JSON.parse(localStorage.getItem('drohnenschein_progress')||'{}');
+      p[chapterKeys[chIdx]] = true;
+      localStorage.setItem('drohnenschein_progress', JSON.stringify(p));
+    }catch(e){}
+    updateProgress();
+    if(chapterDone.every(Boolean) && !finalQuizStarted){
+      setTimeout(()=>{
+        document.getElementById('finalQuizSection').style.display='block';
+        document.getElementById('finalQuizSection').scrollIntoView({behavior:'smooth'});
+        finalQuizStarted = true;
+        initFQ();
+      }, 800);
+    }
+  }
+}
+
+// ─── PROGRESS ──────────────────────────────────────
+function updateProgress(){
+  const done = chapterDone.filter(Boolean).length;
+  const total = chapterDone.length + 1;
+  let pct = Math.round(done/total*100);
+  if(quizPassed) pct = 100;
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressPct').textContent = pct+'%';
+  document.getElementById('headerProgress').textContent = pct+'%';
+}
+
+// ─── INLINE QUIZ ───────────────────────────────────
+const qFeedbacks = {
+  q0_1:{correct:'✅ Richtig! Durch das Anstellen des Profils wird Luft oben beschleunigt (niedriger Druck) und unten abgebremst (hoher Druck). Der Druckunterschied erzeugt die nach oben gerichtete Auftriebskraft.',wrong:'❌ Falsch. Auftrieb entsteht durch eine Druckdifferenz: Über dem Profil herrscht niedrigerer Druck als darunter — die Tragfläche wird nach oben gezogen.'},
+  q0_2:{correct:'✅ Genau! Die Drehmomente der Propellerpaare halten sich normalerweise die Waage. Dreht ein Paar schneller, entsteht ein Netto-Drehmoment, das das UAS um die Hochachse rotiert.',wrong:'❌ Falsch. Das Gieren entsteht durch Drehmoment-Ungleichgewicht: Ein Propellerpaar dreht schneller als das andere — das UAS dreht sich in Richtung des langsameren Paares.'},
+  q1_1:{correct:'✅ Richtig! Der ESC (Electronic Speed Controller) ist die Schnittstelle zwischen Bordcomputer und Motor — er setzt digitale Befehle in präzise Motorsteuerung um.',wrong:'❌ Falsch. Der ESC empfängt Befehle vom Bordcomputer und regelt direkt die Drehzahl jedes einzelnen Motors.'},
+  q1_2:{correct:'✅ Korrekt! Geo-Fence = virtueller Außenzaun (verhindert Einflug in gesperrte Bereiche). Geo-Cage = virtueller Innenzaun (hält das UAS im erlaubten Bereich).',wrong:'❌ Falsch. Geo-Fence schützt gesperrte Gebiete vor dem Einflug. Geo-Cage definiert einen Bereich, den das UAS nicht verlassen darf — das Gegenprinzip.'},
+  q2_1:{correct:'✅ Richtig! Frequenz und Wellenlänge sind umgekehrt proportional. Höhere Frequenz = kürzere Wellenlänge = mehr Daten pro Sekunde übertragbar, aber geringere Reichweite.',wrong:'❌ Falsch. Frequenz und Wellenlänge sind umgekehrt proportional: Je höher die Frequenz, desto kürzer die Wellenlänge. Höhere Frequenzen übertragen mehr Daten.'},
+  q2_2:{correct:'✅ Genau! Der automatische Modus baut auf dem vorprogrammierten auf und ergänzt ihn um automatischen Start und Landung. Der Fernpilot muss aber jederzeit eingreifen können.',wrong:'❌ Falsch. Automatisch = vorprogrammiert + Auto-Start & Auto-Landung. Der Fernpilot überwacht und kann jederzeit übernehmen. Voll-autonomer Betrieb ist verboten.'},
+  q3_1:{correct:'✅ Richtig! Eigenkontrolle nach 25h (selbst), professionelle Wartung nach 50h (Fachbetrieb). Nach jeder Wartung ist ein Testflug an einem sicheren Ort Pflicht.',wrong:'❌ Falsch. Die Eigenkontrolle erfolgt nach 25 Stunden, die professionelle Wartung nach 50 Stunden (oder gemäß Herstellerhandbuch). Nach jeder Wartung: Testflug!'}
+};
+
+const scFeedbacks = {
+  sc0_1:{correct:'✅ Richtig! Das Drehmoment-Gleichgewicht zwischen den Propellerpaaren hält das UAS stabil. Dreht ein Propeller ungleichmäßig (z.B. durch Beschädigungen), entsteht ein Netto-Drehmoment → Rotation.',wrong:'❌ Falsch. Eine ungewollte Achsdrehung entsteht meist durch ein Drehmoment-Ungleichgewicht — häufig durch beschädigte oder falsch eingestellte Propeller.'},
+  sc1_1:{correct:'✅ Korrekt! LiPo-Batterien verlieren bei Kälte massiv an verfügbarer Kapazität. Die Anzeige zeigt den Ladezustand, nicht die verfügbare Energie bei aktueller Temperatur. Batterien vor dem Flug warm halten!',wrong:'❌ Falsch. LiPo-Batterien sind sehr temperaturempfindlich. Bei Kälte bricht die verfügbare Energie viel schneller ein als die Ladeanzeige vermuten lässt.'},
+  sc2_1:{correct:'✅ Genau! Der GNSS-Modus braucht ausreichend Satellitensignale. Bei Abschirmung durch Gebäude fällt er aus — der Höhenmodus (Barometer-basiert) hält weiterhin die Höhe, aber nicht die horizontale Position.',wrong:'❌ Falsch. Ohne GPS-Signal kann nur noch der Höhenmodus (Altitude-Modus) die Höhe halten. Die horizontale Position driftet mit dem Wind.'},
+  sc3_1:{correct:'✅ Richtig! Nach jedem Firmware-Update ist ein Testflug an einem sicheren Ort Pflicht — alle Funktionen und Flugmodi müssen geprüft werden, bevor das UAS im Einsatz ist.',wrong:'❌ Falsch. Nach jedem Firmware-Update, jeder Hardware-Änderung oder Wartung muss ein Testflug an einem sicheren Ort stattfinden und alle Funktionen überprüft werden.'}
+};
+
+function answerQ(btn, type, id){
+  if(quizAnswered[id]) return;
+  quizAnswered[id] = true;
+  btn.closest('.quiz-block').querySelectorAll('.quiz-opt').forEach(o=>o.disabled=true);
+  btn.classList.add(type);
+  const fb = document.getElementById('fb_'+id);
+  fb.innerHTML = qFeedbacks[id][type];
+  fb.className = 'quiz-fb show '+type;
+}
+
+function answerSc(btn, type, id){
+  if(quizAnswered['sc_'+id]) return;
+  quizAnswered['sc_'+id] = true;
+  btn.closest('.scenario').querySelectorAll('.sc-opt').forEach(o=>o.disabled=true);
+  btn.classList.add(type);
+  const fb = document.getElementById('fb_'+id);
+  fb.innerHTML = scFeedbacks[id][type];
+  fb.className = 'sc-fb show '+type;
+}
+
+// ─── CHECKLISTE ────────────────────────────────────
+function toggleCheck(el){
+  el.classList.toggle('checked');
+}
+
+// ─── FINAL QUIZ ─────────────────────────────────────
+const fqPool = [
+  // Kapitel 1: Grundlagen des Fliegens
+  {q:'Welche vier Kräfte wirken auf eine Tragfläche oder ein Rotorblatt im Flug?',opts:['Schwerkraft, Reibung, Magnetismus, Schub','Auftrieb, Gewicht, Vortrieb, Widerstand','Druck, Sog, Rotation, Trägheit','Zentrifugal, Zentripetal, Lift, Drag'],c:1,fb:'Die vier Grundkräfte: Auftrieb (oben), Gewicht (unten), Vortrieb (vorne), Widerstand (hinten). Im unbeschleunigten Horizontalflug sind sie im Gleichgewicht.'},
+  {q:'Was versteht man unter dem "unbeschleunigten Horizontalflug"?',opts:['Das UAS fliegt ohne Motorantrieb','Das UAS steigt langsam und gleichmäßig','Alle vier Kräfte sind im Gleichgewicht — das UAS wird nicht schneller, langsamer, steigt oder sinkt nicht','Das UAS fliegt mit maximaler Geschwindigkeit'],c:2,fb:'Im unbeschleunigten Horizontalflug herrscht Kräftegleichgewicht: Auftrieb = Gewicht, Vortrieb = Widerstand. Keine resultierende Kraft — stabile Fluglage.'},
+  {q:'Wie entsteht Auftrieb an einem Tragflügelprofil?',opts:['Der Motor drückt Luft nach unten und das UAS steigt dadurch','Durch Druckdifferenz: oben niedriger Druck, unten hoher Druck — die Fläche wird nach oben gezogen','Der Propeller dreht schneller als die Luft strömt','Durch statische Elektrizität zwischen Profil und Luft'],c:1,fb:'Das angestellte Profil beschleunigt Luft oben (niedrigerer Druck) und verlangsamt sie unten (höherer Druck). Der Druckunterschied erzeugt die nach oben gerichtete Auftriebskraft.'},
+  {q:'Was bedeutet "Rollen" (Roll) bei einem UAS?',opts:['Die Bewegung um die Hochachse — das UAS dreht auf der Stelle','Die Bewegung um die Längsachse — das UAS kippt nach links oder rechts','Die Bewegung um die Querachse — das UAS neigt sich nach vorne','Die Drehgeschwindigkeit der Propeller erhöhen'],c:1,fb:'Rollen (Roll) = Bewegung um die Längsachse (von Bug zu Heck). Das UAS kippt nach links oder rechts, was eine Seitwärtsbewegung einleitet.'},
+  {q:'Was ist "Nicken" (Pitch) und welche Bewegung leitet es ein?',opts:['Drehung um die Hochachse → Rotation auf der Stelle','Kippen um die Querachse → Vorwärts- oder Rückwärtsbewegung','Kippen um die Längsachse → Seitwärtsbewegung','Änderung der Propellerdrehzahl'],c:1,fb:'Nicken (Pitch) = Bewegung um die Querachse. Das UAS neigt sich nach vorne oder hinten und leitet damit Vorwärts- bzw. Rückwärtsflug ein.'},
+  {q:'Warum drehen sich bei einem Quadrokopter benachbarte Propeller in entgegengesetzte Richtungen?',opts:['Um mehr Auftrieb zu erzeugen','Um Lärm zu reduzieren','Um eine ungewollte Eigenrotation des UAS zu verhindern (Drehmomentausgleich)','Weil die Motoren unterschiedliche Bauarten haben'],c:2,fb:'Jeder Propeller erzeugt ein Drehmoment. Wenn alle gleich drehen würden, würde sich das UAS um seine eigene Achse drehen. Gegenläufige Propeller heben die Drehmomente auf.'},
+  // Kapitel 2: Bauweise & Limitierungen
+  {q:'Was ist die Aufgabe des Bordcomputers (Autopilot) im UAS?',opts:['Er speichert Videoaufnahmen','Er steuert direkt die Propellerdrehzahl per Hand','Er erfasst alle Sensordaten, verarbeitet sie und sendet Steuersignale an die ESCs','Er übermittelt Steuerbefehle per Funk vom Piloten'],c:2,fb:'Der Bordcomputer ist das Gehirn: Er sammelt Daten von GNSS, Barometer, Kompass, IMU und Steuereingaben, verarbeitet sie und schickt präzise Befehle an die Drehzahlregler.'},
+  {q:'Was gilt als Faustregel für die tatsächlich verfügbare Flugzeit gegenüber Herstellerangaben?',opts:['Die Herstellerangabe ist genau korrekt','Mindestens 50% abziehen','Mindestens 20% abziehen — dazu kommen Abzüge bei Kälte und Wind','Nur 5% weniger — moderne Akkus sind sehr präzise'],c:2,fb:'Die Herstellerangabe gilt unter optimalen Bedingungen ohne Wind. LiPo-Akkus verlieren schnell Kapazität. Mindestens 20% abziehen — bei Kälte oder starkem Wind noch deutlich mehr.'},
+  {q:'Wofür steht ESC und was ist seine Funktion?',opts:['Electronic Signal Controller — überträgt Funksignale','Emergency Safety Control — löst Notlandungen aus','Electronic Speed Controller — steuert die Drehzahl der einzelnen Motoren','Energy Supply Core — verteilt Strom von der Batterie'],c:2,fb:'ESC = Electronic Speed Controller. Er empfängt digitale Steuerbefehle vom Bordcomputer und übersetzt sie in präzise Stromimpulse, die die Motordrehzahl regulieren.'},
+  {q:'Was ist der Unterschied zwischen Geo-Awareness und Geo-Fence?',opts:['Kein Unterschied — beides ist dasselbe','Geo-Awareness warnt vor Luftraumverstößen — Geo-Fence verhindert aktiv das Einflug in gesperrte Bereiche','Geo-Fence warnt, Geo-Awareness verhindert aktiv','Geo-Awareness ist für C1, Geo-Fence nur für C3'],c:1,fb:'Geo-Awareness (Pflicht für C1/C2/C3): warnt den Piloten bei potenziellen Luftraumverstößen. Geo-Fence: virtueller Zaun, der den Einflug aktiv verhindert oder das UAS stoppt.'},
+  {q:'Was passiert beim RTH-Manöver (Return to Home) wenn kein Kollisionsvermeidungssystem aktiv ist?',opts:['Das UAS landet sofort an Ort und Stelle','Es wählt den direkten (kürzesten) Weg zurück — ohne Hindernisse zu berücksichtigen','Es fliegt im Kreis bis der Pilot wieder Kontrolle übernimmt','Es steigt auf maximale Höhe und dann zurück'],c:1,fb:'RTH wählt den kürzesten Weg zur Startposition. Hindernisse werden dabei nicht automatisch umflogen! Lösung: RTH-Höhe höher als alle Hindernisse einstellen + Kollisionsvermeidung aktivieren.'},
+  {q:'Warum müssen beschädigte Propeller sofort ersetzt werden?',opts:['Wegen Optik — beschädigte Propeller sehen unprofessionell aus','Ein beschädigter Propeller dreht asymmetrisch → Vibrationen → Motorschäden → möglicher Absturz','Wegen Lärm — beschädigte Propeller sind lauter','Wegen Gesetz — Paragraf 27 LuftVO'],c:1,fb:'Beschädigte Propeller rotieren ungleichmäßig. Das erzeugt Vibrationen, die auf Motoren, Elektronik und Rahmen übertragen werden und zu weiteren Schäden und schließlich Absturz führen können.'},
+  // Kapitel 3: Datenverbindung & Flugmodi
+  {q:'Welche Frequenzen werden standardmäßig für UAS-Steuerungssignale verwendet?',opts:['AM 100 MHz und FM 200 MHz','2,4 GHz und 5,8 GHz (UHF-Bereich)','10 GHz und 24 GHz (Mikrowellenbereich)','433 MHz — ausschließlich'],c:1,fb:'UAS nutzen standardmäßig 2,4 GHz und 5,8 GHz (UHF-Bereich) mit ca. 600 m Reichweite. Alternativ 433/868 MHz für größere Reichweite aber weniger Datendurchsatz.'},
+  {q:'Wofür steht RFID-Code im UAS-Kontext?',opts:['Radio Frequency Information Data','Remote Flight Identification','Radio Frequency IDentification — eindeutiger Kopplungscode zwischen Sender und Empfänger','Redundant Flight Instruction Device'],c:2,fb:'RFID = Radio Frequency IDentification. Der Code koppelt Fernsteuerung und UAS eindeutig. Das verhindert, dass dein UAS auf die Fernsteuerung einer anderen Person reagiert.'},
+  {q:'Welcher Steuerungsmodus ist der Industriestandard für kommerzielle UAS?',opts:['Modus 1 — wegen besserer Präzision','Modus 3 — wegen Symmetrie','Modus 2 — entspricht den Werkseinstellungen der meisten kommerziellen UAS','Modus 4 — speziell für Europa'],c:2,fb:'Modus 2 ist der globale Industriestandard für kommerzielle UAS-Betreiber und entspricht den Werkseinstellungen der meisten Drohnen. Modus 1 nutzen vereinzelt Hobbypiloten.'},
+  {q:'Was kann der GNSS-Modus (GPS-Modus) eines UAS leisten?',opts:['Er hält nur die Höhe, nicht die Position','Er hält sowohl Höhe als auch horizontale Position automatisch — braucht aber ausreichend Satellitensignale','Er fliegt automatisch zum nächsten Wegpunkt','Er aktiviert automatisch den RTH bei Signalverlust'],c:1,fb:'GNSS-Modus hält Position und Höhe automatisch durch kontinuierliche GPS-Positionsüberwachung. Voraussetzung: ausreichend Satelliten ohne Abschirmung. Ohne GPS nur Höhenmodus möglich.'},
+  {q:'Was gilt für den vollautonomen Flugmodus (Pilot kann nicht eingreifen)?',opts:['Erlaubt wenn das UAS unter 500g wiegt','Erlaubt in A3-Kategorie','Derzeit grundsätzlich nicht zulässig — Fernpiloten müssen jederzeit eingreifen können','Erlaubt nach bestandener A2-Prüfung'],c:2,fb:'Vollautonomer Betrieb (ohne Möglichkeit des Fernpiloten einzugreifen) ist derzeit nicht zulässig. Der Fernpilot muss immer die Möglichkeit haben, die Steuerung zu übernehmen oder RTH einzuleiten.'},
+  // Kapitel 4: Wartung
+  {q:'Was muss nach jeder Wartung, Hardware-Änderung oder Firmware-Update zwingend gemacht werden?',opts:['Den Hersteller telefonisch informieren','Einen Eintrag ins Flugbuch machen und dann normal weiterfliegen','Einen Testflug an einem sicheren Ort durchführen und alle Funktionen prüfen','Das UAS 24 Stunden ruhen lassen'],c:2,fb:'Nach jeder Wartung, Hardware-Änderung oder Firmware-Update ist ein Testflug an einem sicheren Ort Pflicht — alle Funktionen und Flugmodi müssen geprüft werden, bevor das UAS wieder im Einsatz ist.'},
+  {q:'Was ist bei der Eigenkontrolle der Motoren (nach 25h) zu prüfen?',opts:['Motortemperatur per Thermometer messen','Propeller von Hand drehen — Widerstand deutet auf Schmutz im Inneren hin','Motor zerlegen und Spulen kontrollieren','Stromverbrauch mit Multimeter messen'],c:1,fb:'Propeller vorsichtig von Hand drehen. Spürst du Widerstand? → Feine Sand- oder Staubpartikel haben sich im Motor abgelagert. Motor kräftig durchblasen und genauer untersuchen.'},
+  {q:'Was gehört laut LBA zur Eigenkontrolle nach 25 Stunden (Struktur)?',opts:['Lackierung erneuern, Fahrwerk ölen, GPS-Modul kalibrieren','Reinigen, auf Risse untersuchen, Schrauben nachziehen, Motoren prüfen, Propeller prüfen, Antennen prüfen','Nur Propeller und Akkus tauschen','Komplette Demontage und Neuaufbau'],c:1,fb:'Die Eigenkontrolle umfasst: Reinigung, Sichtprüfung auf Risse (mit Lupe), Schrauben nachziehen, Motoren von Hand drehen, Propeller auf Schäden prüfen, Antennen-Befestigung prüfen (auch Bodenstation).'},
+  {q:'Was ist bei Ad-hoc-Reparaturen am UAS zu beachten?',opts:['Alles selbst reparieren spart Zeit und Geld','Ad-hoc-Reparaturen (außer Propellerwechsel und oberflächliche Eingriffe) sind nicht ratsam — bei komplexen Reparaturen Fachbetriebe nutzen','Nur Firmware-Änderungen sind erlaubt','Alle Reparaturen sind verboten'],c:1,fb:'UAS sind komplex und vollgepackt mit Elektronik. Inneneingriffe nur durch Fachpersonal. Ad-hoc-Reparaturen beschränken sich auf Propellerwechsel und oberflächliche Eingriffe. Immer Herstelleranweisungen beachten.'}
+];
+
+const fqState = { questions:[], current:0, score:0 };
+
+function initFQ(){
+  const shuffled = [...fqPool].sort(()=>Math.random()-.5);
+  fqState.questions = shuffled.slice(0,20);
+  fqState.current = 0;
+  fqState.score = 0;
+  const dots = document.getElementById('fqDots');
+  dots.innerHTML = fqState.questions.map((_,i)=>`<div class="qdot" id="fqdot${i}"></div>`).join('');
+  document.getElementById('fqResult').style.display='none';
+  document.getElementById('fqBody').style.display='block';
+  document.getElementById('fqDots').style.display='flex';
+  showFQ();
+}
+
+function showFQ(){
+  const q = fqState.questions[fqState.current];
+  document.getElementById('fqCounter').textContent = `Frage ${fqState.current+1} von ${fqState.questions.length}`;
+  document.getElementById('fqQuestion').textContent = q.q;
+  document.getElementById('fqOpts').innerHTML = q.opts.map((o,i)=>`<button class="quiz-opt" onclick="answerFQ(this,${i})" style="color:#fff;background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2)"><span class="opt-l" style="background:rgba(255,255,255,.2);color:#fff">${['A','B','C','D'][i]}</span>${o}</button>`).join('');
+  document.getElementById('fqFeedback').style.display='none';
+  document.getElementById('fqFeedback').className='fq-feedback';
+  document.getElementById('fqNext').style.display='none';
+}
+
+function answerFQ(btn, idx){
+  const q = fqState.questions[fqState.current];
+  document.querySelectorAll('#fqOpts .quiz-opt').forEach(o=>o.disabled=true);
+  const fb = document.getElementById('fqFeedback');
+  const dot = document.getElementById('fqdot'+fqState.current);
+  if(idx===q.c){
+    btn.classList.add('correct');
+    fb.innerHTML='✅ Richtig! '+q.fb;
+    fb.className='fq-feedback show';
+    fqState.score++;
+    if(dot) dot.style.background='var(--green)';
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('#fqOpts .quiz-opt')[q.c].classList.add('correct');
+    fb.innerHTML='❌ Falsch. '+q.fb;
+    fb.className='fq-feedback show';
+    if(dot) dot.style.background='var(--red)';
+  }
+  fb.style.display='block';
+  document.getElementById('fqNext').style.display='block';
+}
+
+function nextFQ(){
+  fqState.current++;
+  if(fqState.current>=fqState.questions.length){ showFQResult(); }
+  else { showFQ(); }
+}
+
+function showFQResult(){
+  const pct = Math.round(fqState.score/fqState.questions.length*100);
+  const passed = pct>=75;
+  document.getElementById('fqBody').style.display='none';
+  document.getElementById('fqDots').style.display='none';
+  const r = document.getElementById('fqResult');
+  r.style.display='block';
+  r.innerHTML=`<div class="fq-result">
+    <div class="fq-score">${pct}%</div>
+    <div class="fq-result-label">${passed?'🎉 Bestanden!':'💪 Noch nicht ganz'}</div>
+    <div class="fq-result-msg">${fqState.score} von ${fqState.questions.length} Fragen richtig.<br>${passed?'Stark! Du kennst die Technik deiner Drohne in- und auswendig.':'Nochmal durch die Kapitel — dann schaffst du das!'}</div>
+    <button onclick="retryFQ()" style="background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.3);color:#fff;padding:11px 22px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif">🔄 Nochmal</button>
+  </div>`;
+  if(passed){
+    quizPassed = true;
+    updateProgress();
+    showToast('🎉 Modul 4 abgeschlossen!','success');
+    document.getElementById('moduleEnd').style.display='block';
+    markModuleDone();
+  }
+}
+
+function retryFQ(){
+  document.getElementById('fqResult').style.display='none';
+  document.getElementById('fqBody').style.display='block';
+  document.getElementById('fqDots').style.display='flex';
+  initFQ();
+}
+
+function markModuleDone(){
+  try{
+    const p = JSON.parse(localStorage.getItem('drohnenschein_progress')||'{}');
+    p['m4_completed'] = true;
+    localStorage.setItem('drohnenschein_progress', JSON.stringify(p));
+  }catch(e){}
+}
+
+function showToast(msg,type=''){
+  const t = document.getElementById('toast');
+  t.textContent=msg; t.className='toast '+type+' show';
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+// ─── INIT ──────────────────────────────────────────
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('progressFill').style.width='0%';
+  document.getElementById('progressPct').textContent='0%';
+  if(document.getElementById('headerProgress')) document.getElementById('headerProgress').textContent='0%';
+  const firstBody = document.getElementById('body_l0_1');
+  const firstTgl = document.getElementById('tgl_l0_1');
+  if(firstBody){ firstBody.classList.add('open'); if(firstTgl) firstTgl.classList.add('open'); }
+});
+</script>
+</body>
+</html>

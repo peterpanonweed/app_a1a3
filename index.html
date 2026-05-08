@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>drohnenschein.app — EU Drohnenführerschein A1/A3</title>
+<meta name="theme-color" content="#004499"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="DrohnenSchein"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icon-192.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--sky:#0066CC;--sky-light:#E8F4FF;--sky-dark:#004499;--yellow:#FFD600;--green:#00C853;--red:#FF3D00;--orange:#FF6D00;--purple:#9C27B0;--black:#0D0D0D;--white:#FAFAF8;--gray:#F2F2EF;--border:#E0E0DC;--text:#1A1A1A;--muted:#777}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);overflow-x:hidden;-webkit-tap-highlight-color:transparent;line-height:1.65}
+
+/* HEADER */
+.app-header{background:var(--sky-dark);padding:.875rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;padding-top:max(.875rem,env(safe-area-inset-top));box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.app-logo{font-family:'Syne',sans-serif;font-size:16px;color:#fff;font-weight:800;letter-spacing:-.02em;text-decoration:none}
+.app-logo span{color:var(--yellow)}
+.header-right{display:flex;align-items:center;gap:10px}
+.streak{display:flex;align-items:center;gap:4px;background:rgba(255,214,0,.15);padding:4px 10px;border-radius:20px;font-size:12px;color:var(--yellow);font-weight:600;border:1px solid rgba(255,214,0,.3)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--sky-dark) 0%,var(--sky) 100%);padding:2rem 1.25rem 3.5rem;color:#fff;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;bottom:-30px;left:0;right:0;height:62px;background:var(--white);border-radius:40px 40px 0 0;z-index:1}
+.hero::before{content:'';position:absolute;top:-30%;right:-10%;width:300px;height:300px;background:radial-gradient(circle,rgba(255,214,0,.18) 0%,transparent 70%);pointer-events:none}
+.hero-greeting{font-size:13px;color:rgba(255,255,255,.75);font-weight:500;margin-bottom:.4rem;letter-spacing:.02em;position:relative;z-index:2}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(20px,5vw,36px);font-weight:800;line-height:1.15;letter-spacing:-.02em;margin-bottom:.4rem;position:relative;z-index:2;hyphens:auto;-webkit-hyphens:auto;overflow-wrap:break-word}
+.hero .sub{font-size:14px;color:rgba(255,255,255,.85);line-height:1.6;margin-bottom:1.5rem;max-width:480px;position:relative;z-index:2}
+
+/* OVERALL PROGRESS */
+.overall-progress{background:rgba(0,0,0,.2);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:1.25rem;position:relative;z-index:2}
+.op-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:.8rem}
+.op-label{font-size:11px;color:rgba(255,255,255,.65);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.op-pct{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:var(--yellow);line-height:1}
+.op-pct small{font-size:13px;color:rgba(255,255,255,.55);font-weight:400;margin-left:3px}
+.op-track{height:8px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden}
+.op-fill{height:100%;background:linear-gradient(90deg,var(--yellow),#FFA000);border-radius:4px;transition:width .6s ease;width:0%}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:.8rem}
+.stat{text-align:center;padding:.5rem 0;border-right:1px solid rgba(255,255,255,.1)}
+.stat:last-child{border-right:none}
+.stat-num{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:#fff;line-height:1}
+.stat-lbl{font-size:10px;color:rgba(255,255,255,.55);margin-top:2px;letter-spacing:.06em;text-transform:uppercase}
+
+/* CONTENT */
+.content{max-width:680px;margin:0 auto;padding:0 1.25rem 6rem}
+
+/* LBA HINWEIS */
+.lba-badge{display:flex;align-items:center;gap:12px;background:var(--sky-light);border:1px solid #B3D4F5;border-radius:12px;padding:1rem 1.25rem;margin:2rem 0 1.5rem}
+.lba-badge-icon{font-size:28px;flex-shrink:0}
+.lba-badge-text{font-size:13px;color:#1A3A5C;line-height:1.55}
+.lba-badge-text strong{color:var(--sky-dark);font-weight:700}
+
+/* SECTION HEADER */
+.section-head{display:flex;justify-content:space-between;align-items:flex-end;margin:2rem 0 1rem}
+.section-head h2{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--text);letter-spacing:-.01em}
+.section-head .count{font-size:13px;color:var(--muted)}
+
+/* MAIN MODULE CARDS */
+.modules-list{display:flex;flex-direction:column;gap:16px}
+
+.mod-card{background:#fff;border:1.5px solid var(--border);border-radius:18px;overflow:hidden;transition:all .25s;text-decoration:none;color:inherit;display:block;position:relative}
+.mod-card:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.09)}
+.mod-card.done{border-color:var(--green)}
+.mod-card.locked{opacity:.8;cursor:default}
+.mod-card.locked:hover{transform:none;box-shadow:none}
+
+.mod-card-top{padding:1.25rem 1.25rem 1rem;display:flex;gap:14px;align-items:flex-start}
+.mod-icon-wrap{position:relative;flex-shrink:0}
+.mod-icon{width:56px;height:56px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+.mod-status-dot{position:absolute;bottom:-4px;right:-4px;width:22px;height:22px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;border:2.5px solid #fff;box-shadow:0 2px 4px rgba(0,0,0,.1)}
+
+.mod-info{flex:1;min-width:0}
+.mod-eyebrow{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
+.mod-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;line-height:1.2;margin-bottom:5px}
+.mod-desc{font-size:13px;color:var(--muted);line-height:1.5}
+
+/* SUBCHAPTERS LIST */
+.mod-chapters{padding:0 1.25rem 1.25rem}
+.chapters-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
+.chapter-pills{display:flex;flex-direction:column;gap:5px}
+.chapter-pill{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--gray);border-radius:9px;font-size:13px;color:var(--text);transition:all .15s}
+.chapter-pill.done{background:#E8F5E9;color:#1B5E20}
+.chapter-pill.active{background:var(--sky-light);color:var(--sky-dark);font-weight:600}
+.chapter-pill.locked-ch{color:var(--muted);opacity:.7}
+.pill-icon{font-size:14px;width:20px;text-align:center;flex-shrink:0}
+.pill-name{flex:1}
+.pill-status{font-size:11px;font-weight:600;flex-shrink:0}
+
+/* PROGRESS BAR BOTTOM */
+.mod-progress-bar{padding:.8rem 1.25rem;border-top:1px solid var(--border);display:flex;align-items:center;gap:12px;background:#F8F9FA}
+.mpb-track{flex:1;height:5px;background:#E0E0DC;border-radius:3px;overflow:hidden}
+.mpb-fill{height:100%;border-radius:3px;transition:width .4s}
+.mpb-label{font-size:12px;color:var(--muted);flex-shrink:0;min-width:70px;text-align:right}
+
+/* CTA BUTTON */
+.mod-cta-btn{display:block;width:calc(100% - 2.5rem);margin:0 1.25rem 1.25rem;padding:13px;background:var(--sky-dark);color:#fff;border:none;border-radius:10px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;text-align:center;text-decoration:none;cursor:pointer;transition:all .2s;letter-spacing:.01em}
+.mod-cta-btn:hover{background:var(--sky);transform:translateY(-1px)}
+.mod-cta-btn.done-btn{background:#004499}
+.mod-cta-btn.locked-btn{background:#B0BEC5;cursor:default}
+.mod-cta-btn.locked-btn:hover{transform:none}
+
+/* FINAL EXAM CARD */
+.exam-card{background:linear-gradient(135deg,var(--sky-dark),#1565C0);border-radius:18px;padding:1.75rem 1.25rem;margin-top:2rem;color:#fff;text-align:center;position:relative;overflow:hidden}
+.exam-card::before{content:'';position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(255,214,0,.15) 0%,transparent 70%);pointer-events:none}
+.exam-icon{font-size:52px;margin-bottom:.75rem}
+.exam-card h3{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:.5rem}
+.exam-card p{font-size:14px;color:rgba(255,255,255,.8);line-height:1.6;margin-bottom:1.5rem}
+.exam-btn{display:inline-block;background:var(--yellow);color:var(--black);padding:13px 32px;border-radius:10px;font-family:'Syne',sans-serif;font-size:15px;font-weight:800;text-decoration:none;cursor:pointer;border:none;transition:all .2s}
+.exam-btn:hover{background:#E6C200;transform:translateY(-1px)}
+.exam-btn:disabled,.exam-btn.disabled{background:#90A4AE;color:#fff;cursor:default;transform:none}
+.exam-locked-note{font-size:12px;color:rgba(255,255,255,.55);margin-top:.75rem}
+
+/* FOOTER */
+.footer{margin-top:3rem;padding:2rem 1.25rem;background:var(--gray);border-top:1px solid var(--border);text-align:center;font-size:13px;color:var(--muted);line-height:1.8}
+.footer a{color:var(--sky);text-decoration:none;font-weight:500}
+.reset-btn{margin-top:1.25rem;padding:9px 20px;background:var(--red);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+
+
+/* PWA INSTALL BANNER */
+.pwa-banner{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);padding:1rem 1.25rem;z-index:500;display:none;box-shadow:0 -4px 24px rgba(0,0,0,.12);animation:slideUp .3s ease}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.pwa-banner-inner{max-width:480px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.pwa-banner-icon{width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,#004499,#0066CC);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.pwa-banner-text{flex:1;min-width:0}
+.pwa-banner-text strong{display:block;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--text);margin-bottom:2px}
+.pwa-banner-text span{font-size:12px;color:var(--muted);line-height:1.4}
+.pwa-banner-btns{display:flex;gap:8px;flex-shrink:0}
+.pwa-install-btn{background:#004499;color:#fff;border:none;border-radius:8px;padding:9px 16px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.pwa-dismiss-btn{background:var(--gray);color:var(--muted);border:none;border-radius:8px;padding:9px 12px;font-size:13px;font-weight:600;cursor:pointer}
+
+.toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--text);color:#fff;padding:13px 24px;border-radius:12px;font-size:14px;font-weight:500;box-shadow:0 4px 16px rgba(0,0,0,.3);z-index:1000;opacity:0;transition:all .3s ease;pointer-events:none;max-width:90%;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{background:var(--green)}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" style="position:fixed;inset:0;background:#004499;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;padding:2rem">
+  <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#fff;margin-bottom:.25rem">Drohnen<span style="color:#FFD600">Schein</span>.app</div>
+  <div style="font-size:13px;color:rgba(255,255,255,.6);margin-bottom:2.5rem;letter-spacing:.04em">Beta-Zugang</div>
+  <div style="width:100%;max-width:320px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:1.75rem">
+    <div style="font-size:14px;color:rgba(255,255,255,.8);font-weight:500;margin-bottom:1rem">Bitte Passwort eingeben:</div>
+    <input id="pwInput" type="password" placeholder="Passwort" onkeydown="if(event.key==='Enter')checkPw()"
+      style="width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#fff;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:.75rem"
+      autocomplete="current-password"/>
+    <div id="pwError" style="font-size:13px;color:#FF6D6D;margin-bottom:.75rem;display:none">❌ Falsches Passwort</div>
+    <button onclick="checkPw()"
+      style="width:100%;background:#FFD600;color:#000;border:none;border-radius:10px;padding:13px;font-family:'Syne',sans-serif;font-size:15px;font-weight:800;cursor:pointer">
+      Einloggen →
+    </button>
+  </div>
+  <div style="font-size:11px;color:rgba(255,255,255,.3);margin-top:2rem">Beta · drohnenschein.app</div>
+</div>
+
+<script>
+async function checkPw(){
+  const pw = document.getElementById('pwInput').value;
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
+  const hash = Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  if(hash === '946288a30206b072b5cfb5cd6ca228fdacdda35892f0e4c1b0efd19aea84dd09'){
+    document.getElementById('loginScreen').style.display='none';
+    sessionStorage.setItem('ds_auth','1');
+  } else {
+    document.getElementById('pwError').style.display='block';
+    document.getElementById('pwInput').value='';
+    document.getElementById('pwInput').focus();
+  }
+}
+// Auto-hide if already authenticated in this session
+if(sessionStorage.getItem('ds_auth')==='1'){
+  document.addEventListener('DOMContentLoaded',()=>{
+    document.getElementById('loginScreen').style.display='none';
+  });
+}
+</script>
+
+<header class="app-header">
+  <a href="#" class="app-logo">Drohnen<span>Schein</span>.app</a>
+  <div class="header-right">
+    <div class="streak">🔥 <span id="streakDays">0</span>-Tage-Streak</div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-greeting">Willkommen zurück, Pilot 👋</div>
+  <h1>Dein Weg zum<br>EU-Drohnen&shy;führerschein</h1>
+  <p class="sub">Deine Lernvorbereitung für den Kompetenznachweis A1/A3.<br>Offizieller Lernstoff direkt vom LBA — strukturiert, interaktiv und so gebaut, dass Du wirklich bestehst.</p>
+
+  <div class="overall-progress">
+    <div class="op-top">
+      <div class="op-label">Gesamtfortschritt</div>
+      <div class="op-pct" id="overallPct">0<small>%</small></div>
+    </div>
+    <div class="op-track">
+      <div class="op-fill" id="overallFill"></div>
+    </div>
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-num" id="statDone">0</div>
+        <div class="stat-lbl">Module ✓ von 4</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="statChapters">0 / 14</div>
+        <div class="stat-lbl">Kapitel</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" style="font-size:13px;line-height:1.3" id="statExam">40 Fragen</div>
+        <div class="stat-lbl" id="statExamLbl">Abschlusstest</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+  <div class="lba-badge">
+    <div class="lba-badge-icon">🏛️</div>
+    <div class="lba-badge-text">
+      <strong>100% LBA-konform</strong> — Alle Inhalte basieren direkt auf dem offiziellen Lernmaterial der Europäischen Agentur für Flugsicherheit (EASA) und des Luftfahrtbundesamts (LBA). Wer hier alles besteht, ist bereit für die echte Prüfung.
+    </div>
+  </div>
+
+  <div class="section-head">
+    <h2>Deine 4 Lernmodule</h2>
+    <div class="count" id="moduleCount">0 von 4 abgeschlossen</div>
+  </div>
+
+  <div class="modules-list" id="modulesList"></div>
+
+  <div class="exam-card" id="examCard">
+    <div class="exam-icon">🎯</div>
+    <h3>Abschlusstest</h3>
+    <p>40 zufällige Fragen aus dem Gesamtpool · 4 Antwortoptionen · 75% zum Bestehen · Jeder Durchlauf ist anders</p>
+    <button class="exam-btn disabled" id="examBtn" disabled>🔒 Erst alle Module abschließen</button>
+    <div class="exam-locked-note" id="examNote">Noch <span id="examModulesLeft">4</span> Module ausstehend — dann startet der Abschlusstest</div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div>drohnenschein.app · <a href="mailto:mail@adamnuemm.de">Kontakt</a> · <a href="#">Impressum</a> · <a href="#">Datenschutz</a></div>
+  <div style="margin-top:.5rem;color:#aaa;font-size:12px">Basiert auf EASA-Verordnungen 2018/1139 · 2019/945 · 2019/947</div>
+  <button class="reset-btn" onclick="resetProgress()">Fortschritt zurücksetzen</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── MODUL-DEFINITION ──────────────────────────────────────────────────────
+const MODULES = [
+  {
+    id: 1,
+    file: 'modul-1.html',
+    icon: '⚖️',
+    color: '#004499',
+    gradient: 'linear-gradient(135deg,#004499,#0066CC)',
+    title: 'Luftrecht & Sicherheit',
+    desc: 'EU-Kategorien, Klassen, Behörden, Lufträume, Datenschutz, Versicherung',
+    eyebrow: 'Modul 1 · Luftrecht',
+    progressKey: 'm1_completed',
+    chaptersKey: 'm1_chapters',
+    chapters: [
+      { name: 'UAS-Klassifizierungen', key: 'm1_ch1' },
+      { name: 'Luftfahrtverwaltung & Grundlegende Regeln', key: 'm1_ch2' },
+      { name: 'Lufträume & Beschränkungen', key: 'm1_ch3' },
+      { name: 'Sicherer Betrieb & Verantwortlichkeiten', key: 'm1_ch4' },
+      { name: 'Sicherheit, Datenschutz & Versicherung', key: 'm1_ch5' },
+    ]
+  },
+  {
+    id: 2,
+    file: 'modul-2.html',
+    icon: '🧠',
+    color: '#00695C',
+    gradient: 'linear-gradient(135deg,#00695C,#00897B)',
+    title: 'Menschliches Leistungsvermögen',
+    desc: 'Gesundheit, Fitness, I\'M SAFE, Wahrnehmung, Situational Awareness',
+    eyebrow: 'Modul 2 · Menschliche Faktoren',
+    progressKey: 'm2_completed',
+    chaptersKey: 'm2_chapters',
+    chapters: [
+      { name: 'Gesundheit & Fitness', key: 'm2_ch1' },
+      { name: 'Wahrnehmung & Situational Awareness', key: 'm2_ch2' },
+    ]
+  },
+  {
+    id: 3,
+    file: 'modul-3.html',
+    icon: '📋',
+    color: '#E65100',
+    gradient: 'linear-gradient(135deg,#E65100,#FF6F00)',
+    title: 'Betriebliche Verfahren',
+    desc: 'Flugvorbereitung, Checklisten, Überwachung, Nachbereitung, Notfälle',
+    eyebrow: 'Modul 3 · Betrieb',
+    progressKey: 'm3_completed',
+    chaptersKey: 'm3_chapters',
+    chapters: [
+      { name: 'UAS-Flugvorbereitung', key: 'm3_ch1' },
+      { name: 'Flugüberwachung & Nachbereitung', key: 'm3_ch2' },
+      { name: 'Nichtplanmäßige Verfahren', key: 'm3_ch3' },
+    ]
+  },
+  {
+    id: 4,
+    file: 'modul-4.html',
+    icon: '🔧',
+    color: '#6A1B9A',
+    gradient: 'linear-gradient(135deg,#6A1B9A,#8E24AA)',
+    title: 'Allgemeine UAS-Kunde',
+    desc: 'Grundlagen des Fliegens, Bauweise, Datenverbindung, Flugmodi, Wartung',
+    eyebrow: 'Modul 4 · Technik',
+    progressKey: 'm4_completed',
+    chaptersKey: 'm4_chapters',
+    chapters: [
+      { name: 'Grundlagen des Fliegens', key: 'm4_ch1' },
+      { name: 'Bauweise & Limitierungen', key: 'm4_ch2' },
+      { name: 'Datenverbindung & Flugmodi', key: 'm4_ch3' },
+      { name: 'Wartung', key: 'm4_ch4' },
+    ]
+  }
+];
+
+// ─── PROGRESS ──────────────────────────────────────────────────────────────
+function getProgress() {
+  try { return JSON.parse(localStorage.getItem('drohnenschein_progress') || '{}'); } catch(e) { return {}; }
+}
+
+function getModuleDone(m) {
+  const p = getProgress();
+  return !!p[m.progressKey];
+}
+
+function getChaptersDone(m) {
+  const p = getProgress();
+  return m.chapters.filter(ch => !!p[ch.key]).length;
+}
+
+function getTotalChaptersDone() {
+  return MODULES.reduce((sum, m) => sum + getChaptersDone(m), 0);
+}
+
+function getTotalChapters() {
+  return MODULES.reduce((sum, m) => sum + m.chapters.length, 0);
+}
+
+function getModulesDone() {
+  return MODULES.filter(m => getModuleDone(m)).length;
+}
+
+// ─── RENDER ────────────────────────────────────────────────────────────────
+function renderModules() {
+  const list = document.getElementById('modulesList');
+  const p = getProgress();
+  const modulesDone = getModulesDone();
+  const totalChDone = getTotalChaptersDone();
+  const totalCh = getTotalChapters();
+
+  // Update hero stats
+  const overallPct = Math.round((totalChDone / totalCh) * 100);
+  document.getElementById('overallPct').innerHTML = overallPct + '<small>%</small>';
+  document.getElementById('overallFill').style.width = overallPct + '%';
+  document.getElementById('statDone').textContent = modulesDone;
+  document.getElementById('statChapters').textContent = totalChDone + ' / ' + totalCh;
+  document.getElementById('moduleCount').textContent = modulesDone + ' von ' + MODULES.length + ' abgeschlossen';
+
+  // Streak
+  updateStreak();
+
+  // Exam button + stat
+  const examModulesLeft = MODULES.length - modulesDone;
+  document.getElementById('examModulesLeft').textContent = examModulesLeft;
+  const examStat = document.getElementById('statExam');
+  const examLbl = document.getElementById('statExamLbl');
+  if(modulesDone === MODULES.length) {
+    examStat.innerHTML = 'Abschlusstest<br><small style="font-size:10px;font-weight:400">40 Fragen · freigeschaltet ✅</small>';
+    examLbl.textContent = '';
+  } else {
+    examStat.innerHTML = 'Abschlusstest<br><small style="font-size:10px;font-weight:400;opacity:.7">40 Fragen · (noch gesperrt)</small>';
+    examLbl.textContent = '';
+  }
+  if(modulesDone === MODULES.length) {
+    const btn = document.getElementById('examBtn');
+    btn.classList.remove('disabled');
+    btn.disabled = false;
+    btn.textContent = '🎯 Abschlusstest starten';
+    btn.onclick = () => window.location.href = 'exam.html';
+    document.getElementById('examNote').style.display = 'none';
+  }
+
+  list.innerHTML = '';
+
+  MODULES.forEach((m, idx) => {
+    const done = getModuleDone(m);
+    const chDone = getChaptersDone(m);
+    const chTotal = m.chapters.length;
+    const pct = chTotal > 0 ? Math.round((chDone / chTotal) * 100) : 0;
+
+    // Unlock logic: first module always unlocked, rest unlock after previous done
+    const isLocked = idx > 0 && !getModuleDone(MODULES[idx - 1]);
+    const isCurrent = !done && !isLocked;
+
+    // Status dot
+    let dotContent = '';
+    if(done) dotContent = '<div class="mod-status-dot" style="background:var(--green);color:#fff">✓</div>';
+    else if(isLocked) dotContent = '<div class="mod-status-dot" style="background:#B0BEC5">🔒</div>';
+    else dotContent = '<div class="mod-status-dot" style="background:var(--yellow);color:#000">▶</div>';
+
+    // Eyebrow color
+    const eyebrowColor = done ? '#1B5E20' : isLocked ? '#aaa' : m.color;
+
+    // Chapter pills
+    const pillsHTML = m.chapters.map((ch, ci) => {
+      const chDoneFlag = !!p[ch.key];
+      // Chapter unlocked if previous chapter done or first chapter
+      const chLocked = isLocked;
+      let pillClass = chLocked ? 'locked-ch' : (chDoneFlag ? 'done' : (ci === chDone && !done ? 'active' : ''));
+      let pillIcon = chLocked ? '🔒' : (chDoneFlag ? '✅' : (ci === chDone && !done ? '▶' : '○'));
+      let pillStatus = chLocked ? '' : (chDoneFlag ? 'Erledigt' : (ci === chDone && !done ? 'Weiter' : 'Offen'));
+      return `<div class="chapter-pill ${pillClass}">
+        <span class="pill-icon">${pillIcon}</span>
+        <span class="pill-name">${ch.name}</span>
+        <span class="pill-status">${pillStatus}</span>
+      </div>`;
+    }).join('');
+
+    // CTA
+    let ctaText, ctaClass, ctaHref;
+    if(done) { ctaText = '🔄 Wiederholen'; ctaClass = 'done-btn'; ctaHref = m.file; }
+    else if(isLocked) { ctaText = '🔒 Noch gesperrt'; ctaClass = 'locked-btn'; ctaHref = '#'; }
+    else if(chDone === 0) { ctaText = '🚀 Modul starten'; ctaClass = ''; ctaHref = m.file; }
+    else { ctaText = '▶ Weiter lernen'; ctaClass = ''; ctaHref = m.file; }
+
+    // Progress bar color
+    const barColor = done ? 'var(--green)' : m.color;
+
+    const card = document.createElement('div');
+    card.className = 'mod-card' + (done ? ' done' : '') + (isLocked ? ' locked' : '');
+    card.innerHTML = `
+      <div class="mod-card-top">
+        <div class="mod-icon-wrap">
+          <div class="mod-icon" style="background:${m.gradient}">${m.icon}</div>
+          ${dotContent}
+        </div>
+        <div class="mod-info">
+          <div class="mod-eyebrow" style="color:${eyebrowColor}">${m.eyebrow}</div>
+          <div class="mod-title" style="color:${isLocked?'#888':'var(--text)'}">${m.title}</div>
+          <div class="mod-desc">${m.desc}</div>
+        </div>
+      </div>
+      <div class="mod-chapters">
+        <div class="chapters-label">Kapitel (${chDone}/${chTotal})</div>
+        <div class="chapter-pills">${pillsHTML}</div>
+      </div>
+      <div class="mod-progress-bar">
+        <div class="mpb-track">
+          <div class="mpb-fill" style="width:${pct}%;background:${barColor}"></div>
+        </div>
+        <div class="mpb-label">${pct}% abgeschlossen</div>
+      </div>
+      <a href="${ctaHref}" class="mod-cta-btn ${ctaClass}" ${isLocked?'onclick="return false;"':''}>${ctaText}</a>
+    `;
+    list.appendChild(card);
+  });
+}
+
+// ─── STREAK ────────────────────────────────────────────────────────────────
+function updateStreak() {
+  try {
+    const p = getProgress();
+    const today = new Date().toDateString();
+    const lastActive = p.lastActive || '';
+    const streak = p.streak || 0;
+    if(lastActive !== today) {
+      const yesterday = new Date(Date.now() - 86400000).toDateString();
+      const newStreak = lastActive === yesterday ? streak + 1 : 1;
+      p.lastActive = today;
+      p.streak = newStreak;
+      localStorage.setItem('drohnenschein_progress', JSON.stringify(p));
+    }
+    document.getElementById('streakDays').textContent = p.streak || 1;
+  } catch(e) {}
+}
+
+// ─── RESET ─────────────────────────────────────────────────────────────────
+function resetProgress() {
+  if(confirm('Wirklich den gesamten Fortschritt zurücksetzen?')) {
+    localStorage.removeItem('drohnenschein_progress');
+    renderModules();
+    showToast('Fortschritt zurückgesetzt');
+  }
+}
+
+// ─── TOAST ─────────────────────────────────────────────────────────────────
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type + ' show';
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ─── INIT ──────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', renderModules);
+</script>
+
+<!-- PWA INSTALL BANNER -->
+<div class="pwa-banner" id="pwaBanner">
+  <div class="pwa-banner-inner">
+    <div class="pwa-banner-icon">🚁</div>
+    <div class="pwa-banner-text">
+      <strong>App installieren</strong>
+      <span>Direkt auf dem Homescreen — wie eine echte App, offline verfügbar</span>
+    </div>
+    <div class="pwa-banner-btns">
+      <button class="pwa-dismiss-btn" onclick="dismissInstall()">✕</button>
+      <button class="pwa-install-btn" onclick="installApp()">Installieren</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Show banner after short delay
+  if(!localStorage.getItem('pwa_dismissed')){
+    setTimeout(()=>{
+      document.getElementById('pwaBanner').style.display='block';
+    }, 2000);
+  }
+});
+
+function installApp(){
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then((result)=>{
+    if(result.outcome==='accepted'){
+      document.getElementById('pwaBanner').style.display='none';
+    }
+    deferredPrompt = null;
+  });
+}
+
+function dismissInstall(){
+  document.getElementById('pwaBanner').style.display='none';
+  localStorage.setItem('pwa_dismissed','1');
+}
+
+window.addEventListener('appinstalled', ()=>{
+  document.getElementById('pwaBanner').style.display='none';
+  deferredPrompt = null;
+});
+</script>
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('SW registriert:', reg.scope))
+      .catch(err => console.log('SW Fehler:', err));
+  });
+}
+</script>
+</body>
+</html>
