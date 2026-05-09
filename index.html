@@ -192,11 +192,11 @@ img { max-width: 100%; height: auto; }
 .resume-btn{background:linear-gradient(135deg,var(--sky),var(--sky-dark));color:#fff;border:none;}
 .resume-btn:hover{filter:brightness(1.1);}
 
-.mod-cta-row{display:flex;gap:.5rem;margin-top:1rem}
-.mod-cta-row .cta-btn{flex:1;text-align:center;padding:11px 8px;border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:none;text-decoration:none;display:block}
-.cta-reset{background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.15)!important}
-.cta-reset:hover{background:rgba(255,255,255,.15)}
-.cta-continue{background:linear-gradient(135deg,var(--sky),var(--sky-dark));color:#fff}
+.mod-cta-row{display:flex;gap:.5rem;margin:1rem 1.25rem 1.25rem}
+.cta-btn{text-align:center;padding:11px 12px;border-radius:12px;font-family:'Syne',sans-serif;font-weight:700;cursor:pointer;border:none;text-decoration:none;display:block;transition:all .2s}
+.cta-reset{flex:0 0 auto;font-size:12px;background:rgba(0,0,0,.08);color:rgba(0,0,0,.4);border:1px solid rgba(0,0,0,.12)!important;white-space:nowrap}
+.cta-reset:hover{background:rgba(0,0,0,.15)}
+.cta-continue{flex:1;font-size:14px;background:var(--sky-dark);color:#fff}
 .cta-continue:hover{filter:brightness(1.1)}
 
 </style>
@@ -491,6 +491,17 @@ function renderModules() {
     else if(chDone === 0 && realPct === 0) { ctaText = '🚀 Modul starten'; ctaClass = ''; ctaHref = m.file; }
     else { ctaText = '▶ Weiter — Kapitel ' + (savedChapter + 1); ctaClass = 'resume-btn'; ctaHref = resumeHref; }
 
+    // CTA HTML
+    let ctaHTML;
+    if(ctaClass === 'resume-btn') {
+      ctaHTML = `<div class="mod-cta-row">
+        <a class="cta-btn cta-reset" href="#" onclick="resetModuleProgress('${mKey}', '${m.file}'); return false;">↺ Neu starten</a>
+        <a class="cta-btn cta-continue" href="${resumeHref}">▶ Weiter &mdash; Kap. ${savedChapter + 1}</a>
+      </div>`;
+    } else {
+      ctaHTML = `<a href="${ctaHref}" class="mod-cta-btn ${ctaClass}" ${isLocked ? 'onclick="return false;"' : ''}>${ctaText}</a>`;
+    }
+
     // Progress bar color
     const barColor = done ? 'var(--green)' : m.color;
 
@@ -518,14 +529,7 @@ function renderModules() {
         </div>
         <div class="mpb-label">${pct}% abgeschlossen</div>
       </div>
-      ${ctaClass === 'resume-btn' ? `
-        <div class="mod-cta-row">
-          <a class="cta-btn cta-reset" href="#" onclick="resetModuleProgress('${mKey}', '${m.file}'); return false;">↺ Neu starten</a>
-          <a class="cta-btn cta-continue" href="${resumeHref}">▶ Weiter — Kap. ${savedChapter + 1}</a>
-        </div>
-      ` : `
-      <a href="${ctaHref}" class="mod-cta-btn ${ctaClass}" ${isLocked ? 'onclick="return false;"' : ''}>${ctaText}</a>
-      `}
+      ${ctaHTML}
     `;
     list.appendChild(card);
   });
