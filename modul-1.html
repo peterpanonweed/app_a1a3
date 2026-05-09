@@ -172,6 +172,116 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);
 .vorrang-num{width:30px;height:30px;background:var(--sky-dark);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;flex-shrink:0}
 .vorrang-text{flex:1;font-size:14px;line-height:1.5}
 .vorrang-text strong{color:var(--sky-dark)}
+
+/* ═══════════════════════════════════════════════════
+   MOBILE FOUNDATION - gilt strukturell für alle Module
+   Samsung S22 und ähnliche (360px Breite)
+   ═══════════════════════════════════════════════════ */
+
+/* 1. Volle Breite, kein horizontales Scrollen */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* 2. Deutsche Silbentrennung überall */
+* {
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  box-sizing: border-box;
+}
+
+/* 3. Content-Breite: volle Nutzung */
+.lesson-content, .chapter-section, .lesson-body {
+  width: 100%;
+  max-width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* 4. Alle Boxen: volle Breite */
+.quiz-block, .scenario, .info-box, .merke-box,
+.box-text, .highlight-box, .warn-box, .tip-box,
+.lesson-card, .chapter-card {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* 5. Tabellen: horizontal scrollbar nur wo nötig */
+.table-wrap, .comparison-table, .zone-grid, .info-grid, .box-grid {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+table {
+  min-width: 100%;
+}
+
+/* 6. Bilder responsive */
+img, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 7. Quiz-Buttons volle Breite */
+.quiz-opt, .sc-opt {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 8. Header hide-on-scroll (Querformat) */
+.app-header {
+  transition: transform .3s ease;
+  will-change: transform;
+}
+.app-header.hidden {
+  transform: translateY(-100%);
+}
+.progress-mini {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  z-index: 1001;
+  opacity: 0;
+  transition: opacity .3s;
+  pointer-events: none;
+}
+.progress-mini.visible { opacity: 1; }
+.progress-mini-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--yellow), var(--green));
+  width: 0%;
+  transition: width .5s;
+}
+
+@media (max-width: 480px) {
+  /* Padding auf Mobile reduzieren */
+  .lesson-body { padding: 0 .75rem; }
+  .quiz-block { padding: 1rem .9rem; }
+  .scenario { margin: 1rem 0; }
+  .scenario-opts { padding: .4rem .75rem .9rem; }
+  
+  /* Kapitel-Tabs scrollen horizontal */
+  .chapter-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap;
+    padding-bottom: 4px;
+  }
+  .chapter-tab {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  
+  /* Fortschrittsbereich kompakter */
+  .progress-bar-area { padding: .5rem .75rem; }
+}
+
 </style>
 </head>
 <body>
@@ -1586,6 +1696,45 @@ document.addEventListener('DOMContentLoaded',()=>{
   const firstTgl = document.getElementById('tgl_l0_1');
   if(firstBody){ firstBody.classList.add('open'); if(firstTgl) firstTgl.classList.add('open'); }
 });
+</script>
+<script>
+// ── HIDE ON SCROLL (Querformat) ─────────────────────
+(function(){
+  var lastY = 0;
+  var hidden = false;
+  var header = document.querySelector('.app-header');
+  var mini = document.getElementById('progressMini');
+  var miniFill = document.getElementById('progressMiniFill');
+
+  function updateMini(){
+    var pct = document.getElementById('progressPct');
+    if(pct && miniFill){
+      miniFill.style.width = pct.textContent;
+    }
+  }
+
+  window.addEventListener('scroll', function(){
+    var y = window.scrollY;
+    var landscape = window.innerWidth > window.innerHeight;
+    if(landscape){
+      if(y > lastY && y > 50 && !hidden){
+        header.classList.add('hidden');
+        if(mini) mini.classList.add('visible');
+        hidden = true;
+      } else if(y < lastY - 10 && hidden){
+        header.classList.remove('hidden');
+        if(mini) mini.classList.remove('visible');
+        hidden = false;
+      }
+    } else {
+      header.classList.remove('hidden');
+      if(mini) mini.classList.remove('visible');
+      hidden = false;
+    }
+    lastY = y;
+    updateMini();
+  }, {passive:true});
+})();
 </script>
 </body>
 </html>
