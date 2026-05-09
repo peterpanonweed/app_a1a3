@@ -437,7 +437,6 @@ function renderModules() {
     const done = getModuleDone(m);
     const chDone = getChaptersDone(m);
     const chTotal = m.chapters.length;
-    // Echter Fortschritt aus localStorage (Fragen-basiert)
     const moduleKeys = ['m1','m2','m3','m4'];
     const mKey = moduleKeys[idx];
     const realPct = p[mKey+'_progress'] || 0;
@@ -473,11 +472,10 @@ function renderModules() {
 
     // CTA - mit Resume-Position
     let ctaText, ctaClass, ctaHref;
-    const moduleKeys = ['m1','m2','m3','m4'];
-    const mKey = moduleKeys[idx] || 'm' + (idx+1);
+    const mKey2 = moduleKeys[idx] || 'm' + (idx+1);
     let savedProgress = {};
     try { savedProgress = JSON.parse(localStorage.getItem('drohnenschein_progress')||'{}'); } catch(e) {}
-    const savedChapter = savedProgress[mKey+'_chapter'] || 0;
+    const savedChapter = savedProgress[mKey2+'_chapter'] || 0;
     const resumeHref = savedChapter > 0 ? m.file + '?ch=' + savedChapter : m.file;
 
     if(done) { ctaText = '🔄 Wiederholen'; ctaClass = 'done-btn'; ctaHref = m.file; }
