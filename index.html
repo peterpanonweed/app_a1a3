@@ -131,45 +131,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
-<div id="loginScreen" style="position:fixed;inset:0;background:#004499;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;padding:2rem">
-  <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#fff;margin-bottom:.25rem">Drohnen<span style="color:#FFD600">Schein</span>.app</div>
-  <div style="font-size:13px;color:rgba(255,255,255,.6);margin-bottom:2.5rem;letter-spacing:.04em">Beta-Zugang</div>
-  <div style="width:100%;max-width:320px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:1.75rem">
-    <div style="font-size:14px;color:rgba(255,255,255,.8);font-weight:500;margin-bottom:1rem">Bitte Passwort eingeben:</div>
-    <input id="pwInput" type="password" placeholder="Passwort" onkeydown="if(event.key==='Enter')checkPw()"
-      style="width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#fff;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:.75rem"
-      autocomplete="current-password"/>
-    <div id="pwError" style="font-size:13px;color:#FF6D6D;margin-bottom:.75rem;display:none">❌ Falsches Passwort</div>
-    <button onclick="checkPw()"
-      style="width:100%;background:#FFD600;color:#000;border:none;border-radius:10px;padding:13px;font-family:'Syne',sans-serif;font-size:15px;font-weight:800;cursor:pointer">
-      Einloggen →
-    </button>
-  </div>
-  <div style="font-size:11px;color:rgba(255,255,255,.3);margin-top:2rem">Beta · drohnenschein.app</div>
-</div>
 
-<script>
-async function checkPw(){
-  const pw = document.getElementById('pwInput').value;
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
-  const hash = Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-  if(hash === '946288a30206b072b5cfb5cd6ca228fdacdda35892f0e4c1b0efd19aea84dd09'){
-    document.getElementById('loginScreen').style.display='none';
-    sessionStorage.setItem('ds_auth','1');
-  } else {
-    document.getElementById('pwError').style.display='block';
-    document.getElementById('pwInput').value='';
-    document.getElementById('pwInput').focus();
-  }
-}
-// Auto-hide if already authenticated in this session
-if(sessionStorage.getItem('ds_auth')==='1'){
-  document.addEventListener('DOMContentLoaded',()=>{
-    document.getElementById('loginScreen').style.display='none';
-  });
-}
-</script>
 
 <header class="app-header">
   <a href="#" class="app-logo">Drohnen<span>Schein</span>.app</a>
