@@ -518,7 +518,14 @@ function renderModules() {
         </div>
         <div class="mpb-label">${pct}% abgeschlossen</div>
       </div>
-      <a href="${ctaHref}" class="mod-cta-btn ${ctaClass}" ${isLocked?'onclick="return false;"':''}>${ctaText}</a>
+      \${ctaClass === 'resume-btn' ? `
+        <div class="mod-cta-row">
+          <a class="cta-btn cta-reset" href="#" onclick="resetModuleProgress('${mKey}', '${m.file}'); return false;">↺ Neu starten</a>
+          <a class="cta-btn cta-continue" href="${resumeHref}">▶ Weiter — Kap. ${savedChapter + 1}</a>
+        </div>
+      ` : `
+      <a href="${ctaHref}" class="mod-cta-btn ${ctaClass}" ${isLocked ? 'onclick="return false;"' : ''}>${ctaText}</a>
+      `}
     `;
     list.appendChild(card);
   });
