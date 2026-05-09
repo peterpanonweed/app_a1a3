@@ -122,22 +122,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);
 .quiz-fb.correct{background:rgba(0,200,83,.15);color:#A5D6A7}
 .quiz-fb.wrong{background:rgba(255,61,0,.15);color:#FFAB91}
 /* SCENARIO */
-.scenario{background:linear-gradient(135deg,var(--sky-dark),var(--sky));border:none;border-radius:14px;margin:1.4rem 0;position:relative;color:#fff}
-.scenario-tag{position:absolute;top:-10px;left:1rem;background:rgba(255,255,255,.2);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:4px;letter-spacing:.08em;z-index:2}
-.scenario-q{padding:1.1rem 1.25rem;font-size:14px;font-weight:500;background:rgba(0,0,0,.15);border-bottom:1px solid rgba(255,255,255,.15);line-height:1.6;color:#fff}
-.scenario-opts{display:flex;flex-direction:column;gap:7px;padding:.9rem}
-.sc-opt{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);border-radius:8px;padding:10px 14px;font-size:13px;cursor:pointer;text-align:left;color:#fff;width:100%;font-family:'DM Sans',sans-serif;transition:all .15s;display:flex;align-items:center;gap:10px;line-height:1.45}
-.sc-opt:hover{border-color:var(--sky);background:var(--sky-light)}
-.sc-opt.correct{border-color:var(--green);background:#E8F5E9;color:#1B5E20}
-.sc-opt.wrong{border-color:var(--red);background:#FFEBEE;color:#BF360C}
+.scenario{background:linear-gradient(135deg,var(--sky-dark),var(--sky));border-radius:14px;margin:2rem 0;position:relative;color:#fff;padding-top:.5rem}
+.scenario-tag{display:inline-block;background:rgba(255,255,255,.15);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:4px;letter-spacing:.08em;margin:.9rem 1.25rem .4rem;}
+.scenario-q{padding:.6rem 1.25rem 1rem;font-size:14px;font-weight:500;line-height:1.6;color:#fff}
+.scenario-opts{display:flex;flex-direction:column;gap:6px;padding:.4rem 1rem 1rem}
+.sc-opt{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);border-radius:8px;padding:10px 14px;font-size:13px;cursor:pointer;transition:all .15s;text-align:left;color:#fff;width:100%;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:10px;line-height:1.45}
+.sc-opt:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3)}
+.sc-opt.correct{background:rgba(0,200,83,.25);border-color:var(--green);color:#fff}
+.sc-opt.wrong{background:rgba(255,61,0,.25);border-color:var(--red);color:#fff}
 .sc-opt:disabled{cursor:default}
-.sc-opt .opt-l{width:24px;height:24px;border-radius:50%;background:var(--gray);color:var(--muted);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;margin-top:1px}
-.sc-opt.correct .opt-l{background:var(--green);color:#fff}
-.sc-opt.wrong .opt-l{background:var(--red);color:#fff}
-.sc-fb{padding:.9rem 1.1rem;font-size:13px;line-height:1.65;display:none;border-top:2px solid var(--border)}
+.sc-opt .opt-l{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0}
+.sc-opt.correct .opt-l{background:var(--green)}
+.sc-opt.wrong .opt-l{background:var(--red)}
+.sc-fb{padding:.9rem 1.1rem;font-size:13px;line-height:1.65;display:none;border-radius:8px;margin:.4rem 1rem .9rem}
 .sc-fb.show{display:block}
-.sc-fb.correct{background:#E8F5E9;color:#1B5E20;border-color:var(--green)}
-.sc-fb.wrong{background:#FFEBEE;color:#BF360C;border-color:var(--red)}
+.sc-fb.correct{background:rgba(0,200,83,.15);color:#A5D6A7}
+.sc-fb.wrong{background:rgba(255,61,0,.15);color:#FFAB91}
 /* FINAL QUIZ */
 .final-quiz{background:linear-gradient(135deg,var(--sky-dark),#1565C0);border-radius:16px;padding:1.75rem 1.5rem;margin:2rem 0;color:#fff}
 .fq-header{text-align:center;margin-bottom:1.25rem}
@@ -1306,7 +1306,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);
 </div><!-- end ch4 -->
 
 <!-- ==================== FINALES QUIZ ==================== -->
-<div class="final-quiz" id="finalQuizSection" style="display:none">
+<div class="final-quiz" id="finalQuizSection" >
   <div class="fq-header">
     <h3>🎯 Modul-Abschlussquiz</h3>
     <p>20 Fragen aus allen 5 Kapiteln · 75% zum Bestehen</p>
@@ -1358,7 +1358,7 @@ function showChapter(n){
 }
 
 // ─── LESSON TOGGLE ─────────────────────────────────
-function toggleLesson(id, chId){ /* lessons always open */ }
+function toggleLesson(id, chId){ /* always open */ }
 
 // Chapter keys mapping for localStorage
 const chapterKeys = ['m1_ch1','m1_ch2','m1_ch3','m1_ch4','m1_ch5'];
@@ -1376,32 +1376,22 @@ function markChapterProgress(chId){
     } catch(e) {}
     updateProgress();
     // Show final quiz when all chapters done
-    if(chapterDone.every(Boolean) && !finalQuizStarted){
-      setTimeout(()=>{
-        document.getElementById('finalQuizSection').style.display='block';
-        document.getElementById('finalQuizSection').scrollIntoView({behavior:'smooth'});
-        finalQuizStarted = true;
-        initFQ();
-      }, 800);
-    }
+    // Quiz always visible
   }
 }
 
 // ─── PROGRESS ──────────────────────────────────────
 function updateProgress(){
-  // Fortschritt = beantwortete Inline-Fragen + ob Quiz bestanden
   const inlineIds = ['q0_1','q0_2','q1_1','q1_2','q2_1','q3_1','q4_1','q4_2','sc_sc0_1','sc_sc2_1'];
-  const totalInline = inlineIds.length;
   const answeredInline = inlineIds.filter(id => quizAnswered[id]).length;
   const quizBonus = quizPassed ? 1 : 0;
-  const total = totalInline + 1; // +1 für Abschlussquiz
+  const total = inlineIds.length + 1;
   const done = answeredInline + quizBonus;
   let pct = Math.round(done / total * 100);
   if(quizPassed) pct = 100;
   document.getElementById('progressFill').style.width = pct+'%';
   document.getElementById('progressPct').textContent = pct+'%';
   document.getElementById('headerProgress').textContent = pct+'%';
-  // Save overall progress
   try {
     const p = JSON.parse(localStorage.getItem('drohnenschein_progress')||'{}');
     p['m1_progress'] = pct;
@@ -1425,11 +1415,19 @@ const qFeedbacks = {
 function answerQ(btn, type, id){
   if(quizAnswered[id]) return;
   quizAnswered[id] = true;
-  btn.closest('.quiz-block').querySelectorAll('.quiz-opt').forEach(o=>o.disabled=true);
+  const block = btn.closest('.quiz-block');
+  block.querySelectorAll('.quiz-opt').forEach(o=>o.disabled=true);
   btn.classList.add(type);
+  if(type==='wrong'){
+    block.querySelectorAll('.quiz-opt').forEach(o=>{
+      if(o.getAttribute('onclick') && o.getAttribute('onclick').includes("'correct'"))
+        o.classList.add('correct');
+    });
+  }
   const fb = document.getElementById('fb_'+id);
   fb.innerHTML = qFeedbacks[id][type];
   fb.className = 'quiz-fb show '+type;
+  updateProgress();
 }
 
 const scFeedbacks = {
@@ -1440,11 +1438,19 @@ const scFeedbacks = {
 function answerSc(btn, type, id){
   if(quizAnswered['sc_'+id]) return;
   quizAnswered['sc_'+id] = true;
-  btn.closest('.scenario').querySelectorAll('.sc-opt').forEach(o=>o.disabled=true);
+  const sc = btn.closest('.scenario');
+  sc.querySelectorAll('.sc-opt').forEach(o=>o.disabled=true);
   btn.classList.add(type);
+  if(type==='wrong'){
+    sc.querySelectorAll('.sc-opt').forEach(o=>{
+      if(o.getAttribute('onclick') && o.getAttribute('onclick').includes("'correct'"))
+        o.classList.add('correct');
+    });
+  }
   const fb = document.getElementById('fb_'+id);
   fb.innerHTML = scFeedbacks[id][type];
   fb.className = 'sc-fb show '+type;
+  updateProgress();
 }
 
 // ─── FINAL QUIZ ────────────────────────────────────
