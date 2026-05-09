@@ -1603,8 +1603,9 @@ let quizPassed = false;
 function startFQ(){
   document.getElementById('fqStart').style.display='none';
   document.getElementById('fqDots').style.display='flex';
+  document.getElementById('fqBody').style.display='block';
   document.getElementById('fqResult').style.display='none';
-  document.getElementById('fqStart').style.display='block';
+  initFQ();
 }
 function initFQ(){
   fqState.questions = [...fqPool].sort(()=>Math.random()-0.5);
