@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-<title>Modul 2: Menschliches Leistungs&shy;vermögen · drohnenschein.app</title>
+<title>Modul 2: Menschliches Leistungsvermögen · drohnenschein.app</title>
 <meta name="theme-color" content="#00695C"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -40,22 +40,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);
 .pilot-quote-content .from{font-size:11px;font-weight:700;color:var(--orange);letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px}
 .pilot-quote-content p{font-size:15px;color:var(--text);line-height:1.65;font-style:italic}
 /* CHAPTER TABS */
-.chapter-nav{display:flex;gap:6px;padding:1.5rem 1.25rem .5rem;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;background:var(--white)}
+.chapter-nav{display:flex;gap:6px;padding:1.5rem 1.25rem .5rem;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;background:var(--white);justify-content:center;flex-wrap:wrap}
 .chapter-nav::-webkit-scrollbar{display:none}
 .chapter-tab{flex-shrink:0;background:var(--gray);border:1.5px solid var(--border);border-radius:20px;padding:7px 14px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;font-family:'DM Sans',sans-serif}
 .chapter-tab.active{background:var(--sky-dark);color:#fff;border-color:var(--sky-dark)}
 .chapter-tab.done{background:#E8F5E9;color:#1B5E20;border-color:#A5D6A7}
 /* LESSON */
-.lesson{background:#fff;border:1px solid var(--border);border-radius:16px;margin-bottom:1.5rem;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.04)}
-.lesson-head{padding:1.25rem 1.5rem;background:linear-gradient(135deg,#fff 0%,var(--sky-light) 100%);border-bottom:1px solid var(--border);display:flex;gap:14px;align-items:center;cursor:pointer;user-select:none}
+.lesson{background:#fff;border:1px solid var(--border);border-radius:16px;margin-bottom:1.5rem;overflow:visible;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.lesson-head{padding:1.25rem 1.5rem;background:linear-gradient(135deg,#fff 0%,var(--sky-light) 100%);border-bottom:1px solid var(--border);display:flex;gap:14px;align-items:center;cursor:default;user-select:none}
 .lesson-num{width:40px;height:40px;background:var(--sky-dark);color:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:18px;font-weight:800;flex-shrink:0}
 .lesson-head-info{flex:1;min-width:0}
 .lesson-eyebrow{font-size:11px;color:var(--sky);font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px}
 .lesson-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;line-height:1.3;color:var(--text)}
 .lesson-toggle{font-size:12px;color:var(--muted);transition:transform .3s;flex-shrink:0;background:var(--gray);width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center}
 .lesson-toggle.open{transform:rotate(180deg);background:var(--sky-dark);color:#fff}
-.lesson-body{max-height:0;overflow:hidden;transition:max-height .5s ease}
-.lesson-body.open{max-height:30000px}
+.lesson-body{display:none}
+.lesson-body.open{display:block}
 .lesson-content{padding:1.5rem}
 .lesson-content h3{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--sky-dark);margin:1.5rem 0 .65rem;line-height:1.3}
 .lesson-content h3:first-child{margin-top:0}
@@ -122,22 +122,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);
 .quiz-fb.correct{background:rgba(0,200,83,.15);color:#A5D6A7}
 .quiz-fb.wrong{background:rgba(255,61,0,.15);color:#FFAB91}
 /* SCENARIO */
-.scenario{background:#fff;border:2px solid var(--orange);border-radius:14px;margin:1.4rem 0;position:relative}
-.scenario-tag{position:absolute;top:-10px;left:1rem;background:var(--orange);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:4px;letter-spacing:.08em;z-index:2}
-.scenario-q{padding:1.1rem 1.25rem;font-size:14px;font-weight:500;background:var(--gray);border-bottom:1px solid var(--border);line-height:1.6}
-.scenario-opts{display:flex;flex-direction:column;gap:7px;padding:.9rem}
-.sc-opt{background:#fff;border:1.5px solid var(--border);border-radius:9px;padding:10px 14px;font-size:13px;cursor:pointer;transition:all .15s;text-align:left;color:var(--text);width:100%;font-family:'DM Sans',sans-serif;display:flex;align-items:flex-start;gap:10px;line-height:1.5}
-.sc-opt:hover{border-color:var(--sky);background:var(--sky-light)}
-.sc-opt.correct{border-color:var(--green);background:#E8F5E9;color:#1B5E20}
-.sc-opt.wrong{border-color:var(--red);background:#FFEBEE;color:#BF360C}
+.scenario{background:linear-gradient(135deg,var(--sky-dark),var(--sky));border-radius:14px;margin:2rem 0;position:relative;color:#fff;padding-top:.5rem}
+.scenario-tag{display:inline-block;background:rgba(255,255,255,.15);color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:4px;letter-spacing:.08em;margin:.9rem 1.25rem .4rem}
+.scenario-q{padding:.6rem 1.25rem 1rem;font-size:14px;font-weight:500;line-height:1.6;color:#fff}
+.scenario-opts{display:flex;flex-direction:column;gap:6px;padding:.4rem 1rem 1rem}
+.sc-opt{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);border-radius:8px;padding:10px 14px;font-size:13px;cursor:pointer;transition:all .15s;text-align:left;color:#fff;width:100%;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:10px;line-height:1.45}
+.sc-opt:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3)}
+.sc-opt.correct{background:rgba(0,200,83,.25);border-color:var(--green);color:#fff}
+.sc-opt.wrong{background:rgba(255,61,0,.25);border-color:var(--red);color:#fff}
 .sc-opt:disabled{cursor:default}
-.sc-opt .opt-l{width:24px;height:24px;border-radius:50%;background:var(--gray);color:var(--muted);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;margin-top:1px}
+.sc-opt .opt-l{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0}
 .sc-opt.correct .opt-l{background:var(--green);color:#fff}
 .sc-opt.wrong .opt-l{background:var(--red);color:#fff}
-.sc-fb{padding:.9rem 1.1rem;font-size:13px;line-height:1.65;display:none;border-top:2px solid var(--border)}
+.sc-fb{padding:.9rem 1.1rem;font-size:13px;line-height:1.65;display:none;border-radius:8px;margin:.4rem 1rem .9rem}
 .sc-fb.show{display:block}
-.sc-fb.correct{background:#E8F5E9;color:#1B5E20;border-color:var(--green)}
-.sc-fb.wrong{background:#FFEBEE;color:#BF360C;border-color:var(--red)}
+.sc-fb.correct{background:rgba(0,200,83,.15);color:#A5D6A7}
+.sc-fb.wrong{background:rgba(255,61,0,.15);color:#FFAB91}
 /* FINAL QUIZ */
 .final-quiz{background:linear-gradient(135deg,var(--sky-dark),#1565C0);border-radius:16px;padding:1.75rem 1.5rem;margin:2rem 0;color:#fff}
 .fq-header{text-align:center;margin-bottom:1.25rem}
@@ -172,6 +172,29 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);
 .vorrang-num{width:30px;height:30px;background:var(--sky-dark);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;flex-shrink:0}
 .vorrang-text{flex:1;font-size:14px;line-height:1.5}
 .vorrang-text strong{color:var(--sky-dark)}
+
+/* ═══════════════════════════════════════════════════
+   MOBILE FOUNDATION - Samsung S22 optimiert
+   ═══════════════════════════════════════════════════ */
+html, body { overflow-x: hidden; width: 100%; max-width: 100vw; -webkit-text-size-adjust: 100%; }
+* { hyphens: auto; -webkit-hyphens: auto; overflow-wrap: break-word; word-break: break-word; box-sizing: border-box; }
+.lesson-content, .chapter-section, .lesson-body { width: 100%; max-width: 100%; }
+.quiz-block, .scenario, .info-box, .merke-box, .box-text, .highlight-box, .warn-box, .tip-box { width: 100%; max-width: 100%; box-sizing: border-box; }
+.table-wrap, .comparison-table, .zone-grid, .info-grid, .box-grid { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+img, svg { max-width: 100%; height: auto; }
+.quiz-opt, .sc-opt { width: 100%; box-sizing: border-box; }
+.app-header { transition: transform .3s ease; will-change: transform; }
+.app-header.hidden { transform: translateY(-100%); }
+.progress-mini { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 1001; opacity: 0; transition: opacity .3s; pointer-events: none; }
+.progress-mini.visible { opacity: 1; }
+.progress-mini-fill { height: 100%; background: linear-gradient(90deg, var(--yellow), var(--green)); width: 0%; transition: width .5s; }
+@media (max-width: 480px) {
+  .lesson-body { padding: 0 .75rem; }
+  .quiz-block { padding: 1rem .9rem; }
+  .scenario { margin: 1rem 0; }
+  .chapter-nav { justify-content: flex-start; }
+}
+
 </style>
 </head>
 <body>
@@ -180,7 +203,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);
   <a href="index.html" class="header-back">← Übersicht</a>
   <div class="header-title">
     <small>Modul 2 · 2 von 4</small>
-    Menschliches Leistungs&shy;vermögen
+    Menschliches Leistungsvermögen
   </div>
   <div class="header-progress" id="headerProgress">0%</div>
 </header>
@@ -236,9 +259,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);
           <div class="lesson-eyebrow">Lektion 10 · ca. 15 Min</div>
           <div class="lesson-title">Krankheit, Medikamente & Alkohol</div>
         </div>
-        <div class="lesson-toggle" id="tgl_l0_1">▾</div>
+        <div class="lesson-toggle open" id="tgl_l0_1">▾</div>
       </div>
-      <div class="lesson-body" id="body_l0_1">
+      <div class="lesson-body open" id="body_l0_1">
         <div class="lesson-content">
 
           <h3>Krankheit — auch kleine Leiden zählen</h3>
@@ -308,9 +331,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);
           <div class="lesson-eyebrow">Lektion 11 · ca. 15 Min</div>
           <div class="lesson-title">Müdigkeit & die I'M SAFE Checkliste</div>
         </div>
-        <div class="lesson-toggle" id="tgl_l0_2">▾</div>
+        <div class="lesson-toggle open" id="tgl_l0_2">▾</div>
       </div>
-      <div class="lesson-body" id="body_l0_2">
+      <div class="lesson-body open" id="body_l0_2">
         <div class="lesson-content">
 
           <h3>Müdigkeit — unterschätzter Killerfaktor</h3>
@@ -421,9 +444,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);
           <div class="lesson-eyebrow">Lektion 12 · ca. 12 Min</div>
           <div class="lesson-title">Situational Awareness</div>
         </div>
-        <div class="lesson-toggle" id="tgl_l1_1">▾</div>
+        <div class="lesson-toggle open" id="tgl_l1_1">▾</div>
       </div>
-      <div class="lesson-body" id="body_l1_1">
+      <div class="lesson-body open" id="body_l1_1">
         <div class="lesson-content">
 
           <h3>Was ist Situational Awareness?</h3>
@@ -475,9 +498,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);
           <div class="lesson-eyebrow">Lektion 13 · ca. 13 Min</div>
           <div class="lesson-title">Höhe, Entfernung, Geschwindigkeit & Dunkelheit</div>
         </div>
-        <div class="lesson-toggle" id="tgl_l1_2">▾</div>
+        <div class="lesson-toggle open" id="tgl_l1_2">▾</div>
       </div>
-      <div class="lesson-body" id="body_l1_2">
+      <div class="lesson-body open" id="body_l1_2">
         <div class="lesson-content">
 
           <h3>Höhe & Entfernung einschätzen</h3>
@@ -577,8 +600,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);
     <h3>🎯 Modul-Abschlussquiz</h3>
     <p>20 Fragen aus allen 2 Kapiteln · 75% zum Bestehen</p>
   </div>
-  <div class="fq-dots" id="fqDots"></div>
-  <div id="fqBody">
+    <div id="fqStart" style="text-align:center;padding:1rem 0">
+    <p style="color:rgba(255,255,255,.7);font-size:14px;margin-bottom:1rem">Du hast alle Checks abgeschlossen — teste jetzt dein Wissen!</p>
+    <button onclick="startFQ()" style="background:var(--yellow);color:#000;border:none;border-radius:12px;padding:14px 2rem;font-family:'Syne',sans-serif;font-size:16px;font-weight:800;cursor:pointer;width:100%">🚀 Quiz starten</button>
+  </div>
+  <div class="fq-dots" id="fqDots" style="display:none"></div>
+  <div id="fqBody" style="display:none">
     <div class="fq-counter" id="fqCounter"></div>
     <div class="fq-question" id="fqQuestion"></div>
     <div class="fq-opts" id="fqOpts"></div>
@@ -607,6 +634,11 @@ let finalQuizStarted = false;
 
 // ─── CHAPTER NAVIGATION ────────────────────────────
 function showChapter(n){
+  try {
+    const p = JSON.parse(localStorage.getItem('drohnenschein_progress')||'{}');
+    p['m2_chapter'] = n;
+    localStorage.setItem('drohnenschein_progress', JSON.stringify(p));
+  } catch(e) {}
   document.querySelectorAll('.chapter-section').forEach((s,i)=>{
     s.classList.toggle('active', i===n);
   });
@@ -624,16 +656,7 @@ function showChapter(n){
 }
 
 // ─── LESSON TOGGLE ─────────────────────────────────
-function toggleLesson(id, chId){
-  const body = document.getElementById('body_'+id);
-  const tgl = document.getElementById('tgl_'+id);
-  const isOpen = body.classList.toggle('open');
-  tgl.classList.toggle('open', isOpen);
-  if(isOpen){
-    markChapterProgress(chId);
-    setTimeout(()=>{ body.scrollIntoView({behavior:'smooth',block:'start'}); },100);
-  }
-}
+function toggleLesson(id, chId){ /* always open */ }
 
 // Chapter keys mapping for localStorage
 const chapterKeys = ['m2_ch1','m2_ch2'];
@@ -651,19 +674,40 @@ function markChapterProgress(chId){
     } catch(e) {}
     updateProgress();
     // Show final quiz when all chapters done
-    // Quiz always visible - no unlock needed
+    // Quiz always visible
   }
 }
 
 // ─── PROGRESS ──────────────────────────────────────
 function updateProgress(){
-  const done = chapterDone.filter(Boolean).length;
-  const total = chapterDone.length + 1; // +1 for quiz
-  let pct = Math.round(done/total*100);
-  if(quizPassed) pct = 100;
+  const allIds = ['q0_1', 'q0_2', 'q0_3', 'q0_4', 'q0_5', 'q0_6', 'q1_1', 'q1_2', 'q1_3', 'q1_4', 'q1_5', 'q1_6'];
+  const totalChecks = allIds.length;
+  const answered = allIds.filter(id => quizAnswered[id]).length;
+  const pct = Math.round(answered / totalChecks * 100);
   document.getElementById('progressFill').style.width = pct+'%';
   document.getElementById('progressPct').textContent = pct+'%';
   document.getElementById('headerProgress').textContent = pct+'%';
+  if(pct === 100 && !finalQuizStarted){
+    finalQuizStarted = true;
+    const fqs = document.getElementById('finalQuizSection');
+    fqs.style.border = '2px solid var(--yellow)';
+    fqs.style.boxShadow = '0 0 20px rgba(255,214,0,.3)';
+    fqs.scrollIntoView({behavior:'smooth'});
+    showToast('🎉 Alle Checks erledigt! Starte jetzt das Modul-Quiz!','success');
+  }
+  try {
+    const p = JSON.parse(localStorage.getItem('drohnenschein_progress')||'{}');
+    p['m2_progress'] = pct;
+    p['m2_answered'] = JSON.stringify(quizAnswered);
+    const chQuestions = {
+      'm2_ch1': ['q0_1','q0_2','q0_3','q0_4','q0_5','q0_6'],
+      'm2_ch2': ['q1_1','q1_2','q1_3','q1_4','q1_5','q1_6']
+    };
+    Object.entries(chQuestions).forEach(([chKey, ids]) => {
+      if(ids.every(id => quizAnswered[id])) p[chKey] = true;
+    });
+    localStorage.setItem('drohnenschein_progress', JSON.stringify(p));
+  } catch(e) {}
 }
 
 // ─── INLINE QUIZ ───────────────────────────────────
@@ -688,15 +732,16 @@ function answerQ(btn, type, id){
   const block = btn.closest('.quiz-block');
   block.querySelectorAll('.quiz-opt').forEach(o=>o.disabled=true);
   btn.classList.add(type);
-  if(type === 'wrong'){
+  if(type==='wrong'){
     block.querySelectorAll('.quiz-opt').forEach(o=>{
-      if(o.onclick && o.getAttribute('onclick') && o.getAttribute('onclick').includes("'correct'"))
+      if(o.getAttribute('onclick') && o.getAttribute('onclick').includes("'correct'"))
         o.classList.add('correct');
     });
   }
   const fb = document.getElementById('fb_'+id);
   fb.innerHTML = qFeedbacks[id][type];
   fb.className = 'quiz-fb show '+type;
+  updateProgress();
 }
 
 const scFeedbacks = {
@@ -710,7 +755,7 @@ function answerSc(btn, type, id){
   const sc = btn.closest('.scenario');
   sc.querySelectorAll('.sc-opt').forEach(o=>o.disabled=true);
   btn.classList.add(type);
-  if(type === 'wrong'){
+  if(type==='wrong'){
     sc.querySelectorAll('.sc-opt').forEach(o=>{
       if(o.getAttribute('onclick') && o.getAttribute('onclick').includes("'correct'"))
         o.classList.add('correct');
@@ -719,6 +764,7 @@ function answerSc(btn, type, id){
   const fb = document.getElementById('fb_'+id);
   fb.innerHTML = scFeedbacks[id][type];
   fb.className = 'sc-fb show '+type;
+  updateProgress();
 }
 
 // ─── FINAL QUIZ ────────────────────────────────────
@@ -748,6 +794,14 @@ const fqPool = [
 let fqState = {questions:[],current:0,score:0};
 let quizPassed = false;
 
+
+function startFQ(){
+  document.getElementById('fqStart').style.display='none';
+  document.getElementById('fqDots').style.display='flex';
+  document.getElementById('fqBody').style.display='block';
+  document.getElementById('fqResult').style.display='none';
+  initFQ();
+}
 function initFQ(){
   fqState.questions = [...fqPool].sort(()=>Math.random()-0.5);
   fqState.current=0; fqState.score=0;
@@ -849,6 +903,28 @@ document.addEventListener('DOMContentLoaded',()=>{
   const firstTgl = document.getElementById('tgl_l0_1');
   if(firstBody){ firstBody.classList.add('open'); if(firstTgl) firstTgl.classList.add('open'); }
 });
+</script>
+
+<script>
+(function(){
+  var lastY=0,hidden=false;
+  var header=document.querySelector('.app-header');
+  var mini=document.getElementById('progressMini');
+  var miniFill=document.getElementById('progressMiniFill');
+  window.addEventListener('scroll',function(){
+    var y=window.scrollY;
+    var landscape=window.innerWidth>window.innerHeight;
+    if(landscape){
+      if(y>lastY&&y>50&&!hidden){header.classList.add('hidden');if(mini)mini.classList.add('visible');hidden=true;}
+      else if(y<lastY-10&&hidden){header.classList.remove('hidden');if(mini)mini.classList.remove('visible');hidden=false;}
+    } else {
+      header.classList.remove('hidden');if(mini)mini.classList.remove('visible');hidden=false;
+    }
+    var pct=document.getElementById('progressPct');
+    if(pct&&miniFill)miniFill.style.width=pct.textContent;
+    lastY=y;
+  },{passive:true});
+})();
 </script>
 </body>
 </html>
