@@ -1416,13 +1416,17 @@ img, svg {
 </div><!-- end ch4 -->
 
 <!-- ==================== FINALES QUIZ ==================== -->
-<div class="final-quiz" id="finalQuizSection" >
+<div class="final-quiz" id="finalQuizSection">
   <div class="fq-header">
     <h3>🎯 Modul-Abschlussquiz</h3>
     <p>20 Fragen aus allen 5 Kapiteln · 75% zum Bestehen</p>
   </div>
-  <div class="fq-dots" id="fqDots"></div>
-  <div id="fqBody">
+  <div id="fqStart" style="text-align:center;padding:1rem 0">
+    <p style="color:rgba(255,255,255,.7);font-size:14px;margin-bottom:1rem">Du hast alle Checks abgeschlossen — teste jetzt dein Wissen!</p>
+    <button onclick="startFQ()" style="background:var(--yellow);color:#000;border:none;border-radius:12px;padding:14px 2rem;font-family:'Syne',sans-serif;font-size:16px;font-weight:800;cursor:pointer;width:100%">🚀 Quiz starten</button>
+  </div>
+  <div class="fq-dots" id="fqDots" style="display:none"></div>
+  <div id="fqBody" style="display:none">
     <div class="fq-counter" id="fqCounter"></div>
     <div class="fq-question" id="fqQuestion"></div>
     <div class="fq-opts" id="fqOpts"></div>
@@ -1595,6 +1599,13 @@ const fqPool = [
 let fqState = {questions:[],current:0,score:0};
 let quizPassed = false;
 
+
+function startFQ(){
+  document.getElementById('fqStart').style.display='none';
+  document.getElementById('fqDots').style.display='flex';
+  document.getElementById('fqResult').style.display='none';
+  document.getElementById('fqStart').style.display='block';
+}
 function initFQ(){
   fqState.questions = [...fqPool].sort(()=>Math.random()-0.5);
   fqState.current=0; fqState.score=0;
