@@ -186,12 +186,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);
     </div>
     <div class="stats-row">
       <div class="stat">
-        <div class="stat-num" id="statDone">0</div>
-        <div class="stat-lbl">Module ✓ von 4</div>
-      </div>
-      <div class="stat">
         <div class="stat-num" id="statChapters">0 / 14</div>
         <div class="stat-lbl">Kapitel</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="statLessons">0 / 27</div>
+        <div class="stat-lbl">Lektionen</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="statDone">0</div>
+        <div class="stat-lbl">Module ✓ von 4</div>
       </div>
       <div class="stat">
         <div class="stat-num" style="font-size:13px;line-height:1.3" id="statExam">40 Fragen</div>
@@ -352,6 +356,17 @@ function renderModules() {
   document.getElementById('statDone').textContent = modulesDone;
   document.getElementById('statChapters').textContent = totalChDone + ' / ' + totalCh;
   document.getElementById('moduleCount').textContent = modulesDone + ' von ' + MODULES.length + ' abgeschlossen';
+  // Lektionen: M1=9, M2=4, M3=7, M4=7 = 27 total
+  const lessonsByModule = [9, 4, 7, 7];
+  const totalLessons = 27;
+  let doneLessons = 0;
+  MODULES.forEach((m, idx) => {
+    const chDone = getChaptersDone(m);
+    const chTotal = m.chapters.length;
+    if(chTotal > 0) doneLessons += Math.round((chDone / chTotal) * lessonsByModule[idx]);
+  });
+  if(modulesDone === MODULES.length) doneLessons = totalLessons;
+  document.getElementById('statLessons').textContent = doneLessons + ' / ' + totalLessons;
 
   // Exam button + stat
   const examModulesLeft = MODULES.length - modulesDone;
