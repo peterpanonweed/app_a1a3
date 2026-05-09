@@ -1455,6 +1455,12 @@ let finalQuizStarted = false;
 
 // ─── CHAPTER NAVIGATION ────────────────────────────
 function showChapter(n){
+  // Position speichern
+  try {
+    const p = JSON.parse(localStorage.getItem('drohnenschein_progress')||'{}');
+    p['m1_chapter'] = n;
+    localStorage.setItem('drohnenschein_progress', JSON.stringify(p));
+  } catch(e) {}
   document.querySelectorAll('.chapter-section').forEach((s,i)=>{
     s.classList.toggle('active', i===n);
   });
