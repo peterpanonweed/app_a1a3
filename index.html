@@ -278,7 +278,7 @@ img { max-width: 100%; height: auto; }
 </div>
 
 <div class="footer">
-  <div>drohnenschein.app · <a href="mailto:mail@adamnuemm.de">Kontakt</a> · <a href="#">Impressum</a> · <a href="#">Datenschutz</a></div>
+  <div>drohnenschein.app · <a href="mailto:mail@adamnuemm.de">Kontakt</a> · <a href="#" onclick="document.getElementById('impressum-modal').style.display='flex';return false;">Impressum</a> · <a href="#">Datenschutz</a></div>
   <div style="margin-top:.5rem;color:#aaa;font-size:12px">Basiert auf EASA-Verordnungen 2018/1139 · 2019/945 · 2019/947</div>
   
 </div>
@@ -518,7 +518,7 @@ function renderModules() {
         </div>
         <div class="mpb-label">${pct}% abgeschlossen</div>
       </div>
-      \${ctaClass === 'resume-btn' ? `
+      ${ctaClass === 'resume-btn' ? `
         <div class="mod-cta-row">
           <a class="cta-btn cta-reset" href="#" onclick="resetModuleProgress('${mKey}', '${m.file}'); return false;">↺ Neu starten</a>
           <a class="cta-btn cta-continue" href="${resumeHref}">▶ Weiter — Kap. ${savedChapter + 1}</a>
@@ -695,6 +695,20 @@ function resetModuleProgress(mKey, file){
 }
 
 </script>
+
+
+<div id="impressum-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;align-items:center;justify-content:center;padding:1.5rem" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:#1a1a2e;border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:2rem;max-width:380px;width:100%;color:#fff;position:relative">
+    <button onclick="document.getElementById('impressum-modal').style.display='none'" style="position:absolute;top:1rem;right:1rem;background:none;border:none;color:rgba(255,255,255,.5);font-size:20px;cursor:pointer">✕</button>
+    <h3 style="font-family:'Syne',sans-serif;margin:0 0 1rem;font-size:18px">Impressum</h3>
+    <p style="font-size:14px;line-height:1.7;color:rgba(255,255,255,.8);margin:0">
+      Adam Nümm<br>
+      Maybachufer 28<br>
+      12047 Berlin<br><br>
+      <a href="mailto:mail@adamnuemm.de" style="color:var(--yellow)">mail@adamnuemm.de</a>
+    </p>
+  </div>
+</div>
 
 </body>
 </html>
