@@ -1,4 +1,4 @@
-const CACHE_NAME = 'drohnenschein-v1';
+const CACHE_NAME = 'drohnenschein-v2';
 const ASSETS = [
   '/app_a1a3/',
   '/app_a1a3/index.html',
