@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-<title>Modul 2: Menschliches Leistungsvermögen · drohnenschein.app</title>
+<title>Modul 2: Menschliches Leistungs&shy;vermögen · drohnenschein.app</title>
 <meta name="theme-color" content="#00695C"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -180,7 +180,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);
   <a href="index.html" class="header-back">← Übersicht</a>
   <div class="header-title">
     <small>Modul 2 · 2 von 4</small>
-    Menschliches Leistungsvermögen
+    Menschliches Leistungs&shy;vermögen
   </div>
   <div class="header-progress" id="headerProgress">0%</div>
 </header>
@@ -231,9 +231,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);
     <!-- LEKTION 1 -->
     <div class="lesson" id="l0_1">
       <div class="lesson-head" onclick="toggleLesson('l0_1','ch0')">
-        <div class="lesson-num">1</div>
+        <div class="lesson-num">10</div>
         <div class="lesson-head-info">
-          <div class="lesson-eyebrow">Kapitel 1 · Lektion 1 · ca. 15 Min</div>
+          <div class="lesson-eyebrow">Lektion 10 · ca. 15 Min</div>
           <div class="lesson-title">Krankheit, Medikamente & Alkohol</div>
         </div>
         <div class="lesson-toggle" id="tgl_l0_1">▾</div>
@@ -303,9 +303,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);
     <!-- LEKTION 2 -->
     <div class="lesson" id="l0_2">
       <div class="lesson-head" onclick="toggleLesson('l0_2','ch0')">
-        <div class="lesson-num">2</div>
+        <div class="lesson-num">11</div>
         <div class="lesson-head-info">
-          <div class="lesson-eyebrow">Kapitel 1 · Lektion 2 · ca. 15 Min</div>
+          <div class="lesson-eyebrow">Lektion 11 · ca. 15 Min</div>
           <div class="lesson-title">Müdigkeit & die I'M SAFE Checkliste</div>
         </div>
         <div class="lesson-toggle" id="tgl_l0_2">▾</div>
@@ -416,9 +416,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);
     <!-- LEKTION 1 -->
     <div class="lesson" id="l1_1">
       <div class="lesson-head" onclick="toggleLesson('l1_1','ch1')">
-        <div class="lesson-num">1</div>
+        <div class="lesson-num">12</div>
         <div class="lesson-head-info">
-          <div class="lesson-eyebrow">Kapitel 2 · Lektion 1 · ca. 12 Min</div>
+          <div class="lesson-eyebrow">Lektion 12 · ca. 12 Min</div>
           <div class="lesson-title">Situational Awareness</div>
         </div>
         <div class="lesson-toggle" id="tgl_l1_1">▾</div>
@@ -470,9 +470,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);
     <!-- LEKTION 2 -->
     <div class="lesson" id="l1_2">
       <div class="lesson-head" onclick="toggleLesson('l1_2','ch1')">
-        <div class="lesson-num">2</div>
+        <div class="lesson-num">13</div>
         <div class="lesson-head-info">
-          <div class="lesson-eyebrow">Kapitel 2 · Lektion 2 · ca. 13 Min</div>
+          <div class="lesson-eyebrow">Lektion 13 · ca. 13 Min</div>
           <div class="lesson-title">Höhe, Entfernung, Geschwindigkeit & Dunkelheit</div>
         </div>
         <div class="lesson-toggle" id="tgl_l1_2">▾</div>
@@ -572,7 +572,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);
 
 
 <!-- ==================== FINALES QUIZ ==================== -->
-<div class="final-quiz" id="finalQuizSection" style="display:none">
+<div class="final-quiz" id="finalQuizSection" >
   <div class="fq-header">
     <h3>🎯 Modul-Abschlussquiz</h3>
     <p>20 Fragen aus allen 2 Kapiteln · 75% zum Bestehen</p>
@@ -651,14 +651,7 @@ function markChapterProgress(chId){
     } catch(e) {}
     updateProgress();
     // Show final quiz when all chapters done
-    if(chapterDone.every(Boolean) && !finalQuizStarted){
-      setTimeout(()=>{
-        document.getElementById('finalQuizSection').style.display='block';
-        document.getElementById('finalQuizSection').scrollIntoView({behavior:'smooth'});
-        finalQuizStarted = true;
-        initFQ();
-      }, 800);
-    }
+    // Quiz always visible - no unlock needed
   }
 }
 
@@ -692,8 +685,15 @@ const qFeedbacks = {
 function answerQ(btn, type, id){
   if(quizAnswered[id]) return;
   quizAnswered[id] = true;
-  btn.closest('.quiz-block').querySelectorAll('.quiz-opt').forEach(o=>o.disabled=true);
+  const block = btn.closest('.quiz-block');
+  block.querySelectorAll('.quiz-opt').forEach(o=>o.disabled=true);
   btn.classList.add(type);
+  if(type === 'wrong'){
+    block.querySelectorAll('.quiz-opt').forEach(o=>{
+      if(o.onclick && o.getAttribute('onclick') && o.getAttribute('onclick').includes("'correct'"))
+        o.classList.add('correct');
+    });
+  }
   const fb = document.getElementById('fb_'+id);
   fb.innerHTML = qFeedbacks[id][type];
   fb.className = 'quiz-fb show '+type;
@@ -707,8 +707,15 @@ const scFeedbacks = {
 function answerSc(btn, type, id){
   if(quizAnswered['sc_'+id]) return;
   quizAnswered['sc_'+id] = true;
-  btn.closest('.scenario').querySelectorAll('.sc-opt').forEach(o=>o.disabled=true);
+  const sc = btn.closest('.scenario');
+  sc.querySelectorAll('.sc-opt').forEach(o=>o.disabled=true);
   btn.classList.add(type);
+  if(type === 'wrong'){
+    sc.querySelectorAll('.sc-opt').forEach(o=>{
+      if(o.getAttribute('onclick') && o.getAttribute('onclick').includes("'correct'"))
+        o.classList.add('correct');
+    });
+  }
   const fb = document.getElementById('fb_'+id);
   fb.innerHTML = scFeedbacks[id][type];
   fb.className = 'sc-fb show '+type;
