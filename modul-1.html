@@ -1518,9 +1518,23 @@ function updateProgress(){
     fqs.scrollIntoView({behavior:'smooth'});
     showToast('🎉 Alle Checks erledigt! Starte jetzt das Modul-Quiz!','success');
   }
+  // Alles in localStorage speichern
   try {
     const p = JSON.parse(localStorage.getItem('drohnenschein_progress')||'{}');
     p['m1_progress'] = pct;
+    // Beantwortete Fragen speichern
+    p['m1_answered'] = JSON.stringify(quizAnswered);
+    // Kapitel-Fortschritt aus beantworteten Fragen ableiten
+    const chQuestions = {
+      'm1_ch1': ['q0_1','q0_2'],
+      'm1_ch2': ['q1_1','q1_2','sc_sc0_1'],
+      'm1_ch3': ['q2_1'],
+      'm1_ch4': ['q3_1','sc_sc2_1'],
+      'm1_ch5': ['q4_1','q4_2']
+    };
+    Object.entries(chQuestions).forEach(([chKey, ids]) => {
+      if(ids.every(id => quizAnswered[id])) p[chKey] = true;
+    });
     localStorage.setItem('drohnenschein_progress', JSON.stringify(p));
   } catch(e) {}
 }
