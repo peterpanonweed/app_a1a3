@@ -191,6 +191,14 @@ img { max-width: 100%; height: auto; }
 
 .resume-btn{background:linear-gradient(135deg,var(--sky),var(--sky-dark));color:#fff;border:none;}
 .resume-btn:hover{filter:brightness(1.1);}
+
+.mod-cta-row{display:flex;gap:.5rem;margin-top:1rem}
+.mod-cta-row .cta-btn{flex:1;text-align:center;padding:11px 8px;border-radius:12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:none;text-decoration:none;display:block}
+.cta-reset{background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.15)!important}
+.cta-reset:hover{background:rgba(255,255,255,.15)}
+.cta-continue{background:linear-gradient(135deg,var(--sky),var(--sky-dark));color:#fff}
+.cta-continue:hover{filter:brightness(1.1)}
+
 </style>
 </head>
 <body>
@@ -480,7 +488,7 @@ function renderModules() {
 
     if(done) { ctaText = '🔄 Wiederholen'; ctaClass = 'done-btn'; ctaHref = m.file; }
     else if(isLocked) { ctaText = '🔒 Noch gesperrt'; ctaClass = 'locked-btn'; ctaHref = '#'; }
-    else if(chDone === 0) { ctaText = '🚀 Modul starten'; ctaClass = ''; ctaHref = m.file; }
+    else if(chDone === 0 && realPct === 0) { ctaText = '🚀 Modul starten'; ctaClass = ''; ctaHref = m.file; }
     else { ctaText = '▶ Weiter — Kapitel ' + (savedChapter + 1); ctaClass = 'resume-btn'; ctaHref = resumeHref; }
 
     // Progress bar color
@@ -664,6 +672,20 @@ window.addEventListener('scroll', function(){
   }
   lastScrollY = currentY;
 }, {passive:true});
+
+
+function resetModuleProgress(mKey, file){
+  if(!confirm('Fortschritt für dieses Modul wirklich zurücksetzen?')) return;
+  try {
+    const p = JSON.parse(localStorage.getItem('drohnenschein_progress')||'{}');
+    // Alle Keys für dieses Modul löschen
+    Object.keys(p).forEach(function(k){
+      if(k.startsWith(mKey)) delete p[k];
+    });
+    localStorage.setItem('drohnenschein_progress', JSON.stringify(p));
+  } catch(e) {}
+  window.location.href = file;
+}
 
 </script>
 

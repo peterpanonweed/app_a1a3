@@ -1719,14 +1719,53 @@ function showToast(msg,type=''){
 
 // ─── INIT ──────────────────────────────────────────
 document.addEventListener('DOMContentLoaded',()=>{
-  // Always reset progress to 0% on load
-  document.getElementById('progressFill').style.width = '0%';
-  document.getElementById('progressPct').textContent = '0%';
-  if(document.getElementById('headerProgress')) document.getElementById('headerProgress').textContent = '0%';
-  // Open first lesson of chapter 1
-  const firstBody = document.getElementById('body_l0_1');
-  const firstTgl = document.getElementById('tgl_l0_1');
-  if(firstBody){ firstBody.classList.add('open'); if(firstTgl) firstTgl.classList.add('open'); }
+
+  // ── RESTORE: Fortschritt + Position aus localStorage ──
+  (function(){
+    try {
+      const p = JSON.parse(localStorage.getItem('drohnenschein_progress')||'{}');
+      if(p['m1_answered']){
+        const saved = JSON.parse(p['m1_answered']);
+        Object.assign(quizAnswered, saved);
+        // Fortschrittsbalken wiederherstellen
+        const pct = p['m1_progress'] || 0;
+        document.getElementById('progressFill').style.width = pct+'%';
+        document.getElementById('progressPct').textContent = pct+'%';
+        if(document.getElementById('headerProgress'))
+          document.getElementById('headerProgress').textContent = pct+'%';
+        // Quiz-Buttons deaktivieren
+        Object.keys(saved).forEach(function(id){
+          if(!saved[id]) return;
+          const isScenario = id.startsWith('sc_');
+          const realId = isScenario ? id.slice(3) : id;
+          const fb = document.getElementById('fb_'+realId);
+          if(fb){
+            const block = isScenario ? fb.closest('.scenario') : fb.closest('.quiz-block');
+            if(block) block.querySelectorAll('.quiz-opt,.sc-opt').forEach(function(o){ o.disabled=true; });
+          }
+        });
+        // Bei 100%: Quiz-Box leuchten
+        if(pct >= 100){
+          const fqs = document.getElementById('finalQuizSection');
+          if(fqs){ fqs.style.border='2px solid var(--yellow)'; fqs.style.boxShadow='0 0 20px rgba(255,214,0,.3)'; }
+        }
+      } else {
+        // Kein gespeicherter Fortschritt: auf 0% setzen
+        document.getElementById('progressFill').style.width = '0%';
+        document.getElementById('progressPct').textContent = '0%';
+        if(document.getElementById('headerProgress')) document.getElementById('headerProgress').textContent = '0%';
+      }
+      // Kapitel wiederherstellen (URL-Parameter hat Priorität)
+      const params = new URLSearchParams(window.location.search);
+      const ch = parseInt(params.get('ch'));
+      const savedCh = p['m1_chapter'] || 0;
+      const targetCh = !isNaN(ch) && ch >= 0 ? ch : savedCh;
+      if(targetCh > 0) setTimeout(function(){ showChapter(targetCh); }, 150);
+    } catch(e) {
+      document.getElementById('progressFill').style.width = '0%';
+      document.getElementById('progressPct').textContent = '0%';
+    }
+  })();
 });
 </script>
 <script>
