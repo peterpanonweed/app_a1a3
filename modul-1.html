@@ -186,21 +186,29 @@ html, body {
   -webkit-text-size-adjust: 100%;
 }
 
-/* 2. Deutsche Silbentrennung überall */
+/* 2. Deutsche Silbentrennung nur in Textblöcken */
 * {
-  hyphens: auto;
-  -webkit-hyphens: auto;
-  overflow-wrap: break-word;
-  word-break: break-word;
   box-sizing: border-box;
 }
+p, li, .box-text, .def-text, .merksatz p, .lesson-content h3, .lesson-content h4 {
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+/* Buttons, Labels, Tags: niemals umbrechen */
+.chapter-tab, .quiz-opt, .sc-opt, .module-tag, .meta-item,
+.def-badge, .lesson-eyebrow, .box-text .label, .merksatz::before {
+  hyphens: none;
+  -webkit-hyphens: none;
+  word-break: normal;
+  overflow-wrap: normal;
+}
 
-/* 3. Content-Breite: volle Nutzung */
+/* 3. Content-Breite: volle Nutzung — kein padding-Override, .lesson-content hat bereits padding:1.5rem */
 .lesson-content, .chapter-section, .lesson-body {
   width: 100%;
   max-width: 100%;
-  padding-left: 0;
-  padding-right: 0;
 }
 
 /* 4. Alle Boxen: volle Breite */
