@@ -572,7 +572,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);
 
 
 <!-- ==================== FINALES QUIZ ==================== -->
-<div class="final-quiz" id="finalQuizSection" style="display:none">
+<div class="final-quiz" id="finalQuizSection">
   <div class="fq-header">
     <h3>🎯 Modul-Abschlussquiz</h3>
     <p>20 Fragen aus allen 2 Kapiteln · 75% zum Bestehen</p>
@@ -659,7 +659,8 @@ function markChapterProgress(chId){
     // Show final quiz when all chapters done
     if(chapterDone.every(Boolean) && !finalQuizStarted){
       setTimeout(()=>{
-        document.getElementById('finalQuizSection').style.display='block';
+        document.getElementById('finalQuizSection').style.border='2px solid var(--yellow)';
+        document.getElementById('finalQuizSection').style.boxShadow='0 0 20px rgba(255,214,0,.3)';
         document.getElementById('finalQuizSection').scrollIntoView({behavior:'smooth'});
         finalQuizStarted = true;
         initFQ();
@@ -875,13 +876,18 @@ document.addEventListener('DOMContentLoaded',()=>{
         document.getElementById('progressPct').textContent = pct+'%';
         if(document.getElementById('headerProgress'))
           document.getElementById('headerProgress').textContent = pct+'%';
-        // Quiz-Buttons deaktivieren
+        // Quiz-Buttons deaktivieren + Feedback wiederherstellen
         Object.keys(saved).forEach(function(id){
           if(!saved[id]) return;
           const fb = document.getElementById('fb_'+id);
           if(fb){
             const block = fb.closest('.quiz-block');
             if(block) block.querySelectorAll('.quiz-opt').forEach(function(o){ o.disabled=true; });
+            // Feedback-Text aus qFeedbacks wiederherstellen falls vorhanden
+            if(qFeedbacks[id]){
+              fb.innerHTML = qFeedbacks[id].correct;
+              fb.className = 'quiz-fb show correct';
+            }
           }
         });
         // Chapter-Tabs und chapterDone-Array wiederherstellen
@@ -892,10 +898,18 @@ document.addEventListener('DOMContentLoaded',()=>{
             if(tab) tab.classList.add('done');
           }
         });
-        // Bei 100%: Quiz-Box leuchten
+        // Bei 100%: Quiz öffnen + quizPassed setzen
         if(pct >= 100){
+          quizPassed = true;
           const fqs = document.getElementById('finalQuizSection');
-          if(fqs){ fqs.style.border='2px solid var(--yellow)'; fqs.style.boxShadow='0 0 20px rgba(255,214,0,.3)'; }
+          if(fqs){
+            fqs.style.border = '2px solid var(--yellow)';
+            fqs.style.boxShadow = '0 0 20px rgba(255,214,0,.3)';
+          }
+          if(!finalQuizStarted){
+            finalQuizStarted = true;
+            initFQ();
+          }
         }
       } else {
         document.getElementById('progressFill').style.width = '0%';
