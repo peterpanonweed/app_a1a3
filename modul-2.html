@@ -231,9 +231,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);
     <!-- LEKTION 1 -->
     <div class="lesson" id="l0_1">
       <div class="lesson-head" onclick="toggleLesson('l0_1','ch0')">
-        <div class="lesson-num">1</div>
+        <div class="lesson-num">10</div>
         <div class="lesson-head-info">
-          <div class="lesson-eyebrow">Kapitel 1 · Lektion 1 · ca. 15 Min</div>
+          <div class="lesson-eyebrow">Lektion 10 · ca. 15 Min</div>
           <div class="lesson-title">Krankheit, Medikamente & Alkohol</div>
         </div>
         <div class="lesson-toggle" id="tgl_l0_1">▾</div>
@@ -303,9 +303,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);
     <!-- LEKTION 2 -->
     <div class="lesson" id="l0_2">
       <div class="lesson-head" onclick="toggleLesson('l0_2','ch0')">
-        <div class="lesson-num">2</div>
+        <div class="lesson-num">11</div>
         <div class="lesson-head-info">
-          <div class="lesson-eyebrow">Kapitel 1 · Lektion 2 · ca. 15 Min</div>
+          <div class="lesson-eyebrow">Lektion 11 · ca. 15 Min</div>
           <div class="lesson-title">Müdigkeit & die I'M SAFE Checkliste</div>
         </div>
         <div class="lesson-toggle" id="tgl_l0_2">▾</div>
@@ -416,9 +416,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);
     <!-- LEKTION 1 -->
     <div class="lesson" id="l1_1">
       <div class="lesson-head" onclick="toggleLesson('l1_1','ch1')">
-        <div class="lesson-num">1</div>
+        <div class="lesson-num">12</div>
         <div class="lesson-head-info">
-          <div class="lesson-eyebrow">Kapitel 2 · Lektion 1 · ca. 12 Min</div>
+          <div class="lesson-eyebrow">Lektion 12 · ca. 12 Min</div>
           <div class="lesson-title">Situational Awareness</div>
         </div>
         <div class="lesson-toggle" id="tgl_l1_1">▾</div>
@@ -470,9 +470,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--text);
     <!-- LEKTION 2 -->
     <div class="lesson" id="l1_2">
       <div class="lesson-head" onclick="toggleLesson('l1_2','ch1')">
-        <div class="lesson-num">2</div>
+        <div class="lesson-num">13</div>
         <div class="lesson-head-info">
-          <div class="lesson-eyebrow">Kapitel 2 · Lektion 2 · ca. 13 Min</div>
+          <div class="lesson-eyebrow">Lektion 13 · ca. 13 Min</div>
           <div class="lesson-title">Höhe, Entfernung, Geschwindigkeit & Dunkelheit</div>
         </div>
         <div class="lesson-toggle" id="tgl_l1_2">▾</div>
@@ -614,6 +614,12 @@ function showChapter(n){
     t.classList.toggle('active', i===n);
   });
   currentChapter = n;
+  // Kapitelposition speichern
+  try {
+    const p = JSON.parse(localStorage.getItem('drohnenschein_progress')||'{}');
+    p['m2_chapter'] = n;
+    localStorage.setItem('drohnenschein_progress', JSON.stringify(p));
+  } catch(e) {}
   window.scrollTo({top:0,behavior:'smooth'});
   // Open first lesson of chapter
   const firstLesson = document.querySelector(`#ch${n} .lesson-body`);
@@ -664,13 +670,28 @@ function markChapterProgress(chId){
 
 // ─── PROGRESS ──────────────────────────────────────
 function updateProgress(){
-  const done = chapterDone.filter(Boolean).length;
-  const total = chapterDone.length + 1; // +1 for quiz
-  let pct = Math.round(done/total*100);
+  const allIds = ['q0_1','q0_2','q0_3','q0_4','q0_5','q0_6','q1_1','q1_2','q1_3','q1_4','q1_5','q1_6'];
+  const totalChecks = allIds.length;
+  const answered = allIds.filter(id => quizAnswered[id]).length;
+  let pct = Math.round(answered / totalChecks * 100);
   if(quizPassed) pct = 100;
   document.getElementById('progressFill').style.width = pct+'%';
   document.getElementById('progressPct').textContent = pct+'%';
   document.getElementById('headerProgress').textContent = pct+'%';
+  // In localStorage speichern
+  try {
+    const p = JSON.parse(localStorage.getItem('drohnenschein_progress')||'{}');
+    p['m2_progress'] = pct;
+    p['m2_answered'] = JSON.stringify(quizAnswered);
+    const chQuestions = {
+      'm2_ch1': ['q0_1','q0_2','q0_3','q0_4','q0_5','q0_6'],
+      'm2_ch2': ['q1_1','q1_2','q1_3','q1_4','q1_5','q1_6']
+    };
+    Object.entries(chQuestions).forEach(([chKey, ids]) => {
+      if(ids.every(id => quizAnswered[id])) p[chKey] = true;
+    });
+    localStorage.setItem('drohnenschein_progress', JSON.stringify(p));
+  } catch(e) {}
 }
 
 // ─── INLINE QUIZ ───────────────────────────────────
@@ -692,11 +713,19 @@ const qFeedbacks = {
 function answerQ(btn, type, id){
   if(quizAnswered[id]) return;
   quizAnswered[id] = true;
-  btn.closest('.quiz-block').querySelectorAll('.quiz-opt').forEach(o=>o.disabled=true);
+  const block = btn.closest('.quiz-block');
+  block.querySelectorAll('.quiz-opt').forEach(o=>o.disabled=true);
   btn.classList.add(type);
+  if(type==='wrong'){
+    block.querySelectorAll('.quiz-opt').forEach(o=>{
+      if(o.getAttribute('onclick') && o.getAttribute('onclick').includes("'correct'"))
+        o.classList.add('correct');
+    });
+  }
   const fb = document.getElementById('fb_'+id);
   fb.innerHTML = qFeedbacks[id][type];
   fb.className = 'quiz-fb show '+type;
+  updateProgress();
 }
 
 const scFeedbacks = {
@@ -833,14 +862,49 @@ function showToast(msg,type=''){
 
 // ─── INIT ──────────────────────────────────────────
 document.addEventListener('DOMContentLoaded',()=>{
-  // Always reset progress to 0% on load
-  document.getElementById('progressFill').style.width = '0%';
-  document.getElementById('progressPct').textContent = '0%';
-  document.getElementById('headerProgress').textContent = '0%';
-  // Open first lesson of chapter 1
-  const firstBody = document.getElementById('body_l0_1');
-  const firstTgl = document.getElementById('tgl_l0_1');
-  if(firstBody){ firstBody.classList.add('open'); if(firstTgl) firstTgl.classList.add('open'); }
+  // ── RESTORE: Fortschritt + Position aus localStorage ──
+  (function(){
+    try {
+      const p = JSON.parse(localStorage.getItem('drohnenschein_progress')||'{}');
+      if(p['m2_answered']){
+        const saved = JSON.parse(p['m2_answered']);
+        Object.assign(quizAnswered, saved);
+        // Fortschrittsbalken wiederherstellen
+        const pct = p['m2_progress'] || 0;
+        document.getElementById('progressFill').style.width = pct+'%';
+        document.getElementById('progressPct').textContent = pct+'%';
+        if(document.getElementById('headerProgress'))
+          document.getElementById('headerProgress').textContent = pct+'%';
+        // Quiz-Buttons deaktivieren
+        Object.keys(saved).forEach(function(id){
+          if(!saved[id]) return;
+          const fb = document.getElementById('fb_'+id);
+          if(fb){
+            const block = fb.closest('.quiz-block');
+            if(block) block.querySelectorAll('.quiz-opt').forEach(function(o){ o.disabled=true; });
+          }
+        });
+        // Bei 100%: Quiz-Box leuchten
+        if(pct >= 100){
+          const fqs = document.getElementById('finalQuizSection');
+          if(fqs){ fqs.style.border='2px solid var(--yellow)'; fqs.style.boxShadow='0 0 20px rgba(255,214,0,.3)'; }
+        }
+      } else {
+        document.getElementById('progressFill').style.width = '0%';
+        document.getElementById('progressPct').textContent = '0%';
+        if(document.getElementById('headerProgress')) document.getElementById('headerProgress').textContent = '0%';
+      }
+      // Kapitel wiederherstellen
+      const params = new URLSearchParams(window.location.search);
+      const ch = parseInt(params.get('ch'));
+      const savedCh = p['m2_chapter'] || 0;
+      const targetCh = !isNaN(ch) && ch >= 0 ? ch : savedCh;
+      if(targetCh > 0) setTimeout(function(){ showChapter(targetCh); }, 150);
+    } catch(e) {
+      document.getElementById('progressFill').style.width = '0%';
+      document.getElementById('progressPct').textContent = '0%';
+    }
+  })();
 });
 </script>
 </body>
