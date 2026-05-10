@@ -863,6 +863,7 @@ function showToast(msg,type=''){
 
 // ─── INIT ──────────────────────────────────────────
 document.addEventListener('DOMContentLoaded',()=>{
+
   // ── RESTORE: Fortschritt + Position aus localStorage ──
   (function(){
     try {
@@ -876,47 +877,27 @@ document.addEventListener('DOMContentLoaded',()=>{
         document.getElementById('progressPct').textContent = pct+'%';
         if(document.getElementById('headerProgress'))
           document.getElementById('headerProgress').textContent = pct+'%';
-        // Quiz-Buttons deaktivieren + Feedback wiederherstellen
+        // Quiz-Buttons deaktivieren
         Object.keys(saved).forEach(function(id){
           if(!saved[id]) return;
           const fb = document.getElementById('fb_'+id);
           if(fb){
             const block = fb.closest('.quiz-block');
-            if(block) block.querySelectorAll('.quiz-opt').forEach(function(o){ o.disabled=true; });
-            // Feedback-Text aus qFeedbacks wiederherstellen falls vorhanden
-            if(qFeedbacks[id]){
-              fb.innerHTML = qFeedbacks[id].correct;
-              fb.className = 'quiz-fb show correct';
-            }
+            if(block) block.querySelectorAll('.quiz-opt,.sc-opt').forEach(function(o){ o.disabled=true; });
           }
         });
-        // Chapter-Tabs und chapterDone-Array wiederherstellen
-        chapterKeys.forEach(function(key, i){
-          if(p[key]){
-            chapterDone[i] = true;
-            const tab = document.getElementById('ctab'+i);
-            if(tab) tab.classList.add('done');
-          }
-        });
-        // Bei 100%: Quiz öffnen + quizPassed setzen
+        // Bei 100%: Quiz-Box leuchten
         if(pct >= 100){
-          quizPassed = true;
           const fqs = document.getElementById('finalQuizSection');
-          if(fqs){
-            fqs.style.border = '2px solid var(--yellow)';
-            fqs.style.boxShadow = '0 0 20px rgba(255,214,0,.3)';
-          }
-          if(!finalQuizStarted){
-            finalQuizStarted = true;
-            initFQ();
-          }
+          if(fqs){ fqs.style.border='2px solid var(--yellow)'; fqs.style.boxShadow='0 0 20px rgba(255,214,0,.3)'; }
         }
       } else {
+        // Kein gespeicherter Fortschritt: auf 0% setzen
         document.getElementById('progressFill').style.width = '0%';
         document.getElementById('progressPct').textContent = '0%';
         if(document.getElementById('headerProgress')) document.getElementById('headerProgress').textContent = '0%';
       }
-      // Kapitel wiederherstellen
+      // Kapitel wiederherstellen (URL-Parameter hat Priorität)
       const params = new URLSearchParams(window.location.search);
       const ch = parseInt(params.get('ch'));
       const savedCh = p['m2_chapter'] || 0;
