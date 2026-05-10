@@ -3,7 +3,14 @@
 // Einbindung: <script src="debug.js"></script> vor </body>
 
 (function(){
-  if(!window.location.search.includes('debug=1')) return;
+  // Debug-Modus: per ?debug=1 aktivieren, per ?debug=0 deaktivieren
+  // Zustand wird in localStorage gespeichert — bleibt aktiv bis manuell deaktiviert
+  if(window.location.search.includes('debug=1')){
+    localStorage.setItem('dbg_active','1');
+  } else if(window.location.search.includes('debug=0')){
+    localStorage.removeItem('dbg_active');
+  }
+  if(!localStorage.getItem('dbg_active')) return;
 
   // ── Welches Modul sind wir? ──────────────────────────
   const page = window.location.pathname.split('/').pop() || 'index.html';
@@ -117,9 +124,16 @@
 
     // Titel
     const title = document.createElement('div');
-    title.style.cssText = 'font-weight:700;font-size:14px;margin-bottom:.75rem;';
+    title.style.cssText = 'font-weight:700;font-size:14px;margin-bottom:.4rem;';
     title.textContent = '🐛 Debug Panel' + (mKey ? ' — Modul '+mNum : ' — Index');
     panel.appendChild(title);
+
+    const offBtn = btn('⏹ Debug-Modus deaktivieren', 'gray', ()=>{
+      localStorage.removeItem('dbg_active');
+      panel.remove(); toggle.remove();
+    });
+    offBtn.style.cssText += 'font-size:11px;padding:5px 10px;margin-bottom:.75rem;';
+    panel.appendChild(offBtn);
 
     // ── MODUL-SPEZIFISCH ──
     if(mKey && MODULE_CONFIG[mKey]){
