@@ -1733,7 +1733,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         document.getElementById('progressPct').textContent = pct+'%';
         if(document.getElementById('headerProgress'))
           document.getElementById('headerProgress').textContent = pct+'%';
-        // Quiz-Buttons deaktivieren
+        // Quiz-Buttons deaktivieren + Feedback wiederherstellen
         Object.keys(saved).forEach(function(id){
           if(!saved[id]) return;
           const isScenario = id.startsWith('sc_');
@@ -1742,6 +1742,13 @@ document.addEventListener('DOMContentLoaded',()=>{
           if(fb){
             const block = isScenario ? fb.closest('.scenario') : fb.closest('.quiz-block');
             if(block) block.querySelectorAll('.quiz-opt,.sc-opt').forEach(function(o){ o.disabled=true; });
+            // Feedback-Text wiederherstellen
+            const feedbacks = isScenario ? scFeedbacks : qFeedbacks;
+            const fKey = isScenario ? realId : id;
+            if(feedbacks && feedbacks[fKey]){
+              fb.innerHTML = feedbacks[fKey].correct;
+              fb.className = (isScenario ? 'sc-fb' : 'quiz-fb') + ' show correct';
+            }
           }
         });
         // Bei 100%: Quiz-Box leuchten
@@ -1760,7 +1767,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       const ch = parseInt(params.get('ch'));
       const savedCh = p['m1_chapter'] || 0;
       const targetCh = !isNaN(ch) && ch >= 0 ? ch : savedCh;
-      if(targetCh > 0) setTimeout(function(){ showChapter(targetCh); }, 150);
+      if(targetCh >= 0) setTimeout(function(){ showChapter(targetCh); }, 150);
     } catch(e) {
       document.getElementById('progressFill').style.width = '0%';
       document.getElementById('progressPct').textContent = '0%';
@@ -1807,6 +1814,5 @@ document.addEventListener('DOMContentLoaded',()=>{
   }, {passive:true});
 })();
 </script>
-<script src="debug.js"></script>
 </body>
 </html>
