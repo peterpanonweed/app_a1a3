@@ -884,6 +884,14 @@ document.addEventListener('DOMContentLoaded',()=>{
             if(block) block.querySelectorAll('.quiz-opt').forEach(function(o){ o.disabled=true; });
           }
         });
+        // Chapter-Tabs und chapterDone-Array wiederherstellen
+        chapterKeys.forEach(function(key, i){
+          if(p[key]){
+            chapterDone[i] = true;
+            const tab = document.getElementById('ctab'+i);
+            if(tab) tab.classList.add('done');
+          }
+        });
         // Bei 100%: Quiz-Box leuchten
         if(pct >= 100){
           const fqs = document.getElementById('finalQuizSection');
