@@ -489,14 +489,14 @@ function renderModules() {
     if(done) { ctaText = '🔄 Wiederholen'; ctaClass = 'done-btn'; ctaHref = m.file; }
     else if(isLocked) { ctaText = '🔒 Noch gesperrt'; ctaClass = 'locked-btn'; ctaHref = '#'; }
     else if(chDone === 0 && realPct === 0) { ctaText = '🚀 Modul starten'; ctaClass = ''; ctaHref = m.file; }
-    else { ctaText = '▶ Weiter — Kapitel ' + (savedChapter + 1); ctaClass = 'resume-btn'; ctaHref = resumeHref; }
+    else { const resumeChName = m.chapters[savedChapter] ? m.chapters[savedChapter].name : m.chapters[0].name; ctaText = '▶ Weiter — ' + resumeChName; ctaClass = 'resume-btn'; ctaHref = resumeHref; }
 
     // CTA HTML
     let ctaHTML;
     if(ctaClass === 'resume-btn') {
       ctaHTML = `<div class="mod-cta-row">
         <a class="cta-btn cta-reset" href="#" onclick="resetModuleProgress('${mKey}', '${m.file}'); return false;">↺ Neu starten</a>
-        <a class="cta-btn cta-continue" href="${resumeHref}">▶ Weiter &mdash; Kap. ${savedChapter + 1}</a>
+        <a class="cta-btn cta-continue" href="${resumeHref}">▶ Weiter &mdash; ${m.chapters[savedChapter] ? m.chapters[savedChapter].name : m.chapters[0].name}</a>
       </div>`;
     } else {
       ctaHTML = `<a href="${ctaHref}" class="mod-cta-btn ${ctaClass}" ${isLocked ? 'onclick="return false;"' : ''}>${ctaText}</a>`;
@@ -555,6 +555,11 @@ function showToast(msg, type='') {
 
 // ─── INIT ──────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', renderModules);
+
+// Browser-Zurück: Fortschritt neu laden wenn User per Back-Button zurückkommt
+window.addEventListener('pageshow', function(e){
+  if(e.persisted){ renderModules(); }
+});
 </script>
 
 
